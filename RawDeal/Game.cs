@@ -188,14 +188,13 @@ public class Game
                     _view.SayThatPlayerIsTryingToPlayThisCard(currentPlayer.GetSuperStarName(), formattedPlay);
                     currentPlayer.MoveCardFromHandToRingAreaByIndex(playableCardsFromPlayer[cardIndex].Item1);
                     _view.SayThatPlayerSuccessfullyPlayedACard();
-                    
-                    int actualDamage = notCurrentPlayer.ReceiveDamage(selectedCard.GetDamage());
-                    List<Card> notCurrentPlayerDamagedCards = notCurrentPlayer.GetCardsFromArsenal(actualDamage);
-                    
+                    List<Card> notCurrentPlayerDamagedCards = notCurrentPlayer.GetCardsFromArsenal(selectedCard.GetDamage());
+                    notCurrentPlayer.ReceiveDamage(selectedCard.GetDamage());
+
                     int indexShowedCard = 1;
                     for (cardIndex = notCurrentPlayerDamagedCards.Count - 1; cardIndex >= 0; cardIndex -- )
                     {
-                        _view.ShowCardOverturnByTakingDamage(notCurrentPlayerDamagedCards[cardIndex].GetCardFormattedInfo(), indexShowedCard , actualDamage);
+                        _view.ShowCardOverturnByTakingDamage(notCurrentPlayerDamagedCards[cardIndex].GetCardFormattedInfo(), indexShowedCard , selectedCard.GetDamage());
                         indexShowedCard++;
                     }
                     
