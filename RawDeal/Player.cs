@@ -104,11 +104,15 @@ public class Player
         return Hand.GetPlayableCards(Fortitude);
     }
 
-    public int ReceiveDamage(int damage)
+    public void ReceiveDamage(int damage)
+    {
+        MoveCardsFromArsenalToRingSideByDamageAmount(damage);
+        _view.SayThatOpponentWillTakeSomeDamage(GetSuperStarName(), damage);
+    }
+
+    public int CalculateDamage(int damage)
     {
         int actualDamage = Math.Max(damage - _damageReducedByShield, 1);
-        MoveCardsFromArsenalToRingSideByDamageAmount(actualDamage);
-        _view.SayThatOpponentWillTakeSomeDamage(GetSuperStarName(), actualDamage);
         return actualDamage;
     }
 
