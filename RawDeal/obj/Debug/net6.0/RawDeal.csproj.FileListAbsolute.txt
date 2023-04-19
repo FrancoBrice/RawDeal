@@ -1,0 +1,177 @@
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/bin/Debug/net6.0/RawDeal
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/bin/Debug/net6.0/data/02-InvalidDecks-Tests/1.txt
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/bin/Debug/net6.0/data/02-InvalidDecks-Tests/10.txt
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/bin/Debug/net6.0/data/02-InvalidDecks-Tests/11.txt
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/bin/Debug/net6.0/data/02-InvalidDecks-Tests/2.txt
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/bin/Debug/net6.0/data/02-InvalidDecks-Tests/3.txt
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/bin/Debug/net6.0/data/02-InvalidDecks-Tests/4.txt
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/bin/Debug/net6.0/data/02-InvalidDecks-Tests/5.txt
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/bin/Debug/net6.0/data/02-InvalidDecks-Tests/6.txt
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/bin/Debug/net6.0/data/02-InvalidDecks-Tests/7.txt
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/bin/Debug/net6.0/data/02-InvalidDecks-Tests/8.txt
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/bin/Debug/net6.0/data/02-InvalidDecks-Tests/9.txt
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/bin/Debug/net6.0/data/02-InvalidDecks/01.txt
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/bin/Debug/net6.0/data/02-InvalidDecks/02.txt
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/bin/Debug/net6.0/data/02-InvalidDecks/03.txt
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/bin/Debug/net6.0/data/02-InvalidDecks/04.txt
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/bin/Debug/net6.0/data/02-InvalidDecks/05.txt
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/bin/Debug/net6.0/data/02-InvalidDecks/06.txt
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/bin/Debug/net6.0/data/02-InvalidDecks/07.txt
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/bin/Debug/net6.0/data/02-InvalidDecks/08.txt
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/bin/Debug/net6.0/data/02-InvalidDecks/09.txt
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/bin/Debug/net6.0/data/02-InvalidDecks/10.txt
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/bin/Debug/net6.0/data/02-InvalidDecks/11.txt
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/bin/Debug/net6.0/data/02-InvalidDecks/12.txt
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/bin/Debug/net6.0/data/04-NoEffects-Tests/1.txt
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/bin/Debug/net6.0/data/04-NoEffects-Tests/2.txt
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/bin/Debug/net6.0/data/04-NoEffects-Tests/3.txt
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/bin/Debug/net6.0/data/04-NoEffects-Tests/4.txt
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/bin/Debug/net6.0/data/04-NoEffects-Tests/5.txt
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/bin/Debug/net6.0/data/04-NoEffects-Tests/6.txt
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/bin/Debug/net6.0/data/04-NoEffects-Tests/7.txt
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/bin/Debug/net6.0/data/04-NoEffects/01.txt
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/bin/Debug/net6.0/data/04-NoEffects/02.txt
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/bin/Debug/net6.0/data/04-NoEffects/03.txt
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/bin/Debug/net6.0/data/04-NoEffects/04.txt
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/bin/Debug/net6.0/data/04-NoEffects/05.txt
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/bin/Debug/net6.0/data/04-NoEffects/06.txt
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/bin/Debug/net6.0/data/04-NoEffects/07.txt
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/bin/Debug/net6.0/data/04-NoEffects/08.txt
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/bin/Debug/net6.0/data/05-SuperstarAbilities-Tests/1.txt
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/bin/Debug/net6.0/data/05-SuperstarAbilities-Tests/10.txt
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/bin/Debug/net6.0/data/05-SuperstarAbilities-Tests/11.txt
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/bin/Debug/net6.0/data/05-SuperstarAbilities-Tests/12.txt
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/bin/Debug/net6.0/data/05-SuperstarAbilities-Tests/13.txt
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/bin/Debug/net6.0/data/05-SuperstarAbilities-Tests/2.txt
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/bin/Debug/net6.0/data/05-SuperstarAbilities-Tests/3.txt
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/bin/Debug/net6.0/data/05-SuperstarAbilities-Tests/4.txt
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/bin/Debug/net6.0/data/05-SuperstarAbilities-Tests/5.txt
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/bin/Debug/net6.0/data/05-SuperstarAbilities-Tests/6.txt
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/bin/Debug/net6.0/data/05-SuperstarAbilities-Tests/7.txt
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/bin/Debug/net6.0/data/05-SuperstarAbilities-Tests/8.txt
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/bin/Debug/net6.0/data/05-SuperstarAbilities-Tests/9.txt
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/bin/Debug/net6.0/data/05-SuperstarAbilities/01_Kane.txt
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/bin/Debug/net6.0/data/05-SuperstarAbilities/02_HHH.txt
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/bin/Debug/net6.0/data/05-SuperstarAbilities/03_Jericho.txt
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/bin/Debug/net6.0/data/05-SuperstarAbilities/04_Mankind.txt
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/bin/Debug/net6.0/data/05-SuperstarAbilities/05_StoneCold.txt
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/bin/Debug/net6.0/data/05-SuperstarAbilities/06_TheRock.txt
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/bin/Debug/net6.0/data/05-SuperstarAbilities/07_Undertaker.txt
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/bin/Debug/net6.0/data/05-SuperstarAbilities/08_HHH.txt
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/bin/Debug/net6.0/data/05-SuperstarAbilities/09_Jericho.txt
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/bin/Debug/net6.0/data/05-SuperstarAbilities/10_Kane.txt
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/bin/Debug/net6.0/data/05-SuperstarAbilities/11_Mankind.txt
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/bin/Debug/net6.0/data/05-SuperstarAbilities/12_StoneCold.txt
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/bin/Debug/net6.0/data/05-SuperstarAbilities/13_Undertaker.txt
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/bin/Debug/net6.0/data/05-SuperstarAbilities/14_TheRock.txt
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/bin/Debug/net6.0/data/cards.json
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/bin/Debug/net6.0/data/superstar.json
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/bin/Debug/net6.0/RawDeal.deps.json
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/bin/Debug/net6.0/RawDeal.runtimeconfig.json
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/bin/Debug/net6.0/RawDeal.dll
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/bin/Debug/net6.0/ref/RawDeal.dll
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/bin/Debug/net6.0/RawDeal.pdb
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/bin/Debug/net6.0/RawDealView.dll
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/bin/Debug/net6.0/RawDealView.pdb
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/obj/Debug/net6.0/RawDeal.csproj.AssemblyReference.cache
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/obj/Debug/net6.0/RawDeal.GeneratedMSBuildEditorConfig.editorconfig
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/obj/Debug/net6.0/RawDeal.AssemblyInfoInputs.cache
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/obj/Debug/net6.0/RawDeal.AssemblyInfo.cs
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/obj/Debug/net6.0/RawDeal.csproj.CoreCompileInputs.cache
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/obj/Debug/net6.0/RawDeal.csproj.CopyComplete
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/obj/Debug/net6.0/RawDeal.dll
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/obj/Debug/net6.0/ref/RawDeal.dll
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/obj/Debug/net6.0/RawDeal.pdb
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/obj/Debug/net6.0/RawDeal.genruntimeconfig.cache
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/bin/Debug/net6.0/data/superstar2.json
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/bin/Debug/net6.0/data/05-SuperstarAbilities-Tests/14.txt
+/home/rodrigo/Desktop/IIC2113/2023-1/Proyecto/Entrega 2/Enunciado/RawDeal/RawDeal/bin/Debug/net6.0/data/05-SuperstarAbilities-Tests/15.txt
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\bin\Debug\net6.0\RawDeal.exe
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\bin\Debug\net6.0\data\02-InvalidDecks-Tests\1.txt
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\bin\Debug\net6.0\data\02-InvalidDecks-Tests\10.txt
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\bin\Debug\net6.0\data\02-InvalidDecks-Tests\11.txt
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\bin\Debug\net6.0\data\02-InvalidDecks-Tests\2.txt
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\bin\Debug\net6.0\data\02-InvalidDecks-Tests\3.txt
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\bin\Debug\net6.0\data\02-InvalidDecks-Tests\4.txt
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\bin\Debug\net6.0\data\02-InvalidDecks-Tests\5.txt
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\bin\Debug\net6.0\data\02-InvalidDecks-Tests\6.txt
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\bin\Debug\net6.0\data\02-InvalidDecks-Tests\7.txt
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\bin\Debug\net6.0\data\02-InvalidDecks-Tests\8.txt
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\bin\Debug\net6.0\data\02-InvalidDecks-Tests\9.txt
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\bin\Debug\net6.0\data\02-InvalidDecks\01.txt
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\bin\Debug\net6.0\data\02-InvalidDecks\02.txt
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\bin\Debug\net6.0\data\02-InvalidDecks\03.txt
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\bin\Debug\net6.0\data\02-InvalidDecks\04.txt
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\bin\Debug\net6.0\data\02-InvalidDecks\05.txt
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\bin\Debug\net6.0\data\02-InvalidDecks\06.txt
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\bin\Debug\net6.0\data\02-InvalidDecks\07.txt
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\bin\Debug\net6.0\data\02-InvalidDecks\08.txt
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\bin\Debug\net6.0\data\02-InvalidDecks\09.txt
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\bin\Debug\net6.0\data\02-InvalidDecks\10.txt
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\bin\Debug\net6.0\data\02-InvalidDecks\11.txt
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\bin\Debug\net6.0\data\02-InvalidDecks\12.txt
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\bin\Debug\net6.0\data\04-NoEffects-Tests\1.txt
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\bin\Debug\net6.0\data\04-NoEffects-Tests\2.txt
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\bin\Debug\net6.0\data\04-NoEffects-Tests\3.txt
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\bin\Debug\net6.0\data\04-NoEffects-Tests\4.txt
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\bin\Debug\net6.0\data\04-NoEffects-Tests\5.txt
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\bin\Debug\net6.0\data\04-NoEffects-Tests\6.txt
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\bin\Debug\net6.0\data\04-NoEffects-Tests\7.txt
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\bin\Debug\net6.0\data\04-NoEffects\01.txt
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\bin\Debug\net6.0\data\04-NoEffects\02.txt
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\bin\Debug\net6.0\data\04-NoEffects\03.txt
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\bin\Debug\net6.0\data\04-NoEffects\04.txt
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\bin\Debug\net6.0\data\04-NoEffects\05.txt
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\bin\Debug\net6.0\data\04-NoEffects\06.txt
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\bin\Debug\net6.0\data\04-NoEffects\07.txt
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\bin\Debug\net6.0\data\04-NoEffects\08.txt
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\bin\Debug\net6.0\data\05-SuperstarAbilities-Tests\1.txt
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\bin\Debug\net6.0\data\05-SuperstarAbilities-Tests\10.txt
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\bin\Debug\net6.0\data\05-SuperstarAbilities-Tests\11.txt
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\bin\Debug\net6.0\data\05-SuperstarAbilities-Tests\12.txt
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\bin\Debug\net6.0\data\05-SuperstarAbilities-Tests\13.txt
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\bin\Debug\net6.0\data\05-SuperstarAbilities-Tests\14.txt
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\bin\Debug\net6.0\data\05-SuperstarAbilities-Tests\15.txt
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\bin\Debug\net6.0\data\05-SuperstarAbilities-Tests\2.txt
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\bin\Debug\net6.0\data\05-SuperstarAbilities-Tests\3.txt
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\bin\Debug\net6.0\data\05-SuperstarAbilities-Tests\4.txt
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\bin\Debug\net6.0\data\05-SuperstarAbilities-Tests\5.txt
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\bin\Debug\net6.0\data\05-SuperstarAbilities-Tests\6.txt
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\bin\Debug\net6.0\data\05-SuperstarAbilities-Tests\7.txt
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\bin\Debug\net6.0\data\05-SuperstarAbilities-Tests\8.txt
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\bin\Debug\net6.0\data\05-SuperstarAbilities-Tests\9.txt
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\bin\Debug\net6.0\data\05-SuperstarAbilities\01_Kane.txt
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\bin\Debug\net6.0\data\05-SuperstarAbilities\02_HHH.txt
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\bin\Debug\net6.0\data\05-SuperstarAbilities\03_Jericho.txt
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\bin\Debug\net6.0\data\05-SuperstarAbilities\04_Mankind.txt
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\bin\Debug\net6.0\data\05-SuperstarAbilities\05_StoneCold.txt
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\bin\Debug\net6.0\data\05-SuperstarAbilities\06_TheRock.txt
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\bin\Debug\net6.0\data\05-SuperstarAbilities\07_Undertaker.txt
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\bin\Debug\net6.0\data\05-SuperstarAbilities\08_HHH.txt
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\bin\Debug\net6.0\data\05-SuperstarAbilities\09_Jericho.txt
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\bin\Debug\net6.0\data\05-SuperstarAbilities\10_Kane.txt
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\bin\Debug\net6.0\data\05-SuperstarAbilities\11_Mankind.txt
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\bin\Debug\net6.0\data\05-SuperstarAbilities\12_StoneCold.txt
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\bin\Debug\net6.0\data\05-SuperstarAbilities\13_Undertaker.txt
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\bin\Debug\net6.0\data\05-SuperstarAbilities\14_TheRock.txt
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\bin\Debug\net6.0\data\cards.json
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\bin\Debug\net6.0\data\superstar.json
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\bin\Debug\net6.0\data\superstar2.json
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\bin\Debug\net6.0\RawDeal.deps.json
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\bin\Debug\net6.0\RawDeal.runtimeconfig.json
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\bin\Debug\net6.0\RawDeal.dll
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\bin\Debug\net6.0\RawDeal.pdb
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\bin\Debug\net6.0\Newtonsoft.Json.dll
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\bin\Debug\net6.0\RawDealView.dll
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\bin\Debug\net6.0\RawDealView.pdb
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\obj\Debug\net6.0\RawDeal.csproj.AssemblyReference.cache
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\obj\Debug\net6.0\RawDeal.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\obj\Debug\net6.0\RawDeal.AssemblyInfoInputs.cache
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\obj\Debug\net6.0\RawDeal.AssemblyInfo.cs
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\obj\Debug\net6.0\RawDeal.csproj.CoreCompileInputs.cache
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\obj\Debug\net6.0\RawDeal.csproj.CopyComplete
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\obj\Debug\net6.0\RawDeal.dll
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\obj\Debug\net6.0\refint\RawDeal.dll
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\obj\Debug\net6.0\RawDeal.pdb
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\obj\Debug\net6.0\RawDeal.genruntimeconfig.cache
+C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal\obj\Debug\net6.0\ref\RawDeal.dll
