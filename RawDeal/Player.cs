@@ -69,7 +69,7 @@ public class Player
         }
     }
 
-    public List<string> GetFormattedCardsFromHand()
+    public List<string> GetCardsStringsFromHand()
     {
         return Hand.GetFormattedCards();
     }
@@ -77,11 +77,11 @@ public class Player
     {
         return Arsenal.GetFormattedCards();
     }
-    public List<string> GetCardTilesFromRingside()
+    public List<string> GetCardsStringFromRingside()
     {
         return Ringside.GetFormattedCards();
     }
-    public List<string> GetCardTitlesFromRingArea()
+    public List<string> GetCardsStringsFromRingArea()
     {
         return RingArea.GetFormattedCards();
     }

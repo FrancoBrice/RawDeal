@@ -6,13 +6,15 @@ namespace RawDeal;
 
 public class Game
 {
-    private View _view;
-    private string _deckFolder;
+    private readonly View _view;
+    private readonly string _deckFolder;
     private List<Card> AllCardsList { get; set; }
     private List<SuperStar> AllSuperStarList { get; set; }
-    private List<string> SuperStarLogosList = new List<string>();
-    private List<Player> PlayersList = new List<Player>();
+    private List<string> SuperStarLogosList = new();
+    private List<Player> PlayersList = new();
     private bool _gameIsOver;
+    private int _indexCurrentPlayer;
+    private int _indexNotCurrentPlayer;
 
 
     private void GenerateSuperStarLogosList(){
@@ -30,6 +32,8 @@ public class Game
         _view = view;
         _deckFolder = deckFolder;
         _gameIsOver = false;
+        _indexCurrentPlayer = 0;
+        _indexNotCurrentPlayer = 1;
         GenerateSuperStarLogosList();
     }
 
@@ -39,8 +43,8 @@ public class Game
         while (PlayersList.Count() < 2)
         {
             string pathDeckSelected = _view.AskUserToSelectDeck(_deckFolder);
-            List<Card> deckCardList = new List<Card>();
-            List<SuperStar> deckSuperStarList = new List<SuperStar>();
+            List<Card> deckCardList = new();
+            List<SuperStar> deckSuperStarList = new();
             foreach (string cardString in File.ReadAllLines(pathDeckSelected))
             {
                 if (cardString.Contains("(Superstar Card)"))
@@ -89,7 +93,6 @@ public class Game
         currentPlayer.MoveCardFromArsenalToHand();
         currentPlayer.HasUsedHisAbilityInTheTurn = false;
 
-        
         bool playerEndedTurn = false;
         while (!playerEndedTurn && !_gameIsOver)
         {
@@ -122,7 +125,7 @@ public class Game
             else if (nextPlay == NextPlay.PlayCard)
             {
                 List<(int, Card)> playableCardsFromPlayer = currentPlayer.GetPlayableCardsFromPlayer();
-                List<string> availablePlays = new List<string>();
+                List<string> availablePlays = new();
                 
                 
                 foreach (var tuple in playableCardsFromPlayer)
@@ -194,17 +197,13 @@ public class Game
         bool thereIsInvalidDeck = CheckIfThereIsInvalidDecks();
         if (!thereIsInvalidDeck)
         {
-            
             PlayersList = OrderPlayersBySuperStarValue(PlayersList);
             AplyInitialAbilities();
-            int indexCurrentPlayer = 0;
-            int indexNotCurrentPlayer = 1;
 
             while (!_gameIsOver)
             {
-                Player currentPlayer = PlayersList[indexCurrentPlayer];
-                Player notCurrentPlayer = PlayersList[indexNotCurrentPlayer];
-
+                Player currentPlayer = PlayersList[_indexCurrentPlayer];
+                Player notCurrentPlayer = PlayersList[_indexNotCurrentPlayer];
                 bool notCurrentPlayerHasLose =  notCurrentPlayer.CheckIfPlayerLose();
                 if (notCurrentPlayerHasLose)
                 {
@@ -215,23 +214,26 @@ public class Game
                 {
                     PlayTurn(currentPlayer, notCurrentPlayer);
                 }
-                
-
-                indexCurrentPlayer = (indexCurrentPlayer + 1) % PlayersList.Count;
-                indexNotCurrentPlayer = (indexNotCurrentPlayer + 1) % PlayersList.Count;
+                UpdatePlayersIndex();
             }
         }
 
     }
 
-    private List<Player> OrderPlayersBySuperStarValue(List<Player> playerList)
+    private void UpdatePlayersIndex()
     {
-        if (playerList[1].SuperStar.SuperstarValue > playerList[0].SuperStar.SuperstarValue)
+        _indexCurrentPlayer = (_indexCurrentPlayer + 1) % PlayersList.Count;
+        _indexNotCurrentPlayer = (_indexNotCurrentPlayer + 1) % PlayersList.Count;
+    }
+
+    private List<Player> OrderPlayersBySuperStarValue(List<Player> playersList)
+    {
+        if (playersList[1].SuperStar.SuperstarValue > playersList[0].SuperStar.SuperstarValue)
         {
-            SwapPlayers(playerList);
+            SwapPlayers(playersList);
         }
 
-        return playerList;
+        return playersList;
     }
     
 
@@ -242,36 +244,44 @@ public class Game
         CardSet setOfCardsSelected = _view.AskUserWhatSetOfCardsHeWantsToSee();
         Player opponent = PlayersList.FirstOrDefault(p => p != player);
 
-        List<string> cardTitles = new List<string>();
+        List<string> cardstringsList = GenerateCardsStringsList(player, setOfCardsSelected);
+
+        if (cardstringsList != null) _view.ShowCards(cardstringsList);
+    }
+    
+
+    private List<string> GenerateCardsStringsList(Player player, CardSet setOfCardsSelected)
+    {
+        List<string> cardstringsList = new();
+        Player opponent = PlayersList.FirstOrDefault(p => p != player);
 
         if (setOfCardsSelected == CardSet.RingArea)
         {
-            cardTitles = player.GetCardTitlesFromRingArea();
+            cardstringsList = player.GetCardsStringsFromRingArea();
         }
         else if (setOfCardsSelected == CardSet.Hand)
         {
-            cardTitles = player.GetFormattedCardsFromHand();
+            cardstringsList = player.GetCardsStringsFromHand();
         }
         else if (setOfCardsSelected == CardSet.RingsidePile)
         {
-            cardTitles = player.GetCardTilesFromRingside();
+            cardstringsList = player.GetCardsStringFromRingside();
         }
         else if (setOfCardsSelected == CardSet.OpponentsRingArea)
         {
-            cardTitles = opponent?.GetCardTitlesFromRingArea();
+            cardstringsList = opponent.GetCardsStringsFromRingArea();
         }
         else if (setOfCardsSelected == CardSet.OpponentsRingsidePile)
         {
-            cardTitles = opponent?.GetCardTilesFromRingside();
+            cardstringsList = opponent.GetCardsStringFromRingside();
         }
-
-        if (cardTitles != null) _view.ShowCards(cardTitles);
+        return cardstringsList;
     }
 
     private void ShowPlayersInfo(Player currentPlayer, Player notCurrentPlayer)
     {
-        List<Player> playersList = new List<Player>() { currentPlayer, notCurrentPlayer };
-        List<PlayerInfo> playerInfoList = new List<PlayerInfo>();
+        List<Player> playersList = new() { currentPlayer, notCurrentPlayer };
+        List<PlayerInfo> playerInfoList = new();
         foreach (Player player in playersList)
         {
             PlayerInfo playerInfo = GeneratePlayerInfo(player);

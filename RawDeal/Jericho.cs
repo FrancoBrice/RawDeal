@@ -30,7 +30,7 @@ public class Jericho : SuperStar
 
     private void MakePlayerDiscardACard(Player player)
     {
-        int indexCardFromPlayerHand = _view.AskPlayerToSelectACardToDiscard(player.GetFormattedCardsFromHand(), player.GetSuperStarName(),
+        int indexCardFromPlayerHand = _view.AskPlayerToSelectACardToDiscard(player.GetCardsStringsFromHand(), player.GetSuperStarName(),
             player.GetSuperStarName(), 1);
         player.MoveCardFromHandToRingsideByIndex(indexCardFromPlayerHand);
     }
