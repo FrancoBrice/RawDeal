@@ -8,12 +8,13 @@ public class StoneCold : SuperStar
 
     public override void UseAbility(Player player, Player opponentPlayer)
     {
+        _view.SayThatPlayerIsGoingToUseHisAbility(player.GetSuperStarName(), player.GetSuperStarAbility());
         _view.SayThatPlayerDrawCards(player.GetSuperStarName(), 1);
         player.MoveCardFromArsenalToHand();
         int indexCardFromHand =
             _view.AskPlayerToReturnOneCardFromHisHandToHisArsenal(player.GetSuperStarName(),
                 player.GetFormattedCardsFromHand());
-        player.MoveCardByIndexFromHandToArsenalBeginning(indexCardFromHand);
+        player.MoveCardFromHandToArsenalBeginningByIndex(indexCardFromHand);
     }
 
     public override bool CheckIfCanUseAbility(Player player)

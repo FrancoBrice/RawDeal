@@ -18,13 +18,16 @@ public class TheRock : SuperStar
 
     public override bool CheckIfCanUseAbility(Player player)
     {
-        bool doesPlayerCanUseHisAbility = false || player.GetRingsideSize() > 0;
-        return doesPlayerCanUseHisAbility;
+        if (player.GetRingsideSize() > 0 && !player.HasUsedHisAbilityInTheTurn)
+        {
+            return true;
+        }
+        return false;
     }
 
     public override bool CheckIfAbilityIsAutomatic()
     {
-        return false;
+        return true;
     }
 
     private bool CheckIfPlayerWantToUseHisAbility(Player player)

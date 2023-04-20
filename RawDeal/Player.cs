@@ -229,7 +229,7 @@ public class Player
         AddCardToHand(card);
     }
 
-    public void MoveCardByIndexFromHandToArsenalBeginning(int indexCardFromHand)
+    public void MoveCardFromHandToArsenalBeginningByIndex(int indexCardFromHand)
     {
         Card card = Hand.GetCardByIndex(indexCardFromHand);
         Hand.RemoveCardByIndex(indexCardFromHand);
@@ -239,5 +239,13 @@ public class Player
     public void SetShieldOfDamage(int amountOfDamageShield)
     {
         _damageReducedByShield = amountOfDamageShield;
+    }
+
+    public void ExecuteInitialAbility()
+    {
+        if (SuperStar.HasInitialAbility)
+        {
+            SuperStar.UseInitialAbility(this);
+        }
     }
 }

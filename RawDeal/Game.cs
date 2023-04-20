@@ -131,6 +131,7 @@ public class Game
     
     private void PlayTurn(Player currentPlayer, Player notCurrentPlayer)
     {
+
         _view.SayThatATurnBegins(currentPlayer.SuperStar.Name);
 
         currentPlayer.MoveCardFromArsenalToHand();
@@ -198,12 +199,9 @@ public class Game
                         _view.ShowCardOverturnByTakingDamage(notCurrentPlayerDamagedCards[cardIndex].GetCardFormattedInfo(), indexShowedCard , actualDamage);
                         indexShowedCard++;
                     }
-                    
-                    bool notCurrentPlayerHasLose = notCurrentPlayer.CheckIfPlayerLose();
-                    if (notCurrentPlayerHasLose)
-                    {
-                        EndGame(currentPlayer);
-                    }
+
+
+
                 }
                 
             }
@@ -223,6 +221,13 @@ public class Game
                 EndGame(notCurrentPlayer);
             }
             currentPlayer.UpdateFortitude();
+            
+            bool notCurrentPlayerHasLose = notCurrentPlayer.CheckIfPlayerLose();
+            if (notCurrentPlayerHasLose)
+            {
+                EndGame(currentPlayer);
+            }
+
         }
         
     }
@@ -237,8 +242,10 @@ public class Game
         bool thereIsInvalidDeck = CheckIfThereIsInvalidDecks();
         if (!thereIsInvalidDeck)
         {
+            
             PlayersList = OrderPlayersBySuperStarValue(PlayersList);
 
+            AplyInitialAbilities();
             int indexCurrentPlayer = 0;
             int indexNotCurrentPlayer = 1;
 
@@ -247,7 +254,17 @@ public class Game
                 Player currentPlayer = PlayersList[indexCurrentPlayer];
                 Player notCurrentPlayer = PlayersList[indexNotCurrentPlayer];
 
-                PlayTurn(currentPlayer, notCurrentPlayer);
+                bool notCurrentPlayerHasLose =  notCurrentPlayer.CheckIfPlayerLose();
+                if (notCurrentPlayerHasLose)
+                {
+                    EndGame(currentPlayer);
+                }
+
+                if (!_gameIsOver)
+                {
+                    PlayTurn(currentPlayer, notCurrentPlayer);
+                }
+                
 
                 indexCurrentPlayer = (indexCurrentPlayer + 1) % PlayersList.Count;
                 indexNotCurrentPlayer = (indexNotCurrentPlayer + 1) % PlayersList.Count;
@@ -271,11 +288,6 @@ public class Game
         (list[0], list[1]) = (list[1], list[0]);
     }
     
-    private static string ConvertCardSetToString(CardSet cardSet)
-    {
-        string cardSetString = cardSet.ToString();
-        return cardSetString;
-    }
     private void ShowCardsBasedOnSelection(Player player)
     {
 
@@ -325,11 +337,20 @@ public class Game
 
     }
 
+    private void AplyInitialAbilities()
+    {
+        foreach (Player player in PlayersList)
+        {
+            player.ExecuteInitialAbility();
+        }
+    }
+
     private void EndGame(Player winnerPlayer)
     {
         _gameIsOver = true;
         _view.CongratulateWinner(winnerPlayer.GetSuperStarName());
     }
+
 
 
 }

@@ -11,6 +11,7 @@ namespace RawDeal
         [JsonProperty("Superstar Value")] public int SuperstarValue { get; set; }
         [JsonProperty("Superstar Ability")] public string SuperstarAbility { get; set; }
         protected View _view;
+        public bool HasInitialAbility;
 
         public SuperStar(string name, string logo, int handSize, int superstarValue, string superstarAbility)
         {
@@ -19,6 +20,7 @@ namespace RawDeal
             HandSize = handSize;
             SuperstarValue = superstarValue;
             SuperstarAbility = superstarAbility;
+            HasInitialAbility = false;
         }
 
         public abstract void UseAbility(Player player, Player opponentPlayer);
@@ -31,5 +33,6 @@ namespace RawDeal
         public abstract bool CheckIfCanUseAbility(Player player);
 
         public abstract bool CheckIfAbilityIsAutomatic();
+        public virtual void UseInitialAbility(Player player){}
     }
 }
