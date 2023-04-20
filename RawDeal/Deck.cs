@@ -2,9 +2,9 @@ namespace RawDeal;
 
 public class Deck
 {
-    public List<Card> CardList { get; set; }
-    public List<SuperStar> SuperStarList { get; set; }
-    public List<string> SuperStarLogosList { get; set; }
+    private List<Card> CardList { get; set; }
+    private List<SuperStar> SuperStarList { get; set; }
+    private List<string> SuperStarLogosList { get; set; }
 
 
     public Deck(List<SuperStar> deckSuperStarList, List<Card> deckCardList, List<string> superStarLogosList)

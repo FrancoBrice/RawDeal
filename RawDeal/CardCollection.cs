@@ -3,12 +3,9 @@ namespace RawDeal;
 public class CardCollection
 {
     protected List<Card> CardList;
-    public int CardListSize
-    {
-        get { return CardList.Count; }
-    }
-    
-    public CardCollection()
+    public int CardListSize => CardList.Count;
+
+    protected CardCollection()
     {
         CardList = new List<Card>();
     }

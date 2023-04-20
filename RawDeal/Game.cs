@@ -15,6 +15,8 @@ public class Game
     private bool _gameIsOver;
     private int _indexCurrentPlayer;
     private int _indexNotCurrentPlayer;
+    private Player _currentPlayer => PlayersList[_indexCurrentPlayer];
+    private Player _notCurrentPlayer => PlayersList[_indexNotCurrentPlayer];
 
 
     private void GenerateSuperStarLogosList(){
@@ -85,27 +87,27 @@ public class Game
         return false;
     }
     
-    private void PlayTurn(Player currentPlayer, Player notCurrentPlayer)
+    private void PlayTurn()
     {
 
-        _view.SayThatATurnBegins(currentPlayer.SuperStar.Name);
+        _view.SayThatATurnBegins(_currentPlayer.SuperStar.Name);
 
-        currentPlayer.MoveCardFromArsenalToHand();
-        currentPlayer.HasUsedHisAbilityInTheTurn = false;
+        _currentPlayer.MoveCardFromArsenalToHand();
+        _currentPlayer.HasUsedHisAbilityInTheTurn = false;
 
         bool playerEndedTurn = false;
         while (!playerEndedTurn && !_gameIsOver)
         {
-            bool canUserUseHisAbility = CheckIfPlayerCanUseHisAbility(currentPlayer);
-            bool abilityIsAutomatic = currentPlayer.CheckIfAbilityIsAutomatic();
+            bool canUserUseHisAbility = CheckIfPlayerCanUseHisAbility(_currentPlayer);
+            bool abilityIsAutomatic = _currentPlayer.CheckIfAbilityIsAutomatic();
             NextPlay nextPlay;
             
             if (canUserUseHisAbility && abilityIsAutomatic)
             {
-                currentPlayer.UseSuperStarAbility(notCurrentPlayer);
-                currentPlayer.HasUsedHisAbilityInTheTurn = true;
+                _currentPlayer.UseSuperStarAbility(_notCurrentPlayer);
+                _currentPlayer.HasUsedHisAbilityInTheTurn = true;
             }
-            ShowPlayersInfo(currentPlayer, notCurrentPlayer);
+            ShowPlayersInfo();
             
             if (canUserUseHisAbility && !abilityIsAutomatic)
             {
@@ -119,52 +121,18 @@ public class Game
 
             if (nextPlay == NextPlay.ShowCards)
             {
-                ShowCardsBasedOnSelection(currentPlayer);
+                ShowCardsBasedOnSelection(_currentPlayer);
             }
             
             else if (nextPlay == NextPlay.PlayCard)
             {
-                List<(int, Card)> playableCardsFromPlayer = currentPlayer.GetPlayableCardsFromPlayer();
-                List<string> availablePlays = new();
-                
-                
-                foreach (var tuple in playableCardsFromPlayer)
-                {
-                    Card card = tuple.Item2;
-                    string formattedPlay = card.GetCardInFormattedPlay();
-                    availablePlays.Add(formattedPlay);
-                }
-                int cardIndex = _view.AskUserToSelectAPlay(availablePlays);
-                
-                if (cardIndex != -1)
-                {
-                    Card selectedCard = playableCardsFromPlayer[cardIndex].Item2;
-                    string formattedPlay = selectedCard.GetCardInFormattedPlay();
-                    
-                    _view.SayThatPlayerIsTryingToPlayThisCard(currentPlayer.GetSuperStarName(), formattedPlay);
-                    currentPlayer.MoveCardFromHandToRingAreaByIndex(playableCardsFromPlayer[cardIndex].Item1);
-                    _view.SayThatPlayerSuccessfullyPlayedACard();
-                    int actualDamage = notCurrentPlayer.CalculateDamage(selectedCard.GetDamage());
-                    List<Card> notCurrentPlayerDamagedCards = notCurrentPlayer.GetCardsFromArsenal(actualDamage);
-                    notCurrentPlayer.ReceiveDamage(actualDamage);
-
-                    int indexShowedCard = 1;
-                    for (cardIndex = notCurrentPlayerDamagedCards.Count - 1; cardIndex >= 0; cardIndex -- )
-                    {
-                        _view.ShowCardOverturnByTakingDamage(notCurrentPlayerDamagedCards[cardIndex].GetCardFormattedInfo(), indexShowedCard , actualDamage);
-                        indexShowedCard++;
-                    }
-
-
-
-                }
-                
+                PlayCard();
             }
-            
+
             else if (nextPlay == NextPlay.UseAbility)
             {
-                currentPlayer.UseSuperStarAbility(notCurrentPlayer);
-                currentPlayer.HasUsedHisAbilityInTheTurn = true;
+                _currentPlayer.UseSuperStarAbility(_notCurrentPlayer);
+                _currentPlayer.HasUsedHisAbilityInTheTurn = true;
             }
             
             else if (nextPlay == NextPlay.EndTurn)
@@ -173,18 +141,56 @@ public class Game
             }
             else if (nextPlay == NextPlay.GiveUp)
             {
-                EndGame(notCurrentPlayer);
+                EndGame(_notCurrentPlayer);
             }
-            currentPlayer.UpdateFortitude();
+            _currentPlayer.UpdateFortitude();
             
-            bool notCurrentPlayerHasLose = notCurrentPlayer.CheckIfPlayerLose();
+            bool notCurrentPlayerHasLose = _notCurrentPlayer.CheckIfPlayerLose();
             if (notCurrentPlayerHasLose)
             {
-                EndGame(currentPlayer);
+                EndGame(_currentPlayer);
             }
-
         }
-        
+    }
+
+    private void PlayCard()
+    {
+        List<(int, Card)> playableCardsFromPlayer = _currentPlayer.GetPlayableCardsFromPlayer();
+        List<string> availablePlays = new();
+                
+        foreach (var tupleIndexInHandCard in playableCardsFromPlayer)
+        {
+            Card card = ExtractCardFromTuple(tupleIndexInHandCard);
+            string cardInPlayFormat = card.GetCardInPlayFormat();
+            availablePlays.Add(cardInPlayFormat);
+        }
+        int cardIndex = _view.AskUserToSelectAPlay(availablePlays);
+
+        if (cardIndex != -1)
+        {
+            Card selectedCard = playableCardsFromPlayer[cardIndex].Item2;
+            string cardInPlayFormat = selectedCard.GetCardInPlayFormat();
+
+            _view.SayThatPlayerIsTryingToPlayThisCard(_currentPlayer.GetSuperStarName(), cardInPlayFormat);
+            _currentPlayer.MoveCardFromHandToRingAreaByIndex(playableCardsFromPlayer[cardIndex].Item1);
+            _view.SayThatPlayerSuccessfullyPlayedACard();
+            int actualDamage = _notCurrentPlayer.CalculateDamage(selectedCard.GetDamage());
+            List<Card> notCurrentPlayerDamagedCards = _notCurrentPlayer.GetCardsFromArsenal(actualDamage);
+            _notCurrentPlayer.ReceiveDamage(actualDamage);
+
+            int indexShowedCard = 1;
+            for (cardIndex = notCurrentPlayerDamagedCards.Count - 1; cardIndex >= 0; cardIndex--)
+            {
+                _view.ShowCardOverturnByTakingDamage(notCurrentPlayerDamagedCards[cardIndex].GetCardFormattedInfo(),
+                    indexShowedCard, actualDamage);
+                indexShowedCard++;
+            }
+        }
+    }
+
+    private Card ExtractCardFromTuple((int, Card) tupleIndexCard)
+    {
+        return tupleIndexCard.Item2;
     }
 
     private bool CheckIfPlayerCanUseHisAbility(Player currentPlayer)
@@ -202,17 +208,15 @@ public class Game
 
             while (!_gameIsOver)
             {
-                Player currentPlayer = PlayersList[_indexCurrentPlayer];
-                Player notCurrentPlayer = PlayersList[_indexNotCurrentPlayer];
-                bool notCurrentPlayerHasLose =  notCurrentPlayer.CheckIfPlayerLose();
+                bool notCurrentPlayerHasLose =  _notCurrentPlayer.CheckIfPlayerLose();
                 if (notCurrentPlayerHasLose)
                 {
-                    EndGame(currentPlayer);
+                    EndGame(_currentPlayer);
                 }
 
                 if (!_gameIsOver)
                 {
-                    PlayTurn(currentPlayer, notCurrentPlayer);
+                    PlayTurn();
                 }
                 UpdatePlayersIndex();
             }
@@ -236,14 +240,10 @@ public class Game
         return playersList;
     }
     
-
-    
     private void ShowCardsBasedOnSelection(Player player)
     {
 
         CardSet setOfCardsSelected = _view.AskUserWhatSetOfCardsHeWantsToSee();
-        Player opponent = PlayersList.FirstOrDefault(p => p != player);
-
         List<string> cardstringsList = GenerateCardsStringsList(player, setOfCardsSelected);
 
         if (cardstringsList != null) _view.ShowCards(cardstringsList);
@@ -257,30 +257,30 @@ public class Game
 
         if (setOfCardsSelected == CardSet.RingArea)
         {
-            cardstringsList = player.GetCardsStringsFromRingArea();
+            cardstringsList = player.GetCardsFromRingAreaInStringFormat();
         }
         else if (setOfCardsSelected == CardSet.Hand)
         {
-            cardstringsList = player.GetCardsStringsFromHand();
+            cardstringsList = player.GetCardsFromHandInStringFormat();
         }
         else if (setOfCardsSelected == CardSet.RingsidePile)
         {
-            cardstringsList = player.GetCardsStringFromRingside();
+            cardstringsList = player.GetCardsFromRingsideInStringFormat();
         }
         else if (setOfCardsSelected == CardSet.OpponentsRingArea)
         {
-            cardstringsList = opponent.GetCardsStringsFromRingArea();
+            cardstringsList = opponent.GetCardsFromRingAreaInStringFormat();
         }
         else if (setOfCardsSelected == CardSet.OpponentsRingsidePile)
         {
-            cardstringsList = opponent.GetCardsStringFromRingside();
+            cardstringsList = opponent.GetCardsFromRingsideInStringFormat();
         }
         return cardstringsList;
     }
 
-    private void ShowPlayersInfo(Player currentPlayer, Player notCurrentPlayer)
+    private void ShowPlayersInfo()
     {
-        List<Player> playersList = new() { currentPlayer, notCurrentPlayer };
+        List<Player> playersList = new() { _currentPlayer, _notCurrentPlayer };
         List<PlayerInfo> playerInfoList = new();
         foreach (Player player in playersList)
         {

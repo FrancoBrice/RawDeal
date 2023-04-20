@@ -23,11 +23,6 @@ public class Card
 
     [JsonProperty("CardEffect")]
     public string CardEffect { get; set; }
-    
-
-    //public Card()
-    //{
-    //}
 
     public string GetCardFormattedInfo()
     {
@@ -35,7 +30,7 @@ public class Card
             Damage, StunValue.ToString(), Types, Subtypes, CardEffect);
     }
 
-    public string GetCardInFormattedPlay()
+    public string GetCardInPlayFormat()
     { 
         return Formatter.PlayToString(GetCardFormattedInfo(), Types[0].ToUpper());
     }

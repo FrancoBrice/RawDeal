@@ -4,12 +4,12 @@ namespace RawDeal;
 
 public class Player
 {
-    public List<Card> CardList { get; set; }
+    private List<Card> CardList { get; set; }
     public SuperStar SuperStar { get; set; }
-    public Arsenal Arsenal { get; set; }
+    private Arsenal Arsenal { get; set; }
     public Ringside Ringside  { get; set; }
-    public Hand Hand { get; set; }
-    public RingArea RingArea { get; set; }
+    private Hand Hand { get; set; }
+    private RingArea RingArea { get; set; }
     public int Fortitude;
     private View _view;
     public bool HasUsedHisAbilityInTheTurn;
@@ -69,19 +69,15 @@ public class Player
         }
     }
 
-    public List<string> GetCardsStringsFromHand()
+    public List<string> GetCardsFromHandInStringFormat()
     {
         return Hand.GetFormattedCards();
     }
-    public List<string> GetCardTilesFromArsenal()
-    {
-        return Arsenal.GetFormattedCards();
-    }
-    public List<string> GetCardsStringFromRingside()
+    public List<string> GetCardsFromRingsideInStringFormat()
     {
         return Ringside.GetFormattedCards();
     }
-    public List<string> GetCardsStringsFromRingArea()
+    public List<string> GetCardsFromRingAreaInStringFormat()
     {
         return RingArea.GetFormattedCards();
     }

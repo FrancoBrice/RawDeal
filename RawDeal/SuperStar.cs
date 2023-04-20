@@ -5,8 +5,8 @@ namespace RawDeal
 {
     public abstract class SuperStar
     {
-        public string Name { get; set; }
-        public string Logo { get; set; }
+        public string Name { get; }
+        public string Logo { get; }
         [JsonProperty("Hand Size")] public int HandSize { get; set; }
         [JsonProperty("Superstar Value")] public int SuperstarValue { get; set; }
         [JsonProperty("Superstar Ability")] public string SuperstarAbility { get; set; }

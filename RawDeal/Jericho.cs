@@ -4,6 +4,7 @@ public class Jericho : SuperStar
 {
     public Jericho(string name, string logo, int handSize, int superstarValue, string superstarAbility) : base(name, logo, handSize, superstarValue, superstarAbility)
     {
+        
     }
 
     public override void UseAbility(Player player, Player opponentPlayer)
@@ -30,7 +31,7 @@ public class Jericho : SuperStar
 
     private void MakePlayerDiscardACard(Player player)
     {
-        int indexCardFromPlayerHand = _view.AskPlayerToSelectACardToDiscard(player.GetCardsStringsFromHand(), player.GetSuperStarName(),
+        int indexCardFromPlayerHand = _view.AskPlayerToSelectACardToDiscard(player.GetCardsFromHandInStringFormat(), player.GetSuperStarName(),
             player.GetSuperStarName(), 1);
         player.MoveCardFromHandToRingsideByIndex(indexCardFromPlayerHand);
     }

@@ -13,7 +13,7 @@ public class StoneCold : SuperStar
         player.MoveCardFromArsenalToHand();
         int indexCardFromHand =
             _view.AskPlayerToReturnOneCardFromHisHandToHisArsenal(player.GetSuperStarName(),
-                player.GetCardsStringsFromHand());
+                player.GetCardsFromHandInStringFormat());
         player.MoveCardFromHandToArsenalBeginningByIndex(indexCardFromHand);
     }
 

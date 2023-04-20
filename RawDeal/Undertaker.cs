@@ -4,6 +4,7 @@ public class Undertaker : SuperStar
 {
     public Undertaker(string name, string logo, int handSize, int superstarValue, string superstarAbility) : base(name, logo, handSize, superstarValue, superstarAbility)
     {
+        
     }
 
     public override void UseAbility(Player player, Player opponentPlayer)
@@ -12,14 +13,14 @@ public class Undertaker : SuperStar
         int cardsRemainingToDiscard = 2;
         for (int i = 0; i < 2; i++)
         {
-            int indexCardFromHand = _view.AskPlayerToSelectACardToDiscard(player.GetCardsStringsFromHand(), player.GetSuperStarName(),
+            int indexCardFromHand = _view.AskPlayerToSelectACardToDiscard(player.GetCardsFromHandInStringFormat(), player.GetSuperStarName(),
                 player.GetSuperStarName(), cardsRemainingToDiscard);
             player.MoveCardFromHandToRingsideByIndex(indexCardFromHand);
             cardsRemainingToDiscard--;
         }
 
         int indexCardFromRingside =
-            _view.AskPlayerToSelectCardsToPutInHisHand(player.GetSuperStarName(), 1, player.GetCardsStringFromRingside());
+            _view.AskPlayerToSelectCardsToPutInHisHand(player.GetSuperStarName(), 1, player.GetCardsFromRingsideInStringFormat());
         player.MoveCardFromRingsideToHandByIndex(indexCardFromRingside);
 
     }
