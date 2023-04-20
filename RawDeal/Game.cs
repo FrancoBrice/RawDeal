@@ -1,6 +1,5 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System.Linq;
 using RawDealView;
 
 namespace RawDeal;
@@ -10,60 +9,12 @@ public class Game
     private View _view;
     private string _deckFolder;
     private List<Card> AllCardsList { get; set; }
-    public List<SuperStar> AllSuperStarList { get; set; }
-    public List<string> SuperStarLogosList = new List<string>();
-    public List<Player> PlayersList = new List<Player>();
+    private List<SuperStar> AllSuperStarList { get; set; }
+    private List<string> SuperStarLogosList = new List<string>();
+    private List<Player> PlayersList = new List<Player>();
     private bool _gameIsOver;
 
-    private void ExtractCardsFromJson()
-    {
-        string pathCardsJson = Path.Combine("data", "cards.json");
-        string allCardsJson = File.ReadAllText(pathCardsJson);
-        AllCardsList = JsonConvert.DeserializeObject<List<Card>>(allCardsJson);
-    }
 
-    private void ExtractSuperStarsDataFromJson()
-    {
-        string pathSuperStarJson = Path.Combine("data", "superstar.json");
-        string allSuperStarJson = File.ReadAllText(pathSuperStarJson);
-        JArray jsonArrayAllSuperStar = JArray.Parse(allSuperStarJson);
-        AllSuperStarList = new List<SuperStar>();
-
-        foreach (JObject jObject in jsonArrayAllSuperStar)
-        {
-            string name = jObject["Name"].ToString();
-            SuperStar superstar = null;
-            switch (name)
-            {
-                case "HHH":
-                    superstar = JsonConvert.DeserializeObject<HHH>(jObject.ToString());
-                    break;
-                case "KANE":
-                    superstar = JsonConvert.DeserializeObject<Kane>(jObject.ToString());
-                    break;
-                case "THE ROCK":
-                    superstar = JsonConvert.DeserializeObject<TheRock>(jObject.ToString());
-                    break;
-                case "THE UNDERTAKER":
-                    superstar = JsonConvert.DeserializeObject<Undertaker>(jObject.ToString());
-                    break;
-                case "CHRIS JERICHO":
-                    superstar = JsonConvert.DeserializeObject<Jericho>(jObject.ToString());
-                    break;
-                case "MANKIND":
-                    superstar = JsonConvert.DeserializeObject<Mankind>(jObject.ToString());
-                    break;
-                case "STONE COLD STEVE AUSTIN":
-                    superstar = JsonConvert.DeserializeObject<StoneCold>(jObject.ToString());
-                    break;
-            }
-
-            if (superstar != null)
-            {
-                AllSuperStarList.Add(superstar);
-            }
-        }
-    }
     private void GenerateSuperStarLogosList(){
         foreach (SuperStar superstar in AllSuperStarList)
         {
@@ -73,11 +24,12 @@ public class Game
     
     public Game(View view, string deckFolder)
     {
+        JsonReader jsonReader = new JsonReader();
+        AllCardsList = jsonReader.GenerateAllCardsListFromCardsFromJson();
+        AllSuperStarList = jsonReader.GenerateAllSuperStarsListFromJson();
         _view = view;
         _deckFolder = deckFolder;
         _gameIsOver = false;
-        ExtractCardsFromJson();
-        ExtractSuperStarsDataFromJson();
         GenerateSuperStarLogosList();
     }
 
@@ -244,7 +196,6 @@ public class Game
         {
             
             PlayersList = OrderPlayersBySuperStarValue(PlayersList);
-
             AplyInitialAbilities();
             int indexCurrentPlayer = 0;
             int indexNotCurrentPlayer = 1;
@@ -283,10 +234,7 @@ public class Game
         return playerList;
     }
     
-    private static void SwapPlayers<TPlayer>(IList<TPlayer> list)
-    {
-        (list[0], list[1]) = (list[1], list[0]);
-    }
+
     
     private void ShowCardsBasedOnSelection(Player player)
     {
@@ -322,19 +270,22 @@ public class Game
 
     private void ShowPlayersInfo(Player currentPlayer, Player notCurrentPlayer)
     {
+        List<Player> playersList = new List<Player>() { currentPlayer, notCurrentPlayer };
         List<PlayerInfo> playerInfoList = new List<PlayerInfo>();
-        List<Player> playersList = new List<Player>();
-        playersList.Add(currentPlayer);
-        playersList.Add(notCurrentPlayer);
         foreach (Player player in playersList)
         {
-            PlayerInfo playerInfo =
-                new PlayerInfo(player.GetSuperStarName(), player.Fortitude, player.GetHandSize(),
-                    player.GetArsenalSize());
-            playerInfoList.Add(playerInfo);
+            PlayerInfo playerInfo = GeneratePlayerInfo(player);
+                playerInfoList.Add(playerInfo);
         }
         _view.ShowGameInfo(playerInfoList[0], playerInfoList[1]);
 
+    }
+
+    private PlayerInfo GeneratePlayerInfo(Player player)
+    {
+
+        return new PlayerInfo(player.GetSuperStarName(), player.Fortitude, player.GetHandSize(),
+                player.GetArsenalSize());
     }
 
     private void AplyInitialAbilities()
@@ -350,7 +301,10 @@ public class Game
         _gameIsOver = true;
         _view.CongratulateWinner(winnerPlayer.GetSuperStarName());
     }
-
-
+    
+    private static void SwapPlayers<TPlayer>(IList<TPlayer> list)
+    {
+        (list[0], list[1]) = (list[1], list[0]);
+    }
 
 }
