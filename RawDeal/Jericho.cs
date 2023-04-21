@@ -20,19 +20,11 @@ public class Jericho : SuperStar
         {
             return true;
         }
-
         return false;
     }
 
     public override bool CheckIfAbilityIsAutomatic()
     {
         return false;
-    }
-
-    private void MakePlayerDiscardACard(Player player)
-    {
-        int indexCardFromPlayerHand = _view.AskPlayerToSelectACardToDiscard(player.GetCardsFromHandInStringFormat(), player.GetSuperStarName(),
-            player.GetSuperStarName(), 1);
-        player.MoveCardFromHandToRingsideByIndex(indexCardFromPlayerHand);
     }
 }

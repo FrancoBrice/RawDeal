@@ -12,8 +12,8 @@ public class TheRock : SuperStar
         bool doesPlayerWantToUseHisAbility = CheckIfPlayerWantToUseHisAbility(player);
         if (doesPlayerWantToUseHisAbility)
         {
-            int index = _view.AskPlayerToSelectCardsToRecover(Name, 1, player.Ringside.GetFormattedCards() );
-            player.MoveCardByIndexFromRingsideToArsenalBeginning(index);
+            int indexInputByUser = _view.AskPlayerToSelectCardsToRecover(Name, 1, player.Ringside.GetFormattedCards() );
+            player.MoveCardByIndexFromRingsideToArsenalBeginning(indexInputByUser);
         }
     }
 
@@ -29,16 +29,5 @@ public class TheRock : SuperStar
     public override bool CheckIfAbilityIsAutomatic()
     {
         return true;
-    }
-
-    private bool CheckIfPlayerWantToUseHisAbility(Player player)
-    {
-        bool doesPlayerCanUseHisAbility = false;
-        if (player.Ringside.CardListSize > 0)
-        { 
-            doesPlayerCanUseHisAbility = _view.DoesPlayerWantToUseHisAbility(Name);
-        }
-
-        return doesPlayerCanUseHisAbility;
     }
 }

@@ -7,14 +7,16 @@ public class RingArea : CardCollection
         int fortitude = 0;
         foreach (Card card in CardList)
         {
-          string cardDamageString = card.Damage;
-          int cardDamageInt = 0;
-          if (cardDamageString != "#")
-          {
-              cardDamageInt = Convert.ToInt32(cardDamageString);
-          }
+          int cardDamageInt = TransformCardDamageToInt(card);
           fortitude += cardDamageInt;
         }
         return fortitude;
+    }
+
+    private int TransformCardDamageToInt(Card card)
+    {
+        string cardDamageString = card.Damage;
+        if (cardDamageString != "#") return Convert.ToInt32(cardDamageString);
+        return 0;
     }
 }

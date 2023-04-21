@@ -12,12 +12,9 @@ public class Kane : SuperStar
         if (!player.HasUsedHisAbilityInTheTurn)
         {
             _view.SayThatPlayerIsGoingToUseHisAbility(player.GetSuperStarName(), player.GetSuperStarAbility());
-            Card cardDiscarted = opponentPlayer.GetCardsFromArsenal(1)[0];
-            opponentPlayer.ReceiveDamage(1);
-            _view.ShowCardOverturnByTakingDamage(cardDiscarted.GetCardFormattedInfo(), 1, 1);
+            Card discartedCard = ApplyDamageToOpponent(opponentPlayer, 1);
+            _view.ShowCardOverturnByTakingDamage(discartedCard.GetCardFormattedInfo(), 1, 1);
         }
-        
-   
     }
 
     public override bool CheckIfCanUseAbility(Player player)

@@ -26,17 +26,50 @@ public class Card
 
     public string GetCardFormattedInfo()
     {
-        return Formatter.CardToString(Title, Fortitude.ToString(),
-            Damage, StunValue.ToString(), Types, Subtypes, CardEffect);
+        return Formatter.CardToString(
+            Title,
+            Fortitude.ToString(),
+            Damage,
+            StunValue.ToString(),
+            Types,
+            Subtypes,
+            CardEffect);
     }
 
     public string GetCardInPlayFormat()
-    { 
+    {
         return Formatter.PlayToString(GetCardFormattedInfo(), Types[0].ToUpper());
     }
 
     public int GetDamage()
     {
         return Convert.ToInt32(Damage);
-    } 
+    }
+
+    public bool ItsUnique()
+    {
+        return Subtypes.Contains("Unique");
+    }
+
+    public bool ItsSetUp()
+    {
+        return Subtypes.Contains("SetUp");
+    }
+
+    public bool HasSubtypeHeel()
+    {
+        return Subtypes.Contains("Heel");
+    }
+    public bool HasSubtypeFace()
+    {
+        return Subtypes.Contains("Face");
+    }
+    public bool ItsTypeManeuver()
+    {
+        return Types.Contains("Maneuver");
+    }
+    public bool IsTypeAction()
+    {
+        return Types.Contains("Action");
+    }
 }

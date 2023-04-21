@@ -10,18 +10,8 @@ public class Undertaker : SuperStar
     public override void UseAbility(Player player, Player opponentPlayer)
     {
         _view.SayThatPlayerIsGoingToUseHisAbility(player.GetSuperStarName(), player.GetSuperStarAbility());
-        int cardsRemainingToDiscard = 2;
-        for (int i = 0; i < 2; i++)
-        {
-            int indexCardFromHand = _view.AskPlayerToSelectACardToDiscard(player.GetCardsFromHandInStringFormat(), player.GetSuperStarName(),
-                player.GetSuperStarName(), cardsRemainingToDiscard);
-            player.MoveCardFromHandToRingsideByIndex(indexCardFromHand);
-            cardsRemainingToDiscard--;
-        }
-
-        int indexCardFromRingside =
-            _view.AskPlayerToSelectCardsToPutInHisHand(player.GetSuperStarName(), 1, player.GetCardsFromRingsideInStringFormat());
-        player.MoveCardFromRingsideToHandByIndex(indexCardFromRingside);
+        MakePlayerDiscardCardsWithSelection(player, 2);
+        RecoverCardFromRingide(player);
 
     }
 

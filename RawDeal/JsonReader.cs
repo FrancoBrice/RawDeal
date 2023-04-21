@@ -2,7 +2,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 namespace RawDeal;
 
-public class JsonReader
+public static class JsonReader
 {
     public static List<Card> GenerateAllCardsListFromCardsFromJson()
     {
@@ -69,7 +69,6 @@ public class JsonReader
         {
             superStarLogosList.Add(superstar.Logo);
         }
-
         return superStarLogosList;
     }
 }

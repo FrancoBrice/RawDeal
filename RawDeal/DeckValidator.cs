@@ -4,86 +4,102 @@ public class DeckValidator
 {
     public List<Card> CardList { get; set; }
     public List<SuperStar> SuperStarsList { get; set; }
-    private List<string> _AllSuperStarLogosList;
+    private List<string> _allSuperStarLogosList;
 
 
-    public DeckValidator(List<SuperStar> deckSuperStarsList, List<Card> deckCardList)
+    public DeckValidator(List<SuperStar> superStarsList, List<Card> cardList)
     {
-        CardList = deckCardList;
-        SuperStarsList = deckSuperStarsList;
-        _AllSuperStarLogosList = JsonReader.GenerateSuperStarLogosList();
+        CardList = cardList;
+        SuperStarsList = superStarsList;
+        _allSuperStarLogosList = JsonReader.GenerateSuperStarLogosList();
     }
-    
+
     public bool IsValidDeck()
     {
-        if (CheckRule1() && CheckRule2() && CheckRule3() && CheckRule4())
+        if (CheckIfSatisfyRuleOne() && CheckIfSatisfyRuleTwo() && CheckIfSatisfyRuleThree() && CheckIfSatisfyRuleFour())
         {
             return true;
         }
         return false;
     }
-    private bool CheckRule1()
+
+    private bool CheckIfSatisfyRuleOne()
     {
-        if (SuperStarsList.Count != 1 || CardList.Count != 60)
+        if (CheckIfOnlyHasOneSuperStar() && CheckIfHasCorrectNumberOfCards())
         {
-            return false;
+            return true;
         }
+        return false;
+    }
+    private bool CheckIfOnlyHasOneSuperStar()
+    {
+        if (SuperStarsList.Count != 1) return false;
         return true;
     }
-
-    private bool CheckRule2()
+    private bool CheckIfHasCorrectNumberOfCards()
     {
-        var groupedCards = CardList.GroupBy(c => c.Title);
-        foreach (var group in groupedCards)
-        {
-            int amountEqualCards = group.Count();
-            if (amountEqualCards > 1)
-            {
-                if (IsUniqueCard(group.First()))
-                {
-                    return false;
-                }
+        if (CardList.Count != 60) return false;
+        return true;
+    }
+    
 
-                if ((!IsSetupCard(group.First())) && (amountEqualCards > 3))
-                {
-                    return false;
-                }
+    private bool CheckIfSatisfyRuleTwo()
+    {
+        var groupedCardsByTitle = CardList.GroupBy(card => card.Title);
+        foreach (IGrouping<string, Card> group in groupedCardsByTitle)
+        {
+            if (!CheckIfItMeetsTheUniqueCardsRule(group) || !CheckIfItMeetsTheSetupCardsRule(group))
+            {
+                return false;
             }
         }
         return true;
+
     }
 
-    private bool CheckRule3()
+    private bool CheckIfItMeetsTheUniqueCardsRule(IGrouping<string, Card> groupOfCards)
     {
-        bool hasHeel = CardList.Any(c => c.Subtypes.Contains("Heel"));
-        bool hasFace = CardList.Any(c => c.Subtypes.Contains("Face"));
-        if (hasHeel && hasFace)
-        {
-            return false;
-        }
-
+        int amountEqualCards = groupOfCards.Count();
+        if (groupOfCards.First().ItsUnique() && amountEqualCards > 1) return false;
         return true;
     }
 
-    private bool CheckRule4()
+    private bool CheckIfItMeetsTheSetupCardsRule(IGrouping<string, Card> groupOfCards)
+    {
+        int amountEqualCards = groupOfCards.Count();
+        if (!groupOfCards.First().ItsSetUp() && amountEqualCards > 3) return false;
+        return true;
+    }
+
+    private bool CheckIfSatisfyRuleThree()
+    {
+        if(CheckIfDeckNotContainsHeelAndFace()) return true;
+        return false;
+    }
+    private bool CheckIfDeckNotContainsHeelAndFace()
+    {
+        bool hasHeel = CardList.Any(card => card.HasSubtypeHeel());
+        bool hasFace = CardList.Any(card => card.HasSubtypeFace());
+        if (hasHeel && hasFace) return false; 
+        return true;
+    }
+
+    private bool CheckIfSatisfyRuleFour()
+    {
+        if (CheckIfSuperStarLogoIsCorrect()) return true;
+        return false;
+    }
+    private bool CheckIfSuperStarLogoIsCorrect()
+    {
+        IEnumerable<Card> invalidCards = FoundCardsWithIncorrectLogo();
+        if (invalidCards.Any()) return false;
+        return true;
+    }
+
+    private IEnumerable<Card> FoundCardsWithIncorrectLogo()
     {
         string superstarLogo = SuperStarsList.First().Logo;
-        var invalidCards =
-            CardList.Where(c => c.Subtypes.Any(s => s != superstarLogo && _AllSuperStarLogosList.Contains(s)));
-        if (invalidCards.Any())
-        {
-            return false;
-        }
-
-        return true;
+        return CardList.Where(card => card.Subtypes.Any(s => s != superstarLogo && _allSuperStarLogosList.Contains(s)));
     }
-
-    private bool IsUniqueCard(Card card)
-    {
-        return card.Subtypes.Contains("Unique");
-    }
-    private bool IsSetupCard(Card card)
-    {
-        return card.Subtypes.Contains("SetUp");
-    }
+    
 }

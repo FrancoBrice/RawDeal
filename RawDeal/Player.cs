@@ -70,15 +70,15 @@ public class Player
         }
     }
 
-    public List<string> GetCardsFromHandInStringFormat()
+    public List<string> GetCardsInStringFormatFromHand()
     {
         return Hand.GetFormattedCards();
     }
-    public List<string> GetCardsFromRingsideInStringFormat()
+    public List<string> GetCardsInStringFormatFromRingside()
     {
         return Ringside.GetFormattedCards();
     }
-    public List<string> GetCardsFromRingAreaInStringFormat()
+    public List<string> GetCardsInStringFormatFromRingArea()
     {
         return RingArea.GetFormattedCards();
     }
@@ -98,7 +98,7 @@ public class Player
 
     public List<(int, Card)> GetPlayableCardsFromPlayer()
     {
-        return Hand.GetPlayableCards(Fortitude);
+        return Hand.GetTuplesWithPositionInHandAndPlayableCards(Fortitude);
     }
 
     public void ReceiveDamage(int damage)
@@ -115,21 +115,15 @@ public class Player
 
     public List<Card> GetCardsFromArsenal(int damage)
     {
-        if (damage > Arsenal.CardListSize)
-        {
-            damage = Arsenal.CardListSize;
-        }
-        List<Card> topCards = Arsenal.GetLastCardsReversed(damage);
-        return topCards; 
+        if (damage > Arsenal.CardListSize) damage = Arsenal.CardListSize;
+        List<Card> topCardsOfArsenal = Arsenal.GetLastCardsReversed(damage);
+        return topCardsOfArsenal; 
     }
 
     private void MoveCardsFromArsenalToRingSideByDamageAmount(int damageAmount)
     {
         List<Card> cardsList = Arsenal.GetLastCardsReversed(damageAmount);
-        if (damageAmount >= GetArsenalSize())
-        {
-            damageAmount = GetArsenalSize();
-        }
+        if (damageAmount >= GetArsenalSize()) damageAmount = GetArsenalSize();
         for (int index = damageAmount - 1; index >= 0; index--)
         {
             AddCardToRingside(cardsList[index]);
@@ -182,10 +176,7 @@ public class Player
 
     public bool PlayerHasLost()
     {
-        if (Arsenal.CardListSize == 0)
-        {
-            return true;
-        }
+        if (Arsenal.CardListSize == 0) return true;
         return false;
     }
 

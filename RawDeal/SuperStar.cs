@@ -34,5 +34,46 @@ namespace RawDeal
 
         public abstract bool CheckIfAbilityIsAutomatic();
         public virtual void UseInitialAbility(Player player){}
+        protected void MakePlayerDiscardACard(Player player)
+        {
+            int indexCardFromPlayerHand = _view.AskPlayerToSelectACardToDiscard(player.GetCardsInStringFormatFromHand(), player.GetSuperStarName(),
+                player.GetSuperStarName(), 1);
+            player.MoveCardFromHandToRingsideByIndex(indexCardFromPlayerHand);
+        }
+
+        protected Card ApplyDamageToOpponent(Player opponentPlayer, int damage)
+        {
+            Card discartedCard = opponentPlayer.GetCardsFromArsenal(damage)[0];
+            opponentPlayer.ReceiveDamage(1);
+            return discartedCard;
+        }
+        protected bool CheckIfPlayerWantToUseHisAbility(Player player)
+        {
+            bool doesPlayerCanUseHisAbility = false;
+            if (player.Ringside.CardListSize > 0)
+            { 
+                doesPlayerCanUseHisAbility = _view.DoesPlayerWantToUseHisAbility(Name);
+            }
+
+            return doesPlayerCanUseHisAbility;
+        }
+
+        protected void RecoverCardFromRingide(Player player)
+        {
+            int indexCardFromRingside =
+                _view.AskPlayerToSelectCardsToPutInHisHand(player.GetSuperStarName(), 1, player.GetCardsInStringFormatFromRingside());
+            player.MoveCardFromRingsideToHandByIndex(indexCardFromRingside);
+        }
+
+        protected void MakePlayerDiscardCardsWithSelection(Player player, int numberOfCardsToDiscard)
+        {
+            for (int i = 0; i < 2; i++)
+            {
+                int indexCardFromHand = _view.AskPlayerToSelectACardToDiscard(player.GetCardsInStringFormatFromHand(), player.GetSuperStarName(),
+                    player.GetSuperStarName(), numberOfCardsToDiscard);
+                player.MoveCardFromHandToRingsideByIndex(indexCardFromHand);
+                numberOfCardsToDiscard--;
+            }
+        }
     }
 }
