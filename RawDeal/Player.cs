@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using RawDealView;
 
 namespace RawDeal;
@@ -23,7 +24,7 @@ public class Player
         }
     }
     
-    public Player(List<Card> cardList, SuperStar superstar, View view)
+    public Player(SuperStar superstar, List<Card> cardList, View view)
     {
         _view = view;
         CardList = cardList;
@@ -140,6 +141,7 @@ public class Player
     public void UseSuperStarAbility(Player opponentPlayer)
     {
         SuperStar.UseAbility(this, opponentPlayer);
+        HasUsedHisAbilityInTheTurn = true;
     }
 
     public void MoveCardFromHandToRingAreaByIndex(int index)
@@ -178,7 +180,7 @@ public class Player
         Fortitude = RingArea.GetFortitude();
     }
 
-    public bool CheckIfPlayerLose()
+    public bool PlayerHasLost()
     {
         if (Arsenal.CardListSize == 0)
         {

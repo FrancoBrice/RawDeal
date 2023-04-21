@@ -4,7 +4,7 @@ namespace RawDeal;
 
 public class JsonReader
 {
-    public List<Card> GenerateAllCardsListFromCardsFromJson()
+    public static List<Card> GenerateAllCardsListFromCardsFromJson()
     {
         string pathCardsJson = Path.Combine("data", "cards.json");
         string allCardsJson = File.ReadAllText(pathCardsJson);
@@ -12,7 +12,7 @@ public class JsonReader
         return allCardsList;
     }
 
-    public List<SuperStar> GenerateAllSuperStarsListFromJson()
+    public static List<SuperStar> GenerateAllSuperStarsListFromJson()
     {
         string pathSuperStarJson = Path.Combine("data", "superstar.json");
         string allSuperStarJson = File.ReadAllText(pathSuperStarJson);
@@ -31,7 +31,7 @@ public class JsonReader
         return allSuperStarList;
     }
 
-    private SuperStar CreateSuperStarUsingName(JObject jObject)
+    private static SuperStar CreateSuperStarUsingName(JObject jObject)
     {
         string name = jObject["Name"].ToString();
         SuperStar superstar = null;
@@ -60,5 +60,16 @@ public class JsonReader
                 break;
         }
         return superstar;
+    }
+    public static List<string> GenerateSuperStarLogosList()
+    {
+        List<SuperStar> allSuperStarsList = GenerateAllSuperStarsListFromJson();
+        List<string> superStarLogosList = new List<string>();
+        foreach (SuperStar superstar in allSuperStarsList)
+        {
+            superStarLogosList.Add(superstar.Logo);
+        }
+
+        return superStarLogosList;
     }
 }

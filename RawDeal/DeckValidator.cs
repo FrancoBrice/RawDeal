@@ -1,21 +1,30 @@
 namespace RawDeal;
 
-public class Deck
+public class DeckValidator
 {
-    private List<Card> CardList { get; set; }
-    private List<SuperStar> SuperStarList { get; set; }
-    private List<string> SuperStarLogosList { get; set; }
+    public List<Card> CardList { get; set; }
+    public List<SuperStar> SuperStarsList { get; set; }
+    private List<string> _AllSuperStarLogosList;
 
 
-    public Deck(List<SuperStar> deckSuperStarList, List<Card> deckCardList, List<string> superStarLogosList)
+    public DeckValidator(List<SuperStar> deckSuperStarsList, List<Card> deckCardList)
     {
         CardList = deckCardList;
-        SuperStarList = deckSuperStarList;
-        SuperStarLogosList = superStarLogosList;
+        SuperStarsList = deckSuperStarsList;
+        _AllSuperStarLogosList = JsonReader.GenerateSuperStarLogosList();
+    }
+    
+    public bool IsValidDeck()
+    {
+        if (CheckRule1() && CheckRule2() && CheckRule3() && CheckRule4())
+        {
+            return true;
+        }
+        return false;
     }
     private bool CheckRule1()
     {
-        if (SuperStarList.Count != 1 || CardList.Count != 60)
+        if (SuperStarsList.Count != 1 || CardList.Count != 60)
         {
             return false;
         }
@@ -58,9 +67,9 @@ public class Deck
 
     private bool CheckRule4()
     {
-        string superstarLogo = SuperStarList.First().Logo;
+        string superstarLogo = SuperStarsList.First().Logo;
         var invalidCards =
-            CardList.Where(c => c.Subtypes.Any(s => s != superstarLogo && SuperStarLogosList.Contains(s)));
+            CardList.Where(c => c.Subtypes.Any(s => s != superstarLogo && _AllSuperStarLogosList.Contains(s)));
         if (invalidCards.Any())
         {
             return false;
@@ -68,16 +77,7 @@ public class Deck
 
         return true;
     }
-    
-    public bool IsValidDeck()
-    {
-        if (CheckRule1() && CheckRule2() && CheckRule3() && CheckRule4())
-        {
-            return true;
-        }
-        return false;
-    }
-    
+
     private bool IsUniqueCard(Card card)
     {
         return card.Subtypes.Contains("Unique");
