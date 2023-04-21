@@ -199,13 +199,14 @@ public class Game
     {
         List<(int, Card)> tuplesPlayableCardsFromPlayer = CurrentPlayer.GetPlayableCardsFromPlayer();
         List<string> playableCardsFormatted = GeneratePlayableCardsFormatted(tuplesPlayableCardsFromPlayer);
-        int cardIndex = _view.AskUserToSelectAPlay(playableCardsFormatted);
-        if (cardIndex != -1)
+        int userInput = _view.AskUserToSelectAPlay(playableCardsFormatted);
+        if (userInput != -1)
         {
-            Card selectedCard = tuplesPlayableCardsFromPlayer[cardIndex].Item2;
+            int cardIndexSelected = userInput;
+            Card selectedCard = tuplesPlayableCardsFromPlayer[cardIndexSelected].Item2;
             int actualDamage = NotCurrentPlayer.CalculateDamage(selectedCard.GetDamage());
             List<Card> notCurrentPlayerDamagedCards = NotCurrentPlayer.GetCardsFromArsenal(actualDamage);
-            int positionInHand = tuplesPlayableCardsFromPlayer[cardIndex].Item1;
+            int positionInHand = tuplesPlayableCardsFromPlayer[cardIndexSelected].Item1;
             PerformCardAction(selectedCard, positionInHand);
             NotCurrentPlayer.ReceiveDamage(actualDamage);
             ShowDamagedCards(notCurrentPlayerDamagedCards, actualDamage);
@@ -223,16 +224,15 @@ public class Game
     {
         string cardInPlayFormat = selectedCard.GetCardInPlayFormat();
         _view.SayThatPlayerIsTryingToPlayThisCard(CurrentPlayer.GetSuperStarName(), cardInPlayFormat);
-        CurrentPlayer.MoveCardFromHandToRingAreaByIndex(cardIndexInHand);
         _view.SayThatPlayerSuccessfullyPlayedACard();
     }
 
     private void ShowDamagedCards(List<Card> damagedCards, int actualDamage)
     {
         int indexShowedCard = 1;
-        for (int i = damagedCards.Count - 1; i >= 0; i--)
+        for (int indexInDamagedCards = damagedCards.Count - 1; indexInDamagedCards >= 0; indexInDamagedCards--)
         {
-            string cardFormattedInfo = damagedCards[i].GetCardFormattedInfo();
+            string cardFormattedInfo = damagedCards[indexInDamagedCards].GetCardFormattedInfo();
             _view.ShowCardOverturnByTakingDamage(cardFormattedInfo, indexShowedCard, actualDamage);
             indexShowedCard++;
         }
@@ -319,19 +319,10 @@ public class Game
         
         return cardStrings;
     }
-
-
+    
     private void ShowPlayersInfo()
     {
-        List<Player> playersList = new() { CurrentPlayer, NotCurrentPlayer };
-        List<PlayerInfo> playerInfoList = new();
-        foreach (Player player in playersList)
-        {
-            PlayerInfo playerInfo = GeneratePlayerInfo(player);
-            playerInfoList.Add(playerInfo);
-        }
-        _view.ShowGameInfo(playerInfoList[0], playerInfoList[1]);
-
+        _view.ShowGameInfo(GeneratePlayerInfo(CurrentPlayer), GeneratePlayerInfo(NotCurrentPlayer));
     }
 
     private PlayerInfo GeneratePlayerInfo(Player player)
@@ -347,12 +338,10 @@ public class Game
             player.ExecuteInitialAbility();
         }
     }
-
-
     
-    private static void SwapPlayers<TPlayer>(IList<TPlayer> list)
+    private static void SwapPlayers<TPlayer>(List<TPlayer> playersList)
     {
-        (list[0], list[1]) = (list[1], list[0]);
+        (playersList[0], playersList[1]) = (playersList[1], playersList[0]);
     }
 
 }
