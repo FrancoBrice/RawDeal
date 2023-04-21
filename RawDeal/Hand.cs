@@ -4,33 +4,28 @@ namespace RawDeal;
 
 public class Hand : CardCollection
 {
-    public List<(int, Card)> GetPlayableCards(int fortitude)
+    public List<Card> GetPlayableCards(int fortitude)
     {
-        List<(int, Card)> playableCards = new List<(int, Card)>();
+        List<Card> playableCards = new List<Card>();
         for (int index = 0; index < CardList.Count; index++)
         {
             Card card = CardList[index];
+            Console.WriteLine($"id actual{card.Id}, index {index}");
             if (card.Fortitude <= fortitude && CheckIfTypeOfCardIsPlayable(card))
             {
-                playableCards.Add((index, card));
+                Console.WriteLine($"getplayable: {card.Title}, {card.Id}");
+                playableCards.Add(card);
             }
         }
-
         return playableCards;
     }
 
     private bool CheckIfTypeOfCardIsPlayable(Card card)
     {
-
-        foreach (string type in card.Types)
+        if (card.ItsTypeManeuver() || card.IsTypeAction())
         {
-            if (type is "Maneuver" or "Action")
-            {
-                return true;
-            }
+            return true;
         }
         return false;
     }
-
-
 }

@@ -6,18 +6,18 @@ public class JsonReader
 {
     public static List<Card> GenerateAllCardsListFromCardsFromJson()
     {
+        Dictionary<string, int> cardTitlesToIds = new Dictionary<string, int>();
         string pathCardsJson = Path.Combine("data", "cards.json");
         string allCardsJson = File.ReadAllText(pathCardsJson);
         List<Card> allCardsList = JsonConvert.DeserializeObject<List<Card>>(allCardsJson);
         return allCardsList;
     }
-
     public static List<SuperStar> GenerateAllSuperStarsListFromJson()
     {
         string pathSuperStarJson = Path.Combine("data", "superstar.json");
         string allSuperStarJson = File.ReadAllText(pathSuperStarJson);
         JArray jsonArrayAllSuperStar = JArray.Parse(allSuperStarJson);
-        List<SuperStar> allSuperStarList = new List<SuperStar>();
+        List<SuperStar> allSuperStarList = new();
         
         foreach (JObject jObjectSuperStar in jsonArrayAllSuperStar)
         {
@@ -64,7 +64,7 @@ public class JsonReader
     public static List<string> GenerateSuperStarLogosList()
     {
         List<SuperStar> allSuperStarsList = GenerateAllSuperStarsListFromJson();
-        List<string> superStarLogosList = new List<string>();
+        List<string> superStarLogosList = new();
         foreach (SuperStar superstar in allSuperStarsList)
         {
             superStarLogosList.Add(superstar.Logo);

@@ -16,36 +16,59 @@ public class Player
     public bool HasUsedHisAbilityInTheTurn;
     private int _damageReducedByShield;
 
-    private void InitializeArsenal(List<Card> deck)
-    {
-        foreach (Card card in deck)
-        {
-            Arsenal.AddCard(card);
-        }
-    }
-    
-    public Player(SuperStar superstar, List<Card> cardList, View view)
+
+    public Player(SuperStar superStar, List<Card> cardList, View view)
     {
         _view = view;
         CardList = cardList;
-        SuperStar = superstar;
+        foreach (var VARIABLE in CardList)
+        {
+            Console.WriteLine($"viendo en player id {VARIABLE.Id}");
+        }
+        SuperStar = superStar;
         Fortitude = 0;
         Ringside = new Ringside();
         RingArea = new RingArea();
         Arsenal = new Arsenal();
-        InitializeArsenal(cardList);
+        AsignIdToCardsInCardList();
+        InitializeArsenal();
         Hand = new Hand();
         DistributeOpeningHand();
         AddViewToSuperStar();
         HasUsedHisAbilityInTheTurn = false;
         _damageReducedByShield = 0;
-}
+    }
+
+    private void AsignIdToCardsInCardList()
+    {
+        int nextId = 1;
+        foreach (Card card in CardList)
+        {
+            Console.WriteLine($"{card.Title},next id {nextId}");
+            card.Id = nextId;
+            Console.WriteLine(card.Id);
+            nextId++;
+        }
+    }
+    
+    private void InitializeArsenal()
+    {
+        foreach (Card card in CardList)
+        {
+            Arsenal.AddCard(card);
+        }
+    }
 
     public void DistributeOpeningHand()
     {
+        foreach (var VARIABLE in Arsenal.GetLastCardsReversed(60))
+        {
+            Console.WriteLine($"revisando arsenal ids: {VARIABLE.Id}");
+        }
         List<Card> drawnCards = Arsenal.GetLastCardsReversed(SuperStar.HandSize);
         for (int index = drawnCards.Count - 1; index >= 0; index--)
         {
+            Console.WriteLine($"añadiendo a hand la carta {drawnCards[index].Title} con id {drawnCards[index].Id}");
             AddCardToHand(drawnCards[index]);
             Arsenal.RemoveLastCard();
         }
@@ -96,7 +119,7 @@ public class Player
         return SuperStar.Name;
     }
 
-    public List<(int, Card)> GetPlayableCardsFromPlayer()
+    public List<Card> GetPlayableCardsFromPlayer()
     {
         return Hand.GetPlayableCards(Fortitude);
     }
@@ -144,13 +167,13 @@ public class Player
         HasUsedHisAbilityInTheTurn = true;
     }
 
-    public void MoveCardFromHandToRingAreaByIndex(int index)
+    public void MoveCardFromHandToRingAreaById(int cardId)
     {
-        Card card = Hand.GetCardByIndex(index);
-        Hand.RemoveCardByIndex(index);
+        Card card = Hand.GetCardById(cardId);
+        Hand.RemoveCardById(cardId);
         AddCardToRingArea(card);
     }
-    public void MoveCardByIndexFromRingsideToArsenalBeginning(int index)
+    public void MoveCardFromRingsideToArsenalBeginningByIndex(int index)
     {
         Card card = Ringside.GetCardByIndex(index);
         Ringside.RemoveCardByIndex(index);

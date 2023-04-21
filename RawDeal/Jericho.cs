@@ -20,7 +20,7 @@ public class Jericho : SuperStar
         {
             return true;
         }
-
+        
         return false;
     }
 

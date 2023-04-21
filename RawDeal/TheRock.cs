@@ -13,7 +13,7 @@ public class TheRock : SuperStar
         if (doesPlayerWantToUseHisAbility)
         {
             int index = _view.AskPlayerToSelectCardsToRecover(Name, 1, player.Ringside.GetFormattedCards() );
-            player.MoveCardByIndexFromRingsideToArsenalBeginning(index);
+            player.MoveCardFromRingsideToArsenalBeginningByIndex(index);
         }
     }
 

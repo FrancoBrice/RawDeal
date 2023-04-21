@@ -35,9 +35,9 @@ public class CardCollection
     public List<string> GetFormattedCards()
     {
         List<string> formattedCards = new List<string>();
-
         foreach (Card card in CardList)
         {
+            Console.WriteLine($"{card.Title} id: {card.Id}");
             formattedCards.Add(card.GetCardFormattedInfo());
         }
 
@@ -61,10 +61,32 @@ public class CardCollection
         Card card = CardList[index];
         return card;
     }
-
-    public void RemoveCardByIndex(int index)
+    public Card GetCardById(int cardId)
     {
-            CardList.RemoveAt(index);
+        foreach (Card card in CardList)
+        {
+            if (card.Id == cardId)
+            {
+                return card;
+            }
+        }
+        return null;
+    }
+
+    public void RemoveCardByIndex(int cardIndex)
+    {
+            CardList.RemoveAt(cardIndex);
+    }
+    public void RemoveCardById(int cardId)
+    {
+        for (int i = 0; i < CardList.Count; i++)
+        {
+            if (CardList[i].Id == cardId)
+            {
+                CardList.RemoveAt(i);
+                return;
+            }
+        }
     }
 
     
