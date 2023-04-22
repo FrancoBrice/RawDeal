@@ -12,12 +12,12 @@ public class HHH : SuperStar
         
     }
 
-    public override bool CheckIfCanUseAbility(Player player)
+    public override bool CanUseAbility(Player player)
     {
         return false;
     }
 
-    public override bool CheckIfAbilityIsAutomatic()
+    public override bool IsAbilityAutomatic()
     {
         return true;
     }

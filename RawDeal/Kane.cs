@@ -17,12 +17,12 @@ public class Kane : SuperStar
         }
     }
 
-    public override bool CheckIfCanUseAbility(Player player)
+    public override bool CanUseAbility(Player player)
     {
         return true;
     }
 
-    public override bool CheckIfAbilityIsAutomatic()
+    public override bool IsAbilityAutomatic()
     {
         return true;
     }

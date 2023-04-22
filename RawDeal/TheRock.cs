@@ -9,24 +9,17 @@ public class TheRock : SuperStar
 
     public override void UseAbility(Player player, Player opponentPlayer)
     {
-        bool doesPlayerWantToUseHisAbility = CheckIfPlayerWantToUseHisAbility(player);
-        if (doesPlayerWantToUseHisAbility)
-        {
-            int indexInputByUser = _view.AskPlayerToSelectCardsToRecover(Name, 1, player.Ringside.GetFormattedCards() );
-            player.MoveCardByIndexFromRingsideToArsenalBeginning(indexInputByUser);
-        }
+        if (!DoesPlayerWantToUseAbility(player)) return;
+        int indexInputByUser = _view.AskPlayerToSelectCardsToRecover(Name, 1, player.Ringside.GetFormattedCards() );
+        player.MoveCardByIndexFromRingsideToArsenalBeginning(indexInputByUser);
     }
 
-    public override bool CheckIfCanUseAbility(Player player)
+    public override bool CanUseAbility(Player player)
     {
-        if (player.GetRingsideSize() > 0 && !player.HasUsedHisAbilityInTheTurn)
-        {
-            return true;
-        }
-        return false;
+        return player.GetRingsideSize() > 0 && !player.HasUsedHisAbilityInTheTurn;
     }
 
-    public override bool CheckIfAbilityIsAutomatic()
+    public override bool IsAbilityAutomatic()
     {
         return true;
     }

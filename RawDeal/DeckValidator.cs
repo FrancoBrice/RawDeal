@@ -16,39 +16,39 @@ public class DeckValidator
 
     public bool IsValidDeck()
     {
-        if (CheckIfSatisfyRuleOne() && CheckIfSatisfyRuleTwo() && CheckIfSatisfyRuleThree() && CheckIfSatisfyRuleFour())
+        if (SatisfyRuleOne() && SatisfyRuleTwo() && SatisfyRuleThree() && SatisfyRuleFour())
         {
             return true;
         }
         return false;
     }
 
-    private bool CheckIfSatisfyRuleOne()
+    private bool SatisfyRuleOne()
     {
-        if (CheckIfOnlyHasOneSuperStar() && CheckIfHasCorrectNumberOfCards())
+        if (HasOnlyOneSuperStar() && HasCorrectNumberOfCards())
         {
             return true;
         }
         return false;
     }
-    private bool CheckIfOnlyHasOneSuperStar()
+    private bool HasOnlyOneSuperStar()
     {
         if (SuperStarsList.Count != 1) return false;
         return true;
     }
-    private bool CheckIfHasCorrectNumberOfCards()
+    private bool HasCorrectNumberOfCards()
     {
         if (CardList.Count != 60) return false;
         return true;
     }
     
 
-    private bool CheckIfSatisfyRuleTwo()
+    private bool SatisfyRuleTwo()
     {
         var groupedCardsByTitle = CardList.GroupBy(card => card.Title);
         foreach (IGrouping<string, Card> group in groupedCardsByTitle)
         {
-            if (!CheckIfItMeetsTheUniqueCardsRule(group) || !CheckIfItMeetsTheSetupCardsRule(group))
+            if (HasMoreThanOneUnique(group) || HasMoreThanThreeSetup(group))
             {
                 return false;
             }
@@ -57,26 +57,26 @@ public class DeckValidator
 
     }
 
-    private bool CheckIfItMeetsTheUniqueCardsRule(IGrouping<string, Card> groupOfCards)
+    private bool HasMoreThanOneUnique(IGrouping<string, Card> groupOfCards)
     {
         int amountEqualCards = groupOfCards.Count();
-        if (groupOfCards.First().ItsUnique() && amountEqualCards > 1) return false;
-        return true;
-    }
-
-    private bool CheckIfItMeetsTheSetupCardsRule(IGrouping<string, Card> groupOfCards)
-    {
-        int amountEqualCards = groupOfCards.Count();
-        if (!groupOfCards.First().ItsSetUp() && amountEqualCards > 3) return false;
-        return true;
-    }
-
-    private bool CheckIfSatisfyRuleThree()
-    {
-        if(CheckIfDeckNotContainsHeelAndFace()) return true;
+        if (groupOfCards.First().ItsUnique() && amountEqualCards > 1) return true;
         return false;
     }
-    private bool CheckIfDeckNotContainsHeelAndFace()
+
+    private bool HasMoreThanThreeSetup(IGrouping<string, Card> groupOfCards)
+    {
+        int amountEqualCards = groupOfCards.Count();
+        if (!groupOfCards.First().ItsSetUp() && amountEqualCards > 3) return true;
+        return false;
+    }
+
+    private bool SatisfyRuleThree()
+    {
+        if(HasNoHeelAndFaceCards()) return true;
+        return false;
+    }
+    private bool HasNoHeelAndFaceCards()
     {
         bool hasHeel = CardList.Any(card => card.HasSubtypeHeel());
         bool hasFace = CardList.Any(card => card.HasSubtypeFace());
@@ -84,12 +84,12 @@ public class DeckValidator
         return true;
     }
 
-    private bool CheckIfSatisfyRuleFour()
+    private bool SatisfyRuleFour()
     {
-        if (CheckIfSuperStarLogoIsCorrect()) return true;
+        if (HasCorrectSuperStarLogo()) return true;
         return false;
     }
-    private bool CheckIfSuperStarLogoIsCorrect()
+    private bool HasCorrectSuperStarLogo()
     {
         IEnumerable<Card> invalidCards = FoundCardsWithIncorrectLogo();
         if (invalidCards.Any()) return false;

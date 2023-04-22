@@ -18,7 +18,7 @@ public class StoneCold : SuperStar
         player.MoveCardFromHandToArsenalBeginningByIndex(indexCardFromHand);
     }
 
-    public override bool CheckIfCanUseAbility(Player player)
+    public override bool CanUseAbility(Player player)
     {
         if (player.GetArsenalSize() >= 1 && !player.HasUsedHisAbilityInTheTurn)
         {
@@ -28,7 +28,7 @@ public class StoneCold : SuperStar
         return false;
     }
 
-    public override bool CheckIfAbilityIsAutomatic()
+    public override bool IsAbilityAutomatic()
     {
         return false;
     }

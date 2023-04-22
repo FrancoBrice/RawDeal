@@ -19,7 +19,7 @@ public class Mankind : SuperStar
     }
 
 
-    public override bool CheckIfCanUseAbility(Player player)
+    public override bool CanUseAbility(Player player)
     {
         if (player.HasUsedHisAbilityInTheTurn)
         {
@@ -29,7 +29,7 @@ public class Mankind : SuperStar
         return true;
     }
 
-    public override bool CheckIfAbilityIsAutomatic()
+    public override bool IsAbilityAutomatic()
     {
         return true;
     }

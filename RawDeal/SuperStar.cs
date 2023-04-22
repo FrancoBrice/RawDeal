@@ -30,9 +30,9 @@ namespace RawDeal
             _view = view;
         }
 
-        public abstract bool CheckIfCanUseAbility(Player player);
+        public abstract bool CanUseAbility(Player player);
 
-        public abstract bool CheckIfAbilityIsAutomatic();
+        public abstract bool IsAbilityAutomatic();
         public virtual void UseInitialAbility(Player player){}
         protected void MakePlayerDiscardACard(Player player)
         {
@@ -47,7 +47,7 @@ namespace RawDeal
             opponentPlayer.ReceiveDamage(1);
             return discartedCard;
         }
-        protected bool CheckIfPlayerWantToUseHisAbility(Player player)
+        protected bool DoesPlayerWantToUseAbility(Player player)
         {
             bool doesPlayerCanUseHisAbility = false;
             if (player.Ringside.CardListSize > 0)

@@ -15,14 +15,6 @@ public class Player
     private View _view;
     public bool HasUsedHisAbilityInTheTurn;
     private int _damageReducedByShield;
-
-    private void InitializeArsenal(List<Card> deck)
-    {
-        foreach (Card card in deck)
-        {
-            Arsenal.AddCard(card);
-        }
-    }
     
     public Player(SuperStar superstar, List<Card> cardList, View view)
     {
@@ -62,26 +54,61 @@ public class Player
         }
     }
     
-    public void DrawLastCardFromHand()
+    public void MoveCardFromHandToRingAreaByIndex(int index)
     {
-        if (Hand.CardListSize >= 1)
-        {
-            Hand.RemoveLastCard();
-        }
+        Card card = Hand.GetCardByIndex(index);
+        Hand.RemoveCardByIndex(index);
+        AddCardToRingArea(card);
+    }
+    public void MoveCardByIndexFromRingsideToArsenalBeginning(int index)
+    {
+        Card card = Ringside.GetCardByIndex(index);
+        Ringside.RemoveCardByIndex(index);
+        AddCardToArsenalAtTheBeginning(card);
+    }
+    
+    public void MoveCardFromHandToRingsideByIndex(int indexCardFromHand)
+    {
+        Card card = Hand.GetCardByIndex(indexCardFromHand);
+        Hand.RemoveCardByIndex(indexCardFromHand);
+        AddCardToRingside(card);
+    }
+
+    public void MoveCardFromRingsideToHandByIndex(int indexCardFromRingside)
+    {
+        Card card = Ringside.GetCardByIndex(indexCardFromRingside);
+        Ringside.RemoveCardByIndex(indexCardFromRingside);
+        AddCardToHand(card);
+    }
+
+    public void MoveCardFromHandToArsenalBeginningByIndex(int indexCardFromHand)
+    {
+        Card card = Hand.GetCardByIndex(indexCardFromHand);
+        Hand.RemoveCardByIndex(indexCardFromHand);
+        AddCardToArsenalAtTheBeginning(card);
     }
 
     public List<string> GetCardsInStringFormatFromHand()
     {
         return Hand.GetFormattedCards();
     }
+    
     public List<string> GetCardsInStringFormatFromRingside()
     {
         return Ringside.GetFormattedCards();
     }
+    
     public List<string> GetCardsInStringFormatFromRingArea()
     {
         return RingArea.GetFormattedCards();
     }
+    public List<Card> GetCardsFromArsenal(int damage)
+    {
+        if (damage > Arsenal.CardListSize) damage = Arsenal.CardListSize;
+        List<Card> topCardsOfArsenal = Arsenal.GetLastCardsReversed(damage);
+        return topCardsOfArsenal; 
+    }
+    
     public int GetHandSize()
     {
         return Hand.CardListSize;
@@ -112,53 +139,23 @@ public class Player
         int actualDamage = Math.Max(damage - _damageReducedByShield, 1);
         return actualDamage;
     }
-
-    public List<Card> GetCardsFromArsenal(int damage)
-    {
-        if (damage > Arsenal.CardListSize) damage = Arsenal.CardListSize;
-        List<Card> topCardsOfArsenal = Arsenal.GetLastCardsReversed(damage);
-        return topCardsOfArsenal; 
-    }
-
-    private void MoveCardsFromArsenalToRingSideByDamageAmount(int damageAmount)
-    {
-        List<Card> cardsList = Arsenal.GetLastCardsReversed(damageAmount);
-        if (damageAmount >= GetArsenalSize()) damageAmount = GetArsenalSize();
-        for (int index = damageAmount - 1; index >= 0; index--)
-        {
-            AddCardToRingside(cardsList[index]);
-            Arsenal.RemoveLastCard();
-        }
-        
-    }
-
+    
     public void UseSuperStarAbility(Player opponentPlayer)
     {
         SuperStar.UseAbility(this, opponentPlayer);
         HasUsedHisAbilityInTheTurn = true;
     }
-
-    public void MoveCardFromHandToRingAreaByIndex(int index)
-    {
-        Card card = Hand.GetCardByIndex(index);
-        Hand.RemoveCardByIndex(index);
-        AddCardToRingArea(card);
-    }
-    public void MoveCardByIndexFromRingsideToArsenalBeginning(int index)
-    {
-        Card card = Ringside.GetCardByIndex(index);
-        Ringside.RemoveCardByIndex(index);
-        AddCardToArsenalAtTheBeginning(card);
-    }
-
+    
     public void AddCardToRingArea(Card card)
     {
         RingArea.AddCard(card);
     }
+    
     public void AddCardToArsenalAtTheBeginning(Card card)
     {
         Arsenal.AddCardAtTheBeginning(card);
     }
+    
     public void AddCardToHand(Card card)
     {
         Hand.AddCard(card);
@@ -179,19 +176,15 @@ public class Player
         if (Arsenal.CardListSize == 0) return true;
         return false;
     }
-
-    private void AddViewToSuperStar()
+    
+    public bool CanUseAbility()
     {
-        SuperStar.AddView(_view);
+        return SuperStar.CanUseAbility(this);
     }
-
-    public bool CheckIfCanUseAbility()
+    
+    public bool IsAbilityAutomatic()
     {
-        return SuperStar.CheckIfCanUseAbility(this);
-    }
-    public bool CheckIfAbilityIsAutomatic()
-    {
-        return SuperStar.CheckIfAbilityIsAutomatic();
+        return SuperStar.IsAbilityAutomatic();
     }
 
     public int GetRingsideSize()
@@ -204,26 +197,7 @@ public class Player
         return SuperStar.SuperstarAbility;
     }
 
-    public void MoveCardFromHandToRingsideByIndex(int indexCardFromHand)
-    {
-        Card card = Hand.GetCardByIndex(indexCardFromHand);
-        Hand.RemoveCardByIndex(indexCardFromHand);
-        AddCardToRingside(card);
-    }
-
-    public void MoveCardFromRingsideToHandByIndex(int indexCardFromRingside)
-    {
-        Card card = Ringside.GetCardByIndex(indexCardFromRingside);
-        Ringside.RemoveCardByIndex(indexCardFromRingside);
-        AddCardToHand(card);
-    }
-
-    public void MoveCardFromHandToArsenalBeginningByIndex(int indexCardFromHand)
-    {
-        Card card = Hand.GetCardByIndex(indexCardFromHand);
-        Hand.RemoveCardByIndex(indexCardFromHand);
-        AddCardToArsenalAtTheBeginning(card);
-    }
+    
 
     public void SetShieldOfDamage(int amountOfDamageShield)
     {
@@ -237,4 +211,28 @@ public class Player
             SuperStar.UseInitialAbility(this);
         }
     }
+
+    private void InitializeArsenal(List<Card> deck)
+    {
+        foreach (Card card in deck)
+        {
+            Arsenal.AddCard(card);
+        }
+    }
+    private void MoveCardsFromArsenalToRingSideByDamageAmount(int damageAmount)
+    {
+        List<Card> cardsList = Arsenal.GetLastCardsReversed(damageAmount);
+        if (damageAmount >= GetArsenalSize()) damageAmount = GetArsenalSize();
+        for (int index = damageAmount - 1; index >= 0; index--)
+        {
+            AddCardToRingside(cardsList[index]);
+            Arsenal.RemoveLastCard();
+        }
+    }
+
+    private void AddViewToSuperStar()
+    {
+        SuperStar.AddView(_view);
+    }
+    
 }

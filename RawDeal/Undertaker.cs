@@ -15,7 +15,7 @@ public class Undertaker : SuperStar
 
     }
 
-    public override bool CheckIfCanUseAbility(Player player)
+    public override bool CanUseAbility(Player player)
     {
         if (player.GetHandSize() >= 2 && !player.HasUsedHisAbilityInTheTurn)
         {
@@ -25,7 +25,7 @@ public class Undertaker : SuperStar
         return false;
     }
 
-    public override bool CheckIfAbilityIsAutomatic()
+    public override bool IsAbilityAutomatic()
     {
         return false;
     }

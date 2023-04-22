@@ -14,7 +14,7 @@ public class Jericho : SuperStar
         MakePlayerDiscardACard(opponentPlayer);
     }
 
-    public override bool CheckIfCanUseAbility(Player player)
+    public override bool CanUseAbility(Player player)
     {
         if (player.GetHandSize() >= 1 && !player.HasUsedHisAbilityInTheTurn)
         {
@@ -23,7 +23,7 @@ public class Jericho : SuperStar
         return false;
     }
 
-    public override bool CheckIfAbilityIsAutomatic()
+    public override bool IsAbilityAutomatic()
     {
         return false;
     }

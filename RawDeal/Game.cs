@@ -13,8 +13,10 @@ public class Game
     private int _indexCurrentPlayer;
     private int _indexNotCurrentPlayer;
     private bool _playerEndsHisTurn;
+    private List<DeckValidator> _selectedDecks;
     private Player CurrentPlayer => _playersList[_indexCurrentPlayer];
     private Player NotCurrentPlayer => _playersList[_indexNotCurrentPlayer];
+
 
     public Game(View view, string deckFolder)
     {
@@ -26,35 +28,72 @@ public class Game
         _indexCurrentPlayer = 0;
         _indexNotCurrentPlayer = 1;
         _playerEndsHisTurn = false;
+        _selectedDecks = new List<DeckValidator>();
     }
 
-
-    private bool CheckIfThereIsInvalidDecks()
+    public void Play()
     {
-        while (_playersList.Count < 2)
+        AskUsersToSelectDecks();
+        if (AreDecksValid())
         {
-            string deckPath = _view.AskUserToSelectDeck(_deckFolder);
-            DeckValidator deck = GetDeckFromPath(deckPath);
-            if (deck == null)
-            {
-                _view.SayThatDeckIsInvalid();
-                return true;
-            }
-            Player player = CreatePlayerFromDeck(deck);
-            if (player == null)
-            {
-                return true;
-            }
-            _playersList.Add(player);
+            CreatePlayers(_selectedDecks);
+            OrderPlayersBySuperStarValue();
+            AplyInitialAbilities();
+            RunGameLoop();
         }
-
-        return false;
+    }
+    
+    private void RunGameLoop()
+    {
+        while (!_gameIsOver)
+        {
+            if (NotCurrentPlayer.PlayerHasLost()) EndGame(winnerPlayer: CurrentPlayer);
+            if (!_gameIsOver) PlayTurn();
+            UpdatePlayersIndex();
+        }
     }
     
     private void EndGame(Player winnerPlayer)
     {
         _gameIsOver = true;
         _view.CongratulateWinner(winnerPlayer.GetSuperStarName());
+    }
+
+    private void AskUsersToSelectDecks()
+    {
+        for (int i = 0; i < 2; i++)
+        {
+            string deckPath = _view.AskUserToSelectDeck(_deckFolder);
+            DeckValidator deck = GetDeckFromPath(deckPath);
+            if (IsInvalidDeck(deck)) return;
+            _selectedDecks.Add(deck);
+        }
+    }
+    
+    private bool IsInvalidDeck(DeckValidator deck)
+    {
+        if (!deck.IsValidDeck())
+        {
+            _view.SayThatDeckIsInvalid();
+            return true;
+        }
+        return false;
+    }
+
+    private bool AreDecksValid()
+    {
+        if (_selectedDecks.Count() == 2) return true;
+        return false;
+    }
+
+    private void CreatePlayers(List<DeckValidator> selectedDecks)
+    {
+        foreach (DeckValidator deck in selectedDecks)
+        {
+            Player player = CreatePlayerFromDeck(deck);
+            _playersList.Add(player);    
+        }
+        
     }
 
     private DeckValidator GetDeckFromPath(string path)
@@ -72,10 +111,6 @@ public class Game
         foreach (var cardString in cardStrings)
         {
             var card = AllCardsList.FirstOrDefault(card => card.Title == cardString);
-            if (card == null)
-            {
-                return null;
-            }
             cardsList.Add(card);
         }
         return cardsList;
@@ -83,17 +118,13 @@ public class Game
 
     private List<SuperStar> GetSuperStarsListFromDeck(string path)
     {
-        var superstarStrings = File.ReadAllLines(path).Where(line => line.Contains("(Superstar Card)"));
-        var superStarsList = new List<SuperStar>();
+        var superStarStringsList = File.ReadAllLines(path).Where(line => line.Contains("(Superstar Card)"));
+        List<SuperStar> superStarsList = new List<SuperStar>();
 
-        foreach (var superstarString in superstarStrings)
+        foreach (var superstarString in superStarStringsList)
         {
             string cardName = superstarString.Replace(" (Superstar Card)", "");
-            var superstar = AllSuperStarList.FirstOrDefault(s => s.Name == cardName);
-            if (superstar == null)
-            {
-                return null;
-            }
+            var superstar = AllSuperStarList.FirstOrDefault(superstar => superstar.Name == cardName);
             superStarsList.Add(superstar);
         }
 
@@ -137,8 +168,8 @@ public class Game
 
     private NextPlay AskUserNextPlay()
     {
-        bool canUserUseHisAbility = CheckIfPlayerCanUseHisAbility(CurrentPlayer);
-        if (canUserUseHisAbility && !CurrentPlayer.CheckIfAbilityIsAutomatic())
+        bool canUserUseHisAbility = CanUseHisAbility(CurrentPlayer);
+        if (canUserUseHisAbility && !CurrentPlayer.IsAbilityAutomatic())
         {
             return _view.AskUserWhatToDoWhenUsingHisAbilityIsPossible();
         }
@@ -149,7 +180,7 @@ public class Game
     {
         if (NotCurrentPlayer.PlayerHasLost())
         {
-            EndGame(CurrentPlayer);
+            EndGame(winnerPlayer: CurrentPlayer);
         }
     }
 
@@ -161,7 +192,7 @@ public class Game
 
     private void ExecuteAutomaticAbilities()
     {
-        if (CurrentPlayer.CheckIfCanUseAbility() && CurrentPlayer.CheckIfAbilityIsAutomatic())
+        if (CurrentPlayer.CanUseAbility() && CurrentPlayer.IsAbilityAutomatic())
         {
             CurrentPlayer.UseSuperStarAbility(NotCurrentPlayer);
         }
@@ -178,7 +209,7 @@ public class Game
         switch (nextPlay)
         {
             case NextPlay.ShowCards:
-                ShowCardsBasedOnSelection(CurrentPlayer);
+                ShowCardsBasedOnSelection();
                 break;
             case NextPlay.PlayCard:
                 PlayCard();
@@ -190,84 +221,95 @@ public class Game
                 _playerEndsHisTurn = true;
                 break;
             case NextPlay.GiveUp:
-                EndGame(NotCurrentPlayer);
+                EndGame(winnerPlayer: NotCurrentPlayer);
                 break;
         }
     }
     
     private void PlayCard()
     {
-        List<(int, Card)> tuplesPlayableCardsFromPlayer = CurrentPlayer.GetPlayableCardsFromPlayer();
-        List<string> playableCardsFormatted = GeneratePlayableCardsFormatted(tuplesPlayableCardsFromPlayer);
-        int userInput = _view.AskUserToSelectAPlay(playableCardsFormatted);
-        if (userInput != -1)
-        {
-            int cardIndexSelected = userInput;
-            Card selectedCard = tuplesPlayableCardsFromPlayer[cardIndexSelected].Item2;
-            int actualDamage = NotCurrentPlayer.CalculateDamage(selectedCard.GetDamage());
-            List<Card> notCurrentPlayerDamagedCards = NotCurrentPlayer.GetCardsFromArsenal(actualDamage);
-            int positionInHand = tuplesPlayableCardsFromPlayer[cardIndexSelected].Item1;
-            PerformCardAction(selectedCard, positionInHand);
-            NotCurrentPlayer.ReceiveDamage(actualDamage);
-            ShowDamagedCards(notCurrentPlayerDamagedCards, actualDamage);
-        }
+        List<(int, Card)> playableCards = CurrentPlayer.GetPlayableCardsFromPlayer();
+        int selectedCardIndex = AskUserToSelectCard(playableCards);
+        if (selectedCardIndex == -1) return;
+        Card selectedCard = ExtractCardFromTuple(playableCards[selectedCardIndex]);
+        int indexInHand = ExtractCardIndexInHandFromTuple(playableCards[selectedCardIndex]);
+        int actualDamage = CalculateActualDamage(selectedCard);
+        List<Card> damagedCards = NotCurrentPlayer.GetCardsFromArsenal(actualDamage);
+        SayPlayerIsTryingToPlayCard(selectedCard);
+        MoveCardFromHandToRingArea(indexInHand, selectedCard);
+        SayPlayerSuccessfullyPlayedCard();
+        NotCurrentPlayer.ReceiveDamage(actualDamage);
+        ShowDamagedCards(damagedCards, actualDamage);
     }
 
-    
-    private List<string> GeneratePlayableCardsFormatted(List<(int, Card)> playableCardsFromPlayer)
+    private int AskUserToSelectCard(List<(int, Card)> playableCards)
     {
-        return playableCardsFromPlayer.Select(tuple => ExtractCardFromTuple(tuple).GetCardInPlayFormat()).ToList();
+        List<string> playableCardsFormatted = GetFormattedPlayableCards(playableCards);
+        return _view.AskUserToSelectAPlay(playableCardsFormatted);
     }
 
-
-    private void PerformCardAction(Card selectedCard, int cardIndexInHand)
+    private int CalculateActualDamage(Card selectedCard)
     {
-        string cardInPlayFormat = selectedCard.GetCardInPlayFormat();
-        _view.SayThatPlayerIsTryingToPlayThisCard(CurrentPlayer.GetSuperStarName(), cardInPlayFormat);
-        _view.SayThatPlayerSuccessfullyPlayedACard();
+        return NotCurrentPlayer.CalculateDamage(selectedCard.GetDamage());
     }
 
     private void ShowDamagedCards(List<Card> damagedCards, int actualDamage)
     {
         int indexShowedCard = 1;
-        for (int indexInDamagedCards = damagedCards.Count - 1; indexInDamagedCards >= 0; indexInDamagedCards--)
+        damagedCards.Reverse();
+        foreach (Card damagedCard in damagedCards)
         {
-            string cardFormattedInfo = damagedCards[indexInDamagedCards].GetCardFormattedInfo();
-            _view.ShowCardOverturnByTakingDamage(cardFormattedInfo, indexShowedCard, actualDamage);
+            ShowCardOverturnByTakingDamage(damagedCard, indexShowedCard, actualDamage);
             indexShowedCard++;
         }
     }
-    
-    private Card ExtractCardFromTuple((int, Card) tupleIndexCard)
+
+    private void SayPlayerIsTryingToPlayCard(Card selectedCard)
     {
-        return tupleIndexCard.Item2;
+        string superStarName = CurrentPlayer.GetSuperStarName();
+        string cardInPlayFormat = selectedCard.GetCardInPlayFormat();
+        _view.SayThatPlayerIsTryingToPlayThisCard(superStarName, cardInPlayFormat);
     }
 
-    private bool CheckIfPlayerCanUseHisAbility(Player currentPlayer)
+    private void MoveCardFromHandToRingArea(int cardIndexInHand, Card selectedCard)
     {
-        return currentPlayer.CheckIfCanUseAbility();
+        CurrentPlayer.MoveCardFromHandToRingAreaByIndex(cardIndexInHand);
     }
 
-    public void Play()
+    private void SayPlayerSuccessfullyPlayedCard()
     {
-        bool thereIsInvalidDeck = CheckIfThereIsInvalidDecks();
-        if (!thereIsInvalidDeck)
-        {
-            
-            _playersList = OrderPlayersBySuperStarValue(_playersList);
-            AplyInitialAbilities();
-            RunGameLoop();
-        }
+        _view.SayThatPlayerSuccessfullyPlayedACard();
     }
 
-    private void RunGameLoop()
+    private List<string> GetFormattedPlayableCards(List<(int, Card)> playableCards)
     {
-        while (!_gameIsOver)
-        {
-            if (NotCurrentPlayer.PlayerHasLost()) EndGame(CurrentPlayer);
-            if (!_gameIsOver) PlayTurn();
-            UpdatePlayersIndex();
-        }
+        return playableCards.Select(GetCardInPlayFormat).ToList();
+    }
+
+    private string GetCardInPlayFormat((int, Card) tuple)
+    {
+        Card card = ExtractCardFromTuple(tuple);
+        return card.GetCardInPlayFormat();
+    }
+
+    private Card ExtractCardFromTuple((int, Card) tuple)
+    {
+        return tuple.Item2;
+    }
+    private int ExtractCardIndexInHandFromTuple((int, Card) tuple)
+    {
+        return tuple.Item1;
+    }
+
+    private void ShowCardOverturnByTakingDamage(Card damagedCard, int indexShowedCard, int actualDamage)
+    {
+        string cardFormattedInfo = damagedCard.GetCardFormattedInfo();
+        _view.ShowCardOverturnByTakingDamage(cardFormattedInfo, indexShowedCard, actualDamage);
+}
+
+    private bool CanUseHisAbility(Player currentPlayer)
+    {
+        return currentPlayer.CanUseAbility();
     }
 
     private void UpdatePlayersIndex()
@@ -276,25 +318,24 @@ public class Game
         _indexNotCurrentPlayer = (_indexNotCurrentPlayer + 1) % _playersList.Count;
     }
 
-    private List<Player> OrderPlayersBySuperStarValue(List<Player> playersList)
+    private void OrderPlayersBySuperStarValue()
     {
-        if (playersList[1].SuperStar.SuperstarValue > playersList[0].SuperStar.SuperstarValue)
+        if (_playersList[1].SuperStar.SuperstarValue > _playersList[0].SuperStar.SuperstarValue)
         {
-            SwapPlayers(playersList);
+            ExchangePlayersPositions(_playersList);
         }
-        return playersList;
     }
     
-    private void ShowCardsBasedOnSelection(Player player)
+    private void ShowCardsBasedOnSelection()
     {
 
         CardSet setOfCardsSelected = _view.AskUserWhatSetOfCardsHeWantsToSee();
-        List<string> cardstringsList = GetCardsInStringFormatFromSelectedSet(setOfCardsSelected);
+        List<string> cardstringsList = GetCardsAsStringListFromSelectedSet(setOfCardsSelected);
         _view.ShowCards(cardstringsList);
     }
     
 
-    private List<string> GetCardsInStringFormatFromSelectedSet(CardSet setOfCardsSelected)
+    private List<string> GetCardsAsStringListFromSelectedSet(CardSet setOfCardsSelected)
     {
         List<string> cardStrings = new List<string>();
         
@@ -339,7 +380,7 @@ public class Game
         }
     }
     
-    private static void SwapPlayers<TPlayer>(List<TPlayer> playersList)
+    private static void ExchangePlayersPositions<TPlayer>(List<TPlayer> playersList)
     {
         (playersList[0], playersList[1]) = (playersList[1], playersList[0]);
     }

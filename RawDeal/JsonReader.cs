@@ -22,11 +22,7 @@ public static class JsonReader
         foreach (JObject jObjectSuperStar in jsonArrayAllSuperStar)
         {
             SuperStar superstar = CreateSuperStarUsingName(jObjectSuperStar);
-
-            if (superstar != null)
-            {
-                allSuperStarList.Add(superstar);
-            }
+            allSuperStarList.Add(superstar);
         }
         return allSuperStarList;
     }
