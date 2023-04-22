@@ -58,6 +58,67 @@ public class Game
         _gameIsOver = true;
         _view.CongratulateWinner(winnerPlayer.GetSuperStarName());
     }
+    
+    private void PlayTurn()
+    {
+        _view.SayThatATurnBegins(CurrentPlayer.SuperStar.Name);
+        ResetPlayerStatusInTurn();
+        ExecuteDrawSegment();
+        ExecuteTurnLoop();
+    }
+    private void ExecuteTurnLoop()
+    {
+        while (!_playerEndsHisTurn && !_gameIsOver)
+        {
+            ExecuteAutomaticAbilities();
+            ShowPlayersInfo();
+            NextPlay nextPlay = AskUserNextPlay();
+            ExecuteNextPlay(nextPlay);
+            CurrentPlayer.UpdateFortitude();
+            CheckForGameOver();
+        }
+    }
+    
+    private void ExecuteDrawSegment()
+    {
+        CurrentPlayer.MoveCardFromArsenalToHand();
+    }
+
+    private void ExecuteNextPlay(NextPlay nextPlay)
+    {
+        switch (nextPlay)
+        {
+            case NextPlay.ShowCards:
+                ShowCardsBasedOnSelection();
+                break;
+            case NextPlay.PlayCard:
+                PlayCard();
+                break;
+            case NextPlay.UseAbility:
+                CurrentPlayer.UseSuperStarAbility(NotCurrentPlayer);
+                break;
+            case NextPlay.EndTurn:
+                _playerEndsHisTurn = true;
+                break;
+            case NextPlay.GiveUp:
+                EndGame(winnerPlayer: NotCurrentPlayer);
+                break;
+        }
+    }
+    
+    private void PlayCard()
+    {
+        List<(int, Card)> playableCards = CurrentPlayer.GetPlayableCardsFromPlayer();
+        int selectedCardIndex = AskUserToSelectCard(playableCards);
+        if (selectedCardIndex == -1) return;
+        Card selectedCard = ExtractCardFromTuple(playableCards[selectedCardIndex]);
+        int indexInHand = ExtractCardIndexInHandFromTuple(playableCards[selectedCardIndex]);
+        SayPlayerIsTryingToPlayCard(selectedCard);
+        MoveCardFromHandToRingArea(indexInHand, selectedCard);
+        SayPlayerSuccessfullyPlayedCard();
+        AplyCardDamage(selectedCard);
+
+    }
 
     private void AskUsersToSelectDecks()
     {
@@ -95,6 +156,13 @@ public class Game
         }
         
     }
+    private Player CreatePlayerFromDeck(DeckValidator deckValidator)
+    {
+        SuperStar superstar = deckValidator.SuperStarsList.First();
+        List<Card> cardsList = deckValidator.CardList;
+        Player player = new Player(superstar, cardsList, _view);
+        return player;
+    }
 
     private DeckValidator GetDeckFromPath(string path)
     {
@@ -130,42 +198,8 @@ public class Game
 
         return superStarsList;
     }
-
-    private Player CreatePlayerFromDeck(DeckValidator deckValidator)
-    {
-        if (!deckValidator.IsValidDeck())
-        {
-            _view.SayThatDeckIsInvalid();
-            return null;
-        }
-
-        SuperStar superstar = deckValidator.SuperStarsList.First();
-        List<Card> cardsList = deckValidator.CardList;
-        Player player = new Player(superstar, cardsList, _view);
-        return player;
-    }
     
-    private void PlayTurn()
-    {
-        _view.SayThatATurnBegins(CurrentPlayer.SuperStar.Name);
-        ResetPlayerStatusInTurn();
-        ExecuteDrawSegment();
-        ExecuteTurnLoop();
-    }
-
-    private void ExecuteTurnLoop()
-    {
-        while (!_playerEndsHisTurn && !_gameIsOver)
-        {
-            ExecuteAutomaticAbilities();
-            ShowPlayersInfo();
-            NextPlay nextPlay = AskUserNextPlay();
-            ExecuteNextPlay(nextPlay);
-            CurrentPlayer.UpdateFortitude();
-            CheckForGameOver();
-        }
-    }
-
+    
     private NextPlay AskUserNextPlay()
     {
         bool canUserUseHisAbility = CanUseHisAbility(CurrentPlayer);
@@ -174,6 +208,12 @@ public class Game
             return _view.AskUserWhatToDoWhenUsingHisAbilityIsPossible();
         }
         return _view.AskUserWhatToDoWhenHeCannotUseHisAbility();
+    }
+    
+    private int AskUserToSelectCard(List<(int, Card)> playableCards)
+    {
+        List<string> playableCardsFormatted = GetFormattedPlayableCards(playableCards);
+        return _view.AskUserToSelectAPlay(playableCardsFormatted);
     }
 
     private void CheckForGameOver()
@@ -199,54 +239,15 @@ public class Game
 
     }
 
-    private void ExecuteDrawSegment()
+    private void AplyCardDamage(Card card)
     {
-        CurrentPlayer.MoveCardFromArsenalToHand();
-    }
-
-    private void ExecuteNextPlay(NextPlay nextPlay)
-    {
-        switch (nextPlay)
-        {
-            case NextPlay.ShowCards:
-                ShowCardsBasedOnSelection();
-                break;
-            case NextPlay.PlayCard:
-                PlayCard();
-                break;
-            case NextPlay.UseAbility:
-                CurrentPlayer.UseSuperStarAbility(NotCurrentPlayer);
-                break;
-            case NextPlay.EndTurn:
-                _playerEndsHisTurn = true;
-                break;
-            case NextPlay.GiveUp:
-                EndGame(winnerPlayer: NotCurrentPlayer);
-                break;
-        }
-    }
-    
-    private void PlayCard()
-    {
-        List<(int, Card)> playableCards = CurrentPlayer.GetPlayableCardsFromPlayer();
-        int selectedCardIndex = AskUserToSelectCard(playableCards);
-        if (selectedCardIndex == -1) return;
-        Card selectedCard = ExtractCardFromTuple(playableCards[selectedCardIndex]);
-        int indexInHand = ExtractCardIndexInHandFromTuple(playableCards[selectedCardIndex]);
-        int actualDamage = CalculateActualDamage(selectedCard);
+        int actualDamage = CalculateActualDamage(card);
         List<Card> damagedCards = NotCurrentPlayer.GetCardsFromArsenal(actualDamage);
-        SayPlayerIsTryingToPlayCard(selectedCard);
-        MoveCardFromHandToRingArea(indexInHand, selectedCard);
-        SayPlayerSuccessfullyPlayedCard();
         NotCurrentPlayer.ReceiveDamage(actualDamage);
         ShowDamagedCards(damagedCards, actualDamage);
     }
 
-    private int AskUserToSelectCard(List<(int, Card)> playableCards)
-    {
-        List<string> playableCardsFormatted = GetFormattedPlayableCards(playableCards);
-        return _view.AskUserToSelectAPlay(playableCardsFormatted);
-    }
+
 
     private int CalculateActualDamage(Card selectedCard)
     {
