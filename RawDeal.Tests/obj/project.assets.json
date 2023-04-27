@@ -8,6 +8,19 @@
           "build/netstandard1.0/coverlet.collector.targets": {}
         }
       },
+      "JSON/1.0.1": {
+        "type": "package",
+        "compile": {
+          "lib/net40/Json.dll": {
+            "related": ".pdb"
+          }
+        },
+        "runtime": {
+          "lib/net40/Json.dll": {
+            "related": ".pdb"
+          }
+        }
+      },
       "Microsoft.CodeCoverage/16.11.0": {
         "type": "package",
         "compile": {
@@ -1711,6 +1724,7 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v6.0",
         "dependencies": {
+          "JSON": "1.0.1",
           "Newtonsoft.Json": "13.0.3",
           "RawDealView": "1.0.0"
         },
@@ -1725,6 +1739,7 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v6.0",
         "dependencies": {
+          "JSON": "1.0.1",
           "Newtonsoft.Json": "13.0.3"
         },
         "compile": {
@@ -1786,6 +1801,28 @@
         "coverlet-icon.png",
         "coverlet.collector.3.1.0.nupkg.sha512",
         "coverlet.collector.nuspec"
+      ]
+    },
+    "JSON/1.0.1": {
+      "sha512": "n387Xh1oDWolCIVb2oMV1bWkEKBBk5iLkMuaiAQuLUaAZwowyym2s/6b/hFnmS5J3bzINmZ7I2WEbBAZMQd2dg==",
+      "type": "package",
+      "path": "json/1.0.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE",
+        "json.1.0.1.nupkg.sha512",
+        "json.nuspec",
+        "lib/net35/Json.Net35.dll",
+        "lib/net35/Json.Net35.pdb",
+        "lib/net40/Json.dll",
+        "lib/net40/Json.pdb",
+        "lib/sl3/Json.Silverlight.dll",
+        "lib/sl3/Json.Silverlight.pdb",
+        "lib/sl4/Json.Silverlight4.dll",
+        "lib/sl4/Json.Silverlight4.pdb",
+        "lib/wp/Json.WindowsPhone.dll",
+        "lib/wp/Json.WindowsPhone.pdb"
       ]
     },
     "Microsoft.CodeCoverage/16.11.0": {
@@ -5839,6 +5876,7 @@
   },
   "projectFileDependencyGroups": {
     "net6.0": [
+      "JSON >= 1.0.1",
       "Microsoft.NET.Test.Sdk >= 16.11.0",
       "Newtonsoft.Json >= 13.0.3",
       "RawDeal >= 1.0.0",
@@ -5854,11 +5892,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\franc\\OneDrive - uc.cl\\Documentos\\PUC\\2023-1\\IIC2113 - Diseño detallado de software\\Proyecto\\E2\\RawDeal\\RawDeal.Tests\\RawDeal.Tests.csproj",
+      "projectUniqueName": "C:\\Users\\franc\\Documentos - Local\\RawDeal\\RawDeal.Tests\\RawDeal.Tests.csproj",
       "projectName": "RawDeal.Tests",
-      "projectPath": "C:\\Users\\franc\\OneDrive - uc.cl\\Documentos\\PUC\\2023-1\\IIC2113 - Diseño detallado de software\\Proyecto\\E2\\RawDeal\\RawDeal.Tests\\RawDeal.Tests.csproj",
+      "projectPath": "C:\\Users\\franc\\Documentos - Local\\RawDeal\\RawDeal.Tests\\RawDeal.Tests.csproj",
       "packagesPath": "C:\\Users\\franc\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\franc\\OneDrive - uc.cl\\Documentos\\PUC\\2023-1\\IIC2113 - Diseño detallado de software\\Proyecto\\E2\\RawDeal\\RawDeal.Tests\\obj\\",
+      "outputPath": "C:\\Users\\franc\\Documentos - Local\\RawDeal\\RawDeal.Tests\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\franc\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -5873,11 +5911,11 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "projectReferences": {
-            "C:\\Users\\franc\\OneDrive - uc.cl\\Documentos\\PUC\\2023-1\\IIC2113 - Diseño detallado de software\\Proyecto\\E2\\RawDeal\\RawDealView\\RawDealView.csproj": {
-              "projectPath": "C:\\Users\\franc\\OneDrive - uc.cl\\Documentos\\PUC\\2023-1\\IIC2113 - Diseño detallado de software\\Proyecto\\E2\\RawDeal\\RawDealView\\RawDealView.csproj"
+            "C:\\Users\\franc\\Documentos - Local\\RawDeal\\RawDealView\\RawDealView.csproj": {
+              "projectPath": "C:\\Users\\franc\\Documentos - Local\\RawDeal\\RawDealView\\RawDealView.csproj"
             },
-            "C:\\Users\\franc\\OneDrive - uc.cl\\Documentos\\PUC\\2023-1\\IIC2113 - Diseño detallado de software\\Proyecto\\E2\\RawDeal\\RawDeal\\RawDeal.csproj": {
-              "projectPath": "C:\\Users\\franc\\OneDrive - uc.cl\\Documentos\\PUC\\2023-1\\IIC2113 - Diseño detallado de software\\Proyecto\\E2\\RawDeal\\RawDeal\\RawDeal.csproj"
+            "C:\\Users\\franc\\Documentos - Local\\RawDeal\\RawDeal\\RawDeal.csproj": {
+              "projectPath": "C:\\Users\\franc\\Documentos - Local\\RawDeal\\RawDeal\\RawDeal.csproj"
             }
           }
         }
@@ -5892,6 +5930,10 @@
       "net6.0": {
         "targetAlias": "net6.0",
         "dependencies": {
+          "JSON": {
+            "target": "Package",
+            "version": "[1.0.1, )"
+          },
           "Microsoft.NET.Test.Sdk": {
             "target": "Package",
             "version": "[16.11.0, )"
@@ -5936,5 +5978,17 @@
         "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.406\\RuntimeIdentifierGraph.json"
       }
     }
-  }
+  },
+  "logs": [
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'JSON 1.0.1' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net6.0'. This package may not be fully compatible with your project.",
+      "libraryId": "JSON",
+      "targetGraphs": [
+        "net6.0"
+      ]
+    }
+  ]
 }

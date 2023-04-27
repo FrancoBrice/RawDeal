@@ -1,16 +1,23 @@
+using RawDealView.Options;
+using RawDealView.Utils;
+using RawDealView.Views;
+
 namespace RawDealView;
 
 public class View
 {
     private readonly AbstractView _view;
-    private readonly PlayFormatter _playFormatter = new PlayFormatter();
-    private readonly CardFormatter _cardFormatter = new CardFormatter();
+    private readonly PlayFormatter _playFormatter = new();
+    private readonly CardFormatter _cardFormatter = new();
 
     public static View BuildConsoleView()
-        => new View(new ConsoleView());
+        => new (new ConsoleView());
     
     public static View BuildTestingView(string pathTestScript)
-        => new View(new TestingView(pathTestScript));
+        => new (new TestingView(pathTestScript));
+
+    public static View BuildManualTestingView(string pathTestScript)
+        => new (new ManualTestingView(pathTestScript));
 
     private View(AbstractView newView)
         => _view = newView;
@@ -105,6 +112,9 @@ public class View
         return answer == "Y";
     }
 
+    public void SayThatPlayerMustDiscardThisCard(string superstarName, string cardToDiscard)
+        => _view.WriteLine($"{superstarName} descarta {cardToDiscard}.");
+
     public void SayThatPlayerDrawCards(string superstarName, int numOfCardsToDraw)
         => _view.WriteLine($"{superstarName} roba {numOfCardsToDraw} carta(s).");
     
@@ -112,6 +122,26 @@ public class View
     {
         ShowDivision();
         _view.WriteLine($"{superstarName} intenta jugar la siguiente carta:\n{playInfo}");
+    }
+    
+    public void SayThatPlayerReversedTheCard(string superstarName, string reversalInfo)
+    {
+        ShowDivision();
+        _view.WriteLine($"{superstarName} revierte la carta usando:\n{reversalInfo}");
+    }
+
+    public void SayThatCardWasReversedByDeck(string superstarName)
+    {
+        ShowDivision();
+        _view.WriteLine($"{superstarName} revierte la carta desde el mazo.");
+    }
+
+    public int AskHowManyCardsToDrawBecauseOfStunValue(string superstarName, int stunValue)
+    {
+        ShowDivision();
+        _view.WriteLine(
+            $"{superstarName} puede robar hasta {stunValue} cartas debido al stun value. ¿Cuántas cartas quieres robar?");
+        return AskUserToSelectANumber(0, stunValue);
     }
 
     public void SayThatPlayerSuccessfullyPlayedACard()
@@ -142,7 +172,19 @@ public class View
         _view.WriteLine(player2);
         ShowDivision();
     }
-    
+
+    public int AskUserToSelectAReversal(string superstarName, List<string> applicableReversals)
+    {
+        if (applicableReversals.Any())
+        {
+            ShowDivision();
+            _view.WriteLine($"{superstarName} tiene la opción de revertir la carta:");
+            return AskUserToSelectAPlay(applicableReversals);
+        }
+
+        return -1;
+    }
+
     public int AskUserToSelectAPlay(List<string> plays)
     {
         ShowItems(_playFormatter, plays);
@@ -183,7 +225,20 @@ public class View
         string[] options = NextPlayOptions.GetOptionsWithoutSuperstarAbility();
         return AskUserWhatToDo(options);
     }
-    
+
+    public SelectedEffect AskUserToSelectAnEffectForJockeyForPosition(string superstarName)
+        => AskUserToSelectAnEffect(superstarName,
+            new[] { SelectedEffect.NextGrappleIsPlus4D, SelectedEffect.NextGrapplesReversalIsPlus8F });
+
+    private SelectedEffect AskUserToSelectAnEffect(string superstarName, SelectedEffect[] possibleEffects)
+    {
+        ShowDivision();
+        _view.WriteLine($"Como resultado, {superstarName} debe elegir uno de los siguientes efectos:");
+        string[] options = SelectedEffectOptions.GetOptions(possibleEffects);
+        string selectedOption = AskUserToSelectOption(options);
+        return SelectedEffectOptions.GetSelectedEffectFromText(selectedOption);
+    }
+
     public CardSet AskUserWhatSetOfCardsHeWantsToSee()
     {
         string[] options = ShowCardOptions.GetOptions();

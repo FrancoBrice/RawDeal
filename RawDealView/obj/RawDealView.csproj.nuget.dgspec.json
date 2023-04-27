@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\franc\\OneDrive - uc.cl\\Documentos\\PUC\\2023-1\\IIC2113 - Diseño detallado de software\\Proyecto\\E2\\RawDeal\\RawDealView\\RawDealView.csproj": {}
+    "C:\\Users\\franc\\Documentos - Local\\RawDeal\\RawDealView\\RawDealView.csproj": {}
   },
   "projects": {
-    "C:\\Users\\franc\\OneDrive - uc.cl\\Documentos\\PUC\\2023-1\\IIC2113 - Diseño detallado de software\\Proyecto\\E2\\RawDeal\\RawDealView\\RawDealView.csproj": {
+    "C:\\Users\\franc\\Documentos - Local\\RawDeal\\RawDealView\\RawDealView.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\franc\\OneDrive - uc.cl\\Documentos\\PUC\\2023-1\\IIC2113 - Diseño detallado de software\\Proyecto\\E2\\RawDeal\\RawDealView\\RawDealView.csproj",
+        "projectUniqueName": "C:\\Users\\franc\\Documentos - Local\\RawDeal\\RawDealView\\RawDealView.csproj",
         "projectName": "RawDealView",
-        "projectPath": "C:\\Users\\franc\\OneDrive - uc.cl\\Documentos\\PUC\\2023-1\\IIC2113 - Diseño detallado de software\\Proyecto\\E2\\RawDeal\\RawDealView\\RawDealView.csproj",
+        "projectPath": "C:\\Users\\franc\\Documentos - Local\\RawDeal\\RawDealView\\RawDealView.csproj",
         "packagesPath": "C:\\Users\\franc\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\franc\\OneDrive - uc.cl\\Documentos\\PUC\\2023-1\\IIC2113 - Diseño detallado de software\\Proyecto\\E2\\RawDeal\\RawDealView\\obj\\",
+        "outputPath": "C:\\Users\\franc\\Documentos - Local\\RawDeal\\RawDealView\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\franc\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -38,6 +38,10 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "dependencies": {
+            "JSON": {
+              "target": "Package",
+              "version": "[1.0.1, )"
+            },
             "Newtonsoft.Json": {
               "target": "Package",
               "version": "[13.0.3, )"
