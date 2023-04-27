@@ -1,4 +1,4 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=98cd8c98_002D2869_002D4855_002D8f0d_002Db0fd983ed66c/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="All tests from &amp;lt;RawDeal.Tests&amp;gt;" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
-  &lt;Project Location="C:\Users\franc\OneDrive - uc.cl\Documentos\PUC\2023-1\IIC2113 - Diseño detallado de software\Proyecto\E2\RawDeal\RawDeal.Tests" Presentation="&amp;lt;RawDeal.Tests&amp;gt;" /&gt;&#xD;
+  &lt;Project Location="C:\Users\franc\Documentos - Local\RawDeal\RawDeal.Tests" Presentation="&amp;lt;RawDeal.Tests&amp;gt;" /&gt;&#xD;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>
