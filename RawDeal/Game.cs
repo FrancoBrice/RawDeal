@@ -1,3 +1,4 @@
+using RawDeal.SuperStars;
 using RawDealView;
 using RawDealView.Options;
 

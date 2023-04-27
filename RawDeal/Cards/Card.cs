@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using RawDeal.Cards;
 using RawDealView;
 using RawDealView.Formatters;
 
@@ -54,6 +55,11 @@ public class Card : IViewableCardInfo
     public int GetDamage()
     {
         return Convert.ToInt32(Damage);
+    }
+
+    public int GetFortitude()
+    {
+        return Convert.ToInt32(Fortitude);
     }
 
     public bool ItsUnique()

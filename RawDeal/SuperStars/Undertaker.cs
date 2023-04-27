@@ -1,4 +1,4 @@
-namespace RawDeal;
+namespace RawDeal.SuperStars;
 
 public class Undertaker : SuperStar
 {

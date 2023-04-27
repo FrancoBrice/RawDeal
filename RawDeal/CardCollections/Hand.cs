@@ -1,6 +1,4 @@
-using System.Diagnostics.CodeAnalysis;
-
-namespace RawDeal;
+namespace RawDeal.CardCollections;
 
 public class Hand : CardCollection
 {
@@ -10,7 +8,7 @@ public class Hand : CardCollection
         for (int indexInHand = 0; indexInHand < CardList.Count; indexInHand++)
         {
             Card card = CardList[indexInHand];
-            if (card.Fortitude <= fortitude && CheckIfTypeOfCardIsPlayable(card))
+            if (card.GetFortitude() <= fortitude && CheckIfTypeOfCardIsPlayable(card))
             {
                 tuplesWithPositionInHandAndPlayableCards.Add((indexInHand, card));
             }

@@ -1,3 +1,5 @@
+using RawDeal.CardCollections;
+using RawDeal.SuperStars;
 using RawDealView;
 
 namespace RawDeal;

@@ -1,5 +1,7 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using RawDeal.SuperStars;
+
 namespace RawDeal;
 
 public static class JsonReader

@@ -1,7 +1,7 @@
 using Newtonsoft.Json;
 using RawDealView;
 
-namespace RawDeal
+namespace RawDeal.SuperStars
 {
     public abstract class SuperStar
     {

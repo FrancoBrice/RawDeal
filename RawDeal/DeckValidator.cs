@@ -1,3 +1,5 @@
+using RawDeal.SuperStars;
+
 namespace RawDeal;
 
 public class DeckValidator
