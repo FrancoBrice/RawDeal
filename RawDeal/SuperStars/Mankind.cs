@@ -9,7 +9,8 @@ public class Mankind : SuperStar
 
     public override void UseInitialAbility(Player player)
     {
-        player.SetShieldOfDamage(1);
+        const int shieldOfDamage = 1;
+        player.SetShieldOfDamage(shieldOfDamage);
     }
 
     public override void UseAbility(Player player, Player opponentPlayer)
@@ -17,15 +18,13 @@ public class Mankind : SuperStar
         player.MoveCardFromArsenalToHand();
 
     }
-
-
+    
     public override bool CanUseAbility(Player player)
     {
         if (player.HasUsedHisAbilityInTheTurn)
         {
             return false;
         }
-
         return true;
     }
 

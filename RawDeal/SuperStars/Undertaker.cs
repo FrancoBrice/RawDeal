@@ -10,23 +10,21 @@ public class Undertaker : SuperStar
     public override void UseAbility(Player player, Player opponentPlayer)
     {
         _view.SayThatPlayerIsGoingToUseHisAbility(player.GetSuperStarName(), player.GetSuperStarAbility());
-        MakePlayerDiscardCardsWithSelection(player, 2);
+        int numberOfCardsToDiscard = 2;
+        MakePlayerDiscardCardsWithSelection(player, numberOfCardsToDiscard);
         RecoverCardFromRingide(player);
 
     }
 
     public override bool CanUseAbility(Player player)
     {
-        if (player.GetHandSize() >= 2 && !player.HasUsedHisAbilityInTheTurn)
-        {
-            return true;
-        }
-
-        return false;
+        int minimumCardsInHand = 2;
+        return player.GetHandSize() >= minimumCardsInHand && !player.HasUsedHisAbilityInTheTurn;
     }
 
     public override bool IsAbilityAutomatic()
     {
         return false;
     }
+    
 }

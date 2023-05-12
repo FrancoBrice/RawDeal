@@ -9,8 +9,13 @@ public class TheRock : SuperStar
 
     public override void UseAbility(Player player, Player opponentPlayer)
     {
-        if (!DoesPlayerWantToUseAbility(player)) return;
-        int indexInputByUser = _view.AskPlayerToSelectCardsToRecover(Name, 1, player.Ringside.GetFormattedCards() );
+        if (!DoesPlayerWantToUseAbility(player))
+        {
+            player.HasUsedHisAbilityInTheTurn = true;
+            return;
+        }
+        int numberOfCards = 1; 
+        int indexInputByUser = _view.AskPlayerToSelectCardsToRecover(Name, numberOfCards, player.Ringside.GetFormattedCards() );
         player.MoveCardByIndexFromRingsideToArsenalBeginning(indexInputByUser);
     }
 
@@ -23,4 +28,5 @@ public class TheRock : SuperStar
     {
         return true;
     }
+    
 }

@@ -1,8 +1,9 @@
 ﻿using RawDeal;
+using RawDeal.GameClasses;
 using RawDealView;
 
-string folder = "06-BasicHybridCards";
-int idTest = 1;
+string folder = "04-NoEffects";
+int idTest = 3;
 string pathToTest = Path.Combine("data", $"{folder}-Tests", $"{idTest}.txt");
 
 // Esta vista permite verificar el comportamiento de un test particular.

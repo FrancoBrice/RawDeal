@@ -1,3 +1,5 @@
+using RawDeal.Cards;
+
 namespace RawDeal.CardCollections;
 
 public class CardCollection

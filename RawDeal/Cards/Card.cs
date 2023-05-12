@@ -1,9 +1,8 @@
 using Newtonsoft.Json;
-using RawDeal.Cards;
-using RawDealView;
 using RawDealView.Formatters;
+using RawDealView;
 
-namespace RawDeal;
+namespace RawDeal.Cards;
 public class Card : IViewableCardInfo
 {
     [JsonProperty("Title")]
@@ -26,9 +25,13 @@ public class Card : IViewableCardInfo
 
     [JsonProperty("CardEffect")]
     public string CardEffect { get; set; }
+    public string PlayedType { get; set; }
+    private View _view; 
 
-    public Card() { }
-
+    public Card()
+    {
+        
+    }
     public Card(IViewableCardInfo cardInfo)
     {
         Title = cardInfo.Title;
@@ -40,17 +43,41 @@ public class Card : IViewableCardInfo
         CardEffect = cardInfo.CardEffect;
     }
 
+    public void SetViewObject(View view)
+    {
+        _view = view;
+    }
+
     public string GetCardFormattedInfo()
     
     {   
         return Formatter.CardToString(this);
     }
 
-    public string GetCardInPlayFormat()
+    public string GetCardInPlayFormat(string typeOfCardPlayedAs)
     {
-        PlayInfo playInfo = new PlayInfo(this, Types[0].ToUpper());
+        PlayInfo playInfo = new PlayInfo(this, typeOfCardPlayedAs.ToUpper());
         return playInfo.GetCardInPlayFormat();
     }
+    
+    public bool ItsTypeManeuver => Types.Contains("Maneuver");
+
+    public bool IsTypeAction => Types.Contains("Action");
+    
+    
+    public bool IsHybrid => Types.Count > 1;
+    
+    public bool IsTypeReversal => Types.Contains("Reversal");
+
+    public int AmountOfTypes => Types.Count;
+
+    public void ApplyActionEffect(Player currentPlayer, Player notCurrentPlayer)
+    {
+        currentPlayer.MoveCardFromArsenalToHand();
+        _view.SayThatPlayerMustDiscardThisCard(currentPlayer.GetSuperStarName(), Title);
+        _view.SayThatPlayerDrawCards(currentPlayer.GetSuperStarName(), 1);
+    }
+
 
     public int GetDamage()
     {
@@ -80,12 +107,5 @@ public class Card : IViewableCardInfo
     {
         return Subtypes.Contains("Face");
     }
-    public bool ItsTypeManeuver()
-    {
-        return Types.Contains("Maneuver");
-    }
-    public bool IsTypeAction()
-    {
-        return Types.Contains("Action");
-    }
+
 }

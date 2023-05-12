@@ -1,4 +1,5 @@
 using RawDeal.CardCollections;
+using RawDeal.Cards;
 using RawDeal.SuperStars;
 using RawDealView;
 
@@ -15,7 +16,8 @@ public class Player
     public int Fortitude;
     private View _view;
     public bool HasUsedHisAbilityInTheTurn;
-    private int _damageReducedByShield;
+    public bool EndsHisTurn;
+    public int DamageReducedByShield;
     
     public Player(SuperStar superstar, List<Card> cardList, View view)
     {
@@ -31,7 +33,8 @@ public class Player
         DistributeOpeningHand();
         AddViewToSuperStar();
         HasUsedHisAbilityInTheTurn = false;
-        _damageReducedByShield = 0;
+        EndsHisTurn = false;
+        DamageReducedByShield = 0;
 }
 
     public void DistributeOpeningHand()
@@ -74,7 +77,7 @@ public class Player
         Hand.RemoveCardByIndex(indexCardFromHand);
         AddCardToRingside(card);
     }
-
+    
     public void MoveCardFromRingsideToHandByIndex(int indexCardFromRingside)
     {
         Card card = Ringside.GetCardByIndex(indexCardFromRingside);
@@ -137,7 +140,7 @@ public class Player
 
     public int CalculateDamage(int damage)
     {
-        int actualDamage = Math.Max(damage - _damageReducedByShield, 1);
+        int actualDamage = Math.Max(damage - DamageReducedByShield, 0);
         return actualDamage;
     }
     
@@ -172,7 +175,7 @@ public class Player
         Fortitude = RingArea.GetFortitude();
     }
 
-    public bool PlayerHasLost()
+    public bool HasCeroCardsInArsenal()
     {
         if (Arsenal.CardListSize == 0) return true;
         return false;
@@ -197,12 +200,10 @@ public class Player
     {
         return SuperStar.SuperstarAbility;
     }
-
     
-
     public void SetShieldOfDamage(int amountOfDamageShield)
     {
-        _damageReducedByShield = amountOfDamageShield;
+        DamageReducedByShield = amountOfDamageShield;
     }
 
     public void ExecuteInitialAbility()
@@ -211,6 +212,11 @@ public class Player
         {
             SuperStar.UseInitialAbility(this);
         }
+    }
+
+    public string GetTypeOfPlayedCard(int indexOfCardSelected)
+    {
+        return Hand.GetTypeOfPlayedCard(indexOfCardSelected);
     }
 
     private void InitializeArsenal(List<Card> deck)

@@ -1,3 +1,5 @@
+using RawDeal.Cards;
+using RawDeal.JsonReader;
 using RawDeal.SuperStars;
 
 namespace RawDeal;
@@ -13,7 +15,7 @@ public class DeckValidator
     {
         CardList = cardList;
         SuperStarsList = superStarsList;
-        _allSuperStarLogosList = JsonReader.GenerateSuperStarLogosList();
+        _allSuperStarLogosList = SuperstarsJsonReader.GenerateSuperStarLogosList();
     }
 
     public bool IsValidDeck()
@@ -38,9 +40,11 @@ public class DeckValidator
         if (SuperStarsList.Count != 1) return false;
         return true;
     }
+
+    private int _correctNumberOfCards = 60;
     private bool HasCorrectNumberOfCards()
     {
-        if (CardList.Count != 60) return false;
+        if (CardList.Count != _correctNumberOfCards) return false;
         return true;
     }
     

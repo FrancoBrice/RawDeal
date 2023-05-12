@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using RawDeal.Cards;
 using RawDealView;
 
 namespace RawDeal.SuperStars
@@ -49,13 +50,12 @@ namespace RawDeal.SuperStars
         }
         protected bool DoesPlayerWantToUseAbility(Player player)
         {
-            bool doesPlayerCanUseHisAbility = false;
-            if (player.Ringside.CardListSize > 0)
+            if (player.Ringside.CardListSize > 0 && !player.HasUsedHisAbilityInTheTurn)
             { 
-                doesPlayerCanUseHisAbility = _view.DoesPlayerWantToUseHisAbility(Name);
+                return _view.DoesPlayerWantToUseHisAbility(Name);
             }
-
-            return doesPlayerCanUseHisAbility;
+            
+            return false;
         }
 
         protected void RecoverCardFromRingide(Player player)
