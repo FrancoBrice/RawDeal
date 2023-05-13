@@ -26,6 +26,8 @@ public class Card : IViewableCardInfo
     [JsonProperty("CardEffect")]
     public string CardEffect { get; set; }
     public string PlayedType { get; set; }
+    public string ReversalType { get; set; }
+
     private View _view; 
 
     public Card()
@@ -88,6 +90,12 @@ public class Card : IViewableCardInfo
     {
         return Convert.ToInt32(Fortitude);
     }
+    
+    public int GetStunValue()
+    {
+        return Convert.ToInt32(StunValue);
+    }
+
 
     public bool ItsUnique()
     {
@@ -106,6 +114,29 @@ public class Card : IViewableCardInfo
     public bool HasSubtypeFace()
     {
         return Subtypes.Contains("Face");
+    }
+
+    public void SetReversalType()
+    {
+        if (!IsTypeReversal) return;
+        PlayedType = "Reversal";
+        if (Subtypes.Contains("ReversalStrike"))
+        {
+            ReversalType = "ReversalStrike";
+        }
+        else if (Subtypes.Contains("ReversalGrapple"))
+        {
+            ReversalType = "ReversalGrapple";
+        }
+        else if (Subtypes.Contains("ReversalSubmission"))
+        {
+            ReversalType = "ReversalSubmission";
+        }
+        else if (Subtypes.Contains("ReversalAction"))
+        {
+            ReversalType = "ReversalAction";
+        }
+
     }
 
 }

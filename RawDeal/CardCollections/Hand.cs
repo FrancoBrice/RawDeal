@@ -20,6 +20,22 @@ public class Hand : CardCollection
         }
         return tuplesWithPositionInHandAndPlayableCards;
     }
+    
+    public List<(int, Card)> GetTuplesWithPositionInHandAndReversalCards(Player player, Card opponentsCard)
+    {
+        List<(int, Card)> tuplesWithPositionInHandAndReversalCards = new List<(int, Card)>();
+        TypesOfPlayableCards = new List<string>();
+        for (int indexInHand = 0; indexInHand < CardList.Count; indexInHand++)
+        {
+            Card card = CardList[indexInHand];
+            if (player.IsCorrectReversalCard(card, opponentsCard))
+            {
+                tuplesWithPositionInHandAndReversalCards.Add((indexInHand, card));
+            }
+        }
+        return tuplesWithPositionInHandAndReversalCards;
+    }
+
 
     public string GetTypeOfPlayedCard(int indexOfPlayableCards)
     {

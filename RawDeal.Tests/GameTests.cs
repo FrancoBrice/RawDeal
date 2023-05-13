@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using RawDeal.GameClasses;
+using RawDeal.GameLogic;
 using RawDealView;
 using Xunit;
 

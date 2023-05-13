@@ -132,10 +132,87 @@ public class Player
         return Hand.GetTuplesWithPositionInHandAndPlayableCards(Fortitude);
     }
 
+    public List<(int, Card)> GetReversalCardsFromPlayer(Card opponentsCard)
+    {
+        return Hand.GetTuplesWithPositionInHandAndReversalCards(this, opponentsCard);
+    }
+    
+    public List<Card> GetReversalCards(Card opponentsCard)
+    {
+        List<Card> validReversals = new List<Card>();
+        foreach (Card card in CardList)
+        {
+            if (IsCorrectReversalCard(card, opponentsCard))
+            {
+                validReversals.Add(card);
+            }
+        }
+
+        return validReversals;
+    }
+
+    public bool HasReversalCard()
+    {
+        foreach (Card card in CardList)
+        {
+            if (card.Types.Contains("Reversal"))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public bool IsCorrectReversalCard(Card reversalCard, Card opponentsCard)
+    {
+        if (reversalCard.GetFortitude() > Fortitude)
+        {
+            return false;
+        }
+        
+        if (reversalCard.Subtypes.Contains("ReversalStrike"))
+        {
+            if (opponentsCard.PlayedType.Contains("Maneuver") && opponentsCard.Subtypes.Contains("Strike"))
+            {
+                return true;
+            }
+        }
+        if (reversalCard.Subtypes.Contains("ReversalGrapple"))
+        {
+            if (opponentsCard.PlayedType.Contains("Maneuver") && opponentsCard.Subtypes.Contains("Grapple"))
+            {
+                return true;
+            }
+        } 
+        if (reversalCard.Subtypes.Contains("ReversalSubmission"))
+        {
+            if (opponentsCard.PlayedType.Contains("Maneuver") && opponentsCard.Subtypes.Contains("Submission"))
+            {
+                return true;
+            }
+        }
+        if (reversalCard.Subtypes.Contains("ReversalAction"))
+        {
+            if (opponentsCard.PlayedType.Contains("Action"))
+            {
+                return true;
+            }
+        }
+
+        return false;
+
+    }
+    
     public void ReceiveDamage(int damage)
     {
         MoveCardsFromArsenalToRingSideByDamageAmount(damage);
         _view.SayThatOpponentWillTakeSomeDamage(GetSuperStarName(), damage);
+    }
+    
+    public void ReceiveDamageWithoutView(int damage)
+    {
+        MoveCardsFromArsenalToRingSideByDamageAmount(damage);
     }
 
     public int CalculateDamage(int damage)
@@ -232,8 +309,9 @@ public class Player
         if (damageAmount >= GetArsenalSize()) damageAmount = GetArsenalSize();
         for (int index = damageAmount - 1; index >= 0; index--)
         {
-            AddCardToRingside(cardsList[index]);
-            Arsenal.RemoveLastCard();
+            Card currentCard = cardsList[index];
+            AddCardToRingside(currentCard);
+            Arsenal.RemoveLastCard(); 
         }
     }
 
