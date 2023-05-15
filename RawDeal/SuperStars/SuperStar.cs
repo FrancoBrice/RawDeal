@@ -45,7 +45,7 @@ namespace RawDeal.SuperStars
         protected Card ApplyDamageToOpponent(Player opponentPlayer, int damage)
         {
             Card discartedCard = opponentPlayer.GetCardsFromArsenal(damage)[0];
-            opponentPlayer.ReceiveDamage(1);
+            opponentPlayer.ReceiveDamageWithView(1);
             return discartedCard;
         }
         protected bool DoesPlayerWantToUseAbility(Player player)

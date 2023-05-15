@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using RawDeal.Cards.CardEffects;
 using RawDealView.Formatters;
 using RawDealView;
 
@@ -19,6 +20,7 @@ public class Card : IViewableCardInfo
 
     [JsonProperty("Damage")]
     public string Damage { get; set; }
+    private string _defaultDamage;
 
     [JsonProperty("StunValue")]
     public string StunValue { get; set; }
@@ -28,7 +30,12 @@ public class Card : IViewableCardInfo
     public string PlayedType { get; set; }
     public string ReversalType { get; set; }
 
-    private View _view; 
+    public int CurrentDamage;
+    public int CurrentFortitude;
+
+    private View _view;
+    
+    public Effect Effect { get; set; }
 
     public Card()
     {
@@ -41,8 +48,10 @@ public class Card : IViewableCardInfo
         Subtypes = cardInfo.Subtypes;
         Fortitude = cardInfo.Fortitude;
         Damage = cardInfo.Damage;
+        _defaultDamage = Damage;
         StunValue = cardInfo.StunValue;
         CardEffect = cardInfo.CardEffect;
+        SetDefaultDamage();
     }
 
     public void SetViewObject(View view)
@@ -73,22 +82,40 @@ public class Card : IViewableCardInfo
 
     public int AmountOfTypes => Types.Count;
 
-    public void ApplyActionEffect(Player currentPlayer, Player notCurrentPlayer)
+
+
+
+    public int GetCurrentDamage()
     {
-        currentPlayer.MoveCardFromArsenalToHand();
-        _view.SayThatPlayerMustDiscardThisCard(currentPlayer.GetSuperStarName(), Title);
-        _view.SayThatPlayerDrawCards(currentPlayer.GetSuperStarName(), 1);
+        return CurrentDamage;
     }
 
-
-    public int GetDamage()
+    public void SetDefaultDamage()
     {
-        return Convert.ToInt32(Damage);
+        string cardDamageString = Damage;
+        if (cardDamageString != "#") CurrentDamage = Convert.ToInt32(cardDamageString);
+        CurrentDamage = 0;
+    }
+    
+    private void SetDefaultFortitude()
+    {
+        string cardFortitudeString = Fortitude;
+        CurrentFortitude = Convert.ToInt32(cardFortitudeString);
+    }
+
+    public void SetCurrentDamage(int currentDamage)
+    {
+        CurrentDamage = currentDamage;
+    }
+    
+    public void SetCurrentFortitude(int currentFortitude)
+    {
+        CurrentFortitude = currentFortitude;
     }
 
     public int GetFortitude()
     {
-        return Convert.ToInt32(Fortitude);
+        return CurrentFortitude;
     }
     
     public int GetStunValue()
@@ -115,8 +142,18 @@ public class Card : IViewableCardInfo
     {
         return Subtypes.Contains("Face");
     }
+    
+    public bool TypeIsPlayable()
+    {
+        return ItsTypeManeuver || IsTypeAction;
+    }
+    
+    public bool CurrentPlayedTypeIsPlayable()
+    {
+        return PlayedType == "Maneuver" || PlayedType == "Action";
+    }
 
-    public void SetReversalType()
+    public void SetReversalTypeAndSubtype()
     {
         if (!IsTypeReversal) return;
         PlayedType = "Reversal";
@@ -136,7 +173,18 @@ public class Card : IViewableCardInfo
         {
             ReversalType = "ReversalAction";
         }
+        else if (Subtypes.Contains("ReversalSpecial"))
+        {
+            ReversalType = "ReversalSpecial";
+        }
 
     }
+
+    public void SetDefaultValues()
+    {
+        SetDefaultDamage();
+        SetDefaultFortitude();
+    }
+
 
 }

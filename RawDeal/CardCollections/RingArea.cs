@@ -9,16 +9,10 @@ public class RingArea : CardCollection
         int fortitude = 0;
         foreach (Card card in CardList)
         {
-          int cardDamageInt = TransformCardDamageToInt(card);
+          int cardDamageInt = card.CurrentDamage;
           fortitude += cardDamageInt;
         }
         return fortitude;
     }
-
-    private int TransformCardDamageToInt(Card card)
-    {
-        string cardDamageString = card.Damage;
-        if (cardDamageString != "#") return Convert.ToInt32(cardDamageString);
-        return 0;
-    }
+    
 }

@@ -13,7 +13,7 @@ public class Hand : CardCollection
         for (int indexInHand = 0; indexInHand < CardList.Count; indexInHand++)
         {
             Card card = CardList[indexInHand];
-            if (card.GetFortitude() <= fortitude && TypeOfCardIsPlayableInTurn(card))
+            if (card.GetFortitude() <= fortitude && card.TypeIsPlayable())
             {
                 tuplesWithPositionInHandAndPlayableCards.Add((indexInHand, card));
             }
@@ -21,18 +21,20 @@ public class Hand : CardCollection
         return tuplesWithPositionInHandAndPlayableCards;
     }
     
-    public List<(int, Card)> GetTuplesWithPositionInHandAndReversalCards(Player player, Card opponentsCard)
+    public List<(int, Card)> GetTuplesWithPositionInHandAndReversalCards(Player player, Card attackingCard)
     {
         List<(int, Card)> tuplesWithPositionInHandAndReversalCards = new List<(int, Card)>();
         TypesOfPlayableCards = new List<string>();
+
         for (int indexInHand = 0; indexInHand < CardList.Count; indexInHand++)
         {
-            Card card = CardList[indexInHand];
-            if (player.IsCorrectReversalCard(card, opponentsCard))
+            Card reversalCard = CardList[indexInHand];
+            if (player.IsCorrectReversalCard(attackingCard, reversalCard))
             {
-                tuplesWithPositionInHandAndReversalCards.Add((indexInHand, card));
+                tuplesWithPositionInHandAndReversalCards.Add((indexInHand, reversalCard));
             }
         }
+
         return tuplesWithPositionInHandAndReversalCards;
     }
 
@@ -41,13 +43,7 @@ public class Hand : CardCollection
     {
         return TypesOfPlayableCards[indexOfPlayableCards];
     }
-
-
-    private bool TypeOfCardIsPlayableInTurn(Card card)
-    {
-        return card.ItsTypeManeuver || card.IsTypeAction;
-    }
-
+    
     private bool TypeOfCardIsHybrid(Card card)
     {
         return card.IsHybrid;
