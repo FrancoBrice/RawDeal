@@ -62,7 +62,7 @@ public class Play
 
     public void NextReversalHasMoreFortitudeBySubtype(string subtype, int extraFortitude)
     {
-        throw new NotImplementedException();
+        
     }
 
     public Card GetLastCard()

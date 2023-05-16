@@ -2,7 +2,7 @@
 using RawDeal.GameLogic;
 using RawDealView;
 
-string folder = "08-Reversals";
+string folder = "05-SuperstarAbilities";
 int idTest = 1;
 string pathToTest = Path.Combine("data", $"{folder}-Tests", $"{idTest}.txt");
 

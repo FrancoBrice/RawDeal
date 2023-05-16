@@ -20,7 +20,6 @@ public class Card : IViewableCardInfo
 
     [JsonProperty("Damage")]
     public string Damage { get; set; }
-    private string _defaultDamage;
 
     [JsonProperty("StunValue")]
     public string StunValue { get; set; }
@@ -41,6 +40,7 @@ public class Card : IViewableCardInfo
     {
         
     }
+
     public Card(IViewableCardInfo cardInfo)
     {
         Title = cardInfo.Title;
@@ -48,12 +48,10 @@ public class Card : IViewableCardInfo
         Subtypes = cardInfo.Subtypes;
         Fortitude = cardInfo.Fortitude;
         Damage = cardInfo.Damage;
-        _defaultDamage = Damage;
         StunValue = cardInfo.StunValue;
         CardEffect = cardInfo.CardEffect;
-        SetDefaultDamage();
     }
-
+    
     public void SetViewObject(View view)
     {
         _view = view;
@@ -82,9 +80,6 @@ public class Card : IViewableCardInfo
 
     public int AmountOfTypes => Types.Count;
 
-
-
-
     public int GetCurrentDamage()
     {
         return CurrentDamage;
@@ -93,8 +88,14 @@ public class Card : IViewableCardInfo
     public void SetDefaultDamage()
     {
         string cardDamageString = Damage;
-        if (cardDamageString != "#") CurrentDamage = Convert.ToInt32(cardDamageString);
-        CurrentDamage = 0;
+        if (cardDamageString.Contains("#"))
+        {
+            CurrentDamage = 0;
+            return;
+        }
+        CurrentDamage = Convert.ToInt32(cardDamageString);
+
+
     }
     
     private void SetDefaultFortitude()

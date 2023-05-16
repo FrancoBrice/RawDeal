@@ -19,7 +19,7 @@ public class JockeyingForPositionActionEffect : Effect
         switch (selectedEffect)
         {
             case SelectedEffect.NextGrappleIsPlus4D:
-                currentPlay.NextCardDamageBonusByTypeAndSubtype(card, "Maneuver", "Grapple" , 4);
+                currentPlay.NextCardDamageBonusByTypeAndSubtype(currentPlay.GetLastCard(), "Maneuver", "Grapple" , 4);
                 break;
             case SelectedEffect.NextGrapplesReversalIsPlus8F:
                 currentPlay.NextReversalHasMoreFortitudeBySubtype("Grapple", 8);
