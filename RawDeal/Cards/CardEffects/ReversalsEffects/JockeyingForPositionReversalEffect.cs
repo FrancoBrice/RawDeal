@@ -1,3 +1,4 @@
+using RawDeal.Cards.CardEffects.ActionEffects;
 using RawDeal.GameLogic;
 using RawDealView;
 using RawDealView.Options;
@@ -17,15 +18,8 @@ public class JockeyingForPositionReversalEffect : Effect
         ReversalByTitle cardEffect = new ReversalByTitle(_view);
         cardEffect.SetCardTitleThatCanReverse("Jockeying for Position");
         cardEffect.ApplyEffect(currentPlay);
-        SelectedEffect selectedEffect = _view.AskUserToSelectAnEffectForJockeyForPosition(currentPlay.CurrentPlayer.GetSuperStarName());
-        switch (selectedEffect)
-        {
-            case SelectedEffect.NextGrappleIsPlus4D:
-                currentPlay.NextCardDamageBonusByTypeAndSubtype(currentPlay.GetLastCard(), "Maneuver", "Grapple", 4);
-                break;
-            case SelectedEffect.NextGrapplesReversalIsPlus8F:
-                currentPlay.NextReversalHasMoreFortitudeBySubtype("Grapple", 8);
-                break;
-        }
+        JockeyingForPositionActionEffect specialEffect = new JockeyingForPositionActionEffect(_view);
+        currentPlay.EndPlay();
+        specialEffect.SpecialEffect(currentPlay);
     }
 }

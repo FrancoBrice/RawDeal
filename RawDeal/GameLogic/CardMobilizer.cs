@@ -1,14 +1,17 @@
 using RawDeal.Cards;
+using RawDealView;
 
 namespace RawDeal.GameLogic;
 
 public class CardMobilizer
 {
     private TupleManager _tupleManager;
+    private View _view; 
     
-    public CardMobilizer()
+    public CardMobilizer(View view)
     {
         _tupleManager = new TupleManager();
+        _view = view;
     }
     
     public void MoveCardFromHandToRingArea(Player player, (int, Card) tupleWithIndexInHandAndSelectedCard)
@@ -17,11 +20,23 @@ public class CardMobilizer
         player.MoveCardFromHandToRingAreaByIndex(indexInHand);
     }
 
-    public void MoveCardFromHandToRingside(Player player, (int, Card) tupleWithIndexInHandAndSelectedCard)
+    public void MoveSpecificCardFromHandToRingside(Player player, (int, Card) tupleWithIndexInHandAndSelectedCard)
     {
         int indexInHand = _tupleManager.ExtractCardIndexInHand(tupleWithIndexInHandAndSelectedCard);
         player.MoveCardFromHandToRingsideByIndex(indexInHand);
     }
+
+    public void MakePlayerDiscardCards(Player player, int numberOfCardsToDiscard)
+    {
+        for (int remainingCardsToDiscard = numberOfCardsToDiscard; remainingCardsToDiscard > 0; remainingCardsToDiscard--)
+        {
+            int indexCardFromPlayerHand = _view.AskPlayerToSelectACardToDiscard(player.GetCardsInStringFormatFromHand(), player.GetSuperStarName(),
+                player.GetSuperStarName(), remainingCardsToDiscard);
+            player.MoveCardFromHandToRingsideByIndex(indexCardFromPlayerHand);
+        }
+    }
+    
+
     
     public void MoveCardsFromArsenalToHand(Player player, int numberOfCards)
     {
@@ -37,13 +52,13 @@ public class CardMobilizer
         }
     }
     
-    public void MoveCardsFromArsenalToRingSideByDamageAmount(Player player, int damageAmount)
+    public void MoveCardsFromArsenalToRingSideByDamageAmount(Player player, int? damageAmount)
     {
         List<Card> cardsList = player.GetLastCardsFromArsenalReversed(damageAmount);
         if (damageAmount >= player.GetArsenalSize()) damageAmount = player.GetArsenalSize();
-        for (int index = damageAmount - 1; index >= 0; index--)
+        for (int? index = damageAmount - 1; index >= 0; index--)
         {
-            Card currentCard = cardsList[index];
+            Card currentCard = cardsList[(int)index];
             player.AddCardToRingside(currentCard);
             player.RemoveLastCardFromArsenal(); 
         }

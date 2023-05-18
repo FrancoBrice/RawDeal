@@ -10,10 +10,10 @@ public class ReversalWithMaximumDamage : Effect
     {
         
     }
-    
+
     public override void ApplyEffect(Play currentPlay)
     {
-        int actualDamage = currentPlay.AttackingCard.GetCurrentDamage();
+        int? actualDamage = currentPlay.AttackingCard.GetCurrentDamage();
         if (CanReverseByDamage(_maximumDamageThatCanReverse, actualDamage))
         {
             ReversalSimple cardEffect = new ReversalSimple(_view);

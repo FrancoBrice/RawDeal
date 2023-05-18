@@ -22,6 +22,7 @@ public class Game
     private Player CurrentPlayer => _playersList[_indexCurrentPlayer];
     private Player NotCurrentPlayer => _playersList[_indexNotCurrentPlayer];
     private Play _currentPlay;
+    private PlayManager _playManager;
     private TupleManager _tupleManager;
     private CardMobilizer _cardMobilizer;
 
@@ -38,7 +39,8 @@ public class Game
         _indexNotCurrentPlayer = 1;
         _selectedDecks = new List<DeckValidator>();
         _tupleManager = new TupleManager();
-        _cardMobilizer = new CardMobilizer();
+        _cardMobilizer = new CardMobilizer(_view);
+        _playManager = new PlayManager(_view);
     }
 
     public void Play()
@@ -74,6 +76,8 @@ public class Game
         _view.SayThatATurnBegins(CurrentPlayer.SuperStar.Name);
         ResetPlayerStatusInTurn();
         ExecuteDrawSegment();
+        _currentPlay = new Play(GetDictionaryOfCurrentAndNotCurrentPlayer(), _view);
+        _playManager.AddPlay(_currentPlay);
         ExecuteTurnLoop();
 
     }
@@ -98,6 +102,8 @@ public class Game
             player.UpdateFortitude();
         }
     }
+
+
     
     private void ExecuteDrawSegment()
     {
@@ -106,13 +112,14 @@ public class Game
 
     private void ExecuteNextPlay(NextPlay nextPlay)
     {
+        CurrentPlayer.HasReversedTheLastCard = false;
         switch (nextPlay)
         {
             case NextPlay.ShowCards:
                 ShowCardsBasedOnSelection();
                 break;
             case NextPlay.PlayCard:
-                _currentPlay = new Play(GetDictionaryOfCurrentAndNotCurrentPlayer());
+                _playManager.ApplyPendingEffectsIfPossible();
                 PlayCard();
                 break;
             case NextPlay.UseAbility:
@@ -140,13 +147,11 @@ public class Game
         attackingCard.PlayedType = _typesOfPlayableCards[selectedCardIndex];
         _currentPlay.SetAttackingCardTuple(tupleWithIndexInHandAndAttackingCard);
         SayPlayerIsTryingToPlayCard(attackingCard);
-
         List<(int, Card)> validReversals = NotCurrentPlayer.GetReversalTuplesFromHand(attackingCard);
         if (validReversals.Count > 0) 
         {
             HandleReversals(validReversals, attackingCard);
         }
-        
         switch (attackingCard.PlayedType)
         {
             case "Maneuver":
@@ -160,8 +165,8 @@ public class Game
                 } 
                 else
                 {
-                    SimpleAction simpleAction = new SimpleAction(_view);
-                    simpleAction.ApplyEffect(_currentPlay);
+                    ActionSimple actionSimple = new ActionSimple(_view);
+                    actionSimple.ApplyEffect(_currentPlay);
                 }
                 break;
         }
@@ -171,47 +176,57 @@ public class Game
     {
         List<string> validReversalsInString = GetFormattedReversalCards(validReversals);
         int selectedReversalIndex = _view.AskUserToSelectAReversal(NotCurrentPlayer.GetSuperStarName(), validReversalsInString);
-        if (selectedReversalIndex == -1) {
-            return;
-        }
+        if (selectedReversalIndex == -1) return;
 
+        NotCurrentPlayer.HasReversedTheLastCard = true;
         attackingCard.PlayedType = "Reversed";
         (int, Card) tupleWithIndexInHandAndReverseCard = validReversals[selectedReversalIndex];
         _currentPlay.SetReversalCardTuple(tupleWithIndexInHandAndReverseCard);
         Card selectedReversalCard = _tupleManager.ExtractCard(tupleWithIndexInHandAndReverseCard);
+        selectedReversalCard.PlayedType = "Reversal";
+
         selectedReversalCard.SetReversalTypeAndSubtype();
         
-        HandleReversalEffects(selectedReversalCard);
+        HandleReversalEffects(attackingCard, selectedReversalCard);
     }
 
-    private void HandleReversalEffects(Card selectedReversalCard)
+    private void HandleReversalEffects(Card attackingCard, Card selectedReversalCard)
     {
-        switch (selectedReversalCard.ReversalType)
+        switch (selectedReversalCard.Title)
         {
-            case "ReversalStrike":
-            case "ReversalGrapple":
-            case "ReversalSubmission":
-            case "ReversalAction":
+            case "Step Aside":
+            case "Escape Move":
+            case "Break the Hold":
+            case "No Chance in Hell":
                 ReversalSimple reversalEffect = new ReversalSimple(_view);
                 reversalEffect.ApplyEffect(_currentPlay);
                 break;
-            case "ReversalGrappleSpecial":
-            case "ReversalStrikeSpecial":
-                ReversalWithMaximumDamage reversalSpecial = new ReversalWithMaximumDamage(_view);
-                const int maximumDamageReversalSpecial = 7;
-                reversalSpecial.SetMaximumDamageThatCanReverse(maximumDamageReversalSpecial);
-                reversalSpecial.ApplyEffect(_currentPlay);
+            case "Rolling Takedown":
+                ReversalWithMaximumDamage rollingTakedownEffect = new ReversalWithMaximumDamage(_view);
+                const int maximumDamageReversalRollingTakeDown = 7;
+                rollingTakedownEffect.SetMaximumDamageThatCanReverse(maximumDamageReversalRollingTakeDown);
+                selectedReversalCard.SetCurrentDamage(CalculateActualDamage(NotCurrentPlayer, attackingCard));
+                rollingTakedownEffect.ApplyEffect(_currentPlay);
                 break;
-            case "ReversalSpecial":
-                HandleSpecialReversal(selectedReversalCard);
+            case "Knee to the Gut":
+                ReversalWithMaximumDamage kneeToTheGutEffect = new ReversalWithMaximumDamage(_view);
+                const int maximumDamageReversalKneeToTheGut = 7;
+                kneeToTheGutEffect.SetMaximumDamageThatCanReverse(maximumDamageReversalKneeToTheGut);
+                selectedReversalCard.SetCurrentDamage(CalculateActualDamage(NotCurrentPlayer, attackingCard));
+                kneeToTheGutEffect.ApplyEffect(_currentPlay);
                 break;
-        }
 
-        if (selectedReversalCard.ReversalType != "ReversalSpecial")
-        {
-            ApplyCardDamage(NotCurrentPlayer, CurrentPlayer, selectedReversalCard);
+
         }
+        if (selectedReversalCard.ReversalType == "ReversalSpecial")
+        {
+            HandleSpecialReversal(selectedReversalCard);
+            return;
+        }
+        ApplyCardDamage(NotCurrentPlayer, CurrentPlayer, selectedReversalCard);
+        selectedReversalCard.SetDefaultDamage();
     }
+    
     private void HandleSpecialReversal(Card selectedReversalCard) 
     {
         switch (selectedReversalCard.Title) 
@@ -227,6 +242,7 @@ public class Game
                 ReversalSimple managerInterferes = new ReversalSimple(_view);
                 managerInterferes.ApplyEffect(_currentPlay);
                 const int numberOfCardsToDrawByManagerInterferes = 1;
+                _view.SayThatPlayerDrawCards(NotCurrentPlayer.GetSuperStarName(), numberOfCardsToDrawByManagerInterferes);
                 _cardMobilizer.MoveCardsFromArsenalToHand(NotCurrentPlayer, numberOfCardsToDrawByManagerInterferes);
                 ApplyCardDamage(NotCurrentPlayer, CurrentPlayer, selectedReversalCard);
                 break;
@@ -235,19 +251,23 @@ public class Game
                 chynaInterferes.ApplyEffect(_currentPlay);
                 const int numberOfCardsToDrawByChynaInterferes = 2;
                 _cardMobilizer.MoveCardsFromArsenalToHand(NotCurrentPlayer, numberOfCardsToDrawByChynaInterferes);
+                _view.SayThatPlayerDrawCards(NotCurrentPlayer.GetSuperStarName(), numberOfCardsToDrawByChynaInterferes);
                 ApplyCardDamage(NotCurrentPlayer, CurrentPlayer, selectedReversalCard);
                 break;
             case "Clean Break":
                 ReversalByTitle cleanBreak = new ReversalByTitle(_view);
                 cleanBreak.SetCardTitleThatCanReverse("Jockeying for Position");
                 cleanBreak.ApplyEffect(_currentPlay);
+                const int numberOfCardsThatOpponentMustDiscard = 4;
+                _cardMobilizer.MakePlayerDiscardCards(CurrentPlayer, numberOfCardsThatOpponentMustDiscard);
                 const int numberOfCardsToDrawByCleanBreak = 1;
                 _cardMobilizer.MoveCardsFromArsenalToHand(NotCurrentPlayer, numberOfCardsToDrawByCleanBreak);
+                _view.SayThatPlayerDrawCards(NotCurrentPlayer.GetSuperStarName(), numberOfCardsToDrawByCleanBreak);
                 ApplyCardDamage(NotCurrentPlayer, CurrentPlayer, selectedReversalCard);
                 break;
             case "Jockeying for Position":
-                JockeyingForPositionReversalEffect jockeyingForPosition = new JockeyingForPositionReversalEffect(_view);
-                jockeyingForPosition.ApplyEffect(_currentPlay);
+                JockeyingForPositionReversalEffect jockeyingForPositionReversalEffect = new JockeyingForPositionReversalEffect(_view);
+                jockeyingForPositionReversalEffect.ApplyEffect(_currentPlay);
                 break;
         }
     }
@@ -359,7 +379,7 @@ public class Game
 
     private void CheckForGameOver()
     {
-        if (NotCurrentPlayer.HasCeroCardsInArsenal() && CurrentPlayer.EndsHisTurn)
+        if (NotCurrentPlayer.HasCeroCardsInArsenal() && CurrentPlayer.EndsHisTurn && !NotCurrentPlayer.HasReversedTheLastCard)
         {
             EndGame(winnerPlayer: CurrentPlayer);
         }
@@ -383,7 +403,7 @@ public class Game
 
     private void ApplyCardDamage(Player attackingPlayer, Player damagedPlayer, Card attackingCard)
     {
-        int pretendedDamage = CalculateActualDamage(attackingCard);
+        int pretendedDamage = CalculateActualDamage(damagedPlayer, attackingCard);
         if (pretendedDamage == 0) return;
         int actualDamage = 0;
         List<Card> cardsToBeDamaged = damagedPlayer.GetCardsFromArsenal(pretendedDamage);
@@ -396,8 +416,8 @@ public class Game
             actualDamage++;
             Card damagedCard = cardsToBeDamaged[index];
             actualDamagedCards.Add(damagedCard);
-            List<Card> possibleReversals = damagedPlayer.GetReversalFromArsenal(attackingCard);
-            if (possibleReversals.Contains(damagedCard))
+            List<Card> possibleReversals = damagedPlayer.GetReversalsFromArsenal(attackingCard);
+            if (possibleReversals.Contains(damagedCard) && damagedPlayer.IsCorrectReversalCard(attackingCard, damagedCard))
             {
                 cardWasReversedByDeck = true;
                 attackingPlayer.EndsHisTurn = true;
@@ -439,6 +459,8 @@ public class Game
         {
             EndGame(attackingPlayer);
         }
+        _playManager.RemoveEffectsOnCards();
+        attackingCard.SetDefaultValues();
     }
 
     private bool OpponentLostDuringDamage(int actualDamage)
@@ -447,9 +469,9 @@ public class Game
         return actualDamage > maximumDamage;
     }
 
-    private int CalculateActualDamage(Card selectedCard)
+    private int CalculateActualDamage(Player damagedPlayer, Card selectedCard)
     {
-        return NotCurrentPlayer.CalculateDamage(selectedCard.GetCurrentDamage());
+        return damagedPlayer.CalculateDamage(selectedCard.GetCurrentDamage());
     }
     
 
@@ -478,7 +500,7 @@ public class Game
                     currentCard.PlayedType = currentCard.Types[j];
                     if (currentCard.CurrentPlayedTypeIsPlayable())
                     {
-                        formattedPlayableCards.Add(GetCardInPlayFormat(tupleIndexInHandAndCard));
+                        formattedPlayableCards.Add(GetCardInPlayFormat(tupleIndexInHandAndCard, currentCard.PlayedType));
                         _typesOfPlayableCards.Add(currentCard.PlayedType);
                         _listOfTuplesOfPlayableCards.Add(tupleIndexInHandAndCard);
                     }
@@ -487,7 +509,7 @@ public class Game
             else
             {
                 currentCard.PlayedType = currentCard.Types[0];
-                formattedPlayableCards.Add(GetCardInPlayFormat(tupleIndexInHandAndCard));
+                formattedPlayableCards.Add(GetCardInPlayFormat(tupleIndexInHandAndCard, currentCard.PlayedType));
                 _typesOfPlayableCards.Add(currentCard.PlayedType);
                 _listOfTuplesOfPlayableCards.Add(tupleIndexInHandAndCard);
             }
@@ -502,18 +524,16 @@ public class Game
         foreach (var tupleIndexInHandAndCard in reversalCardsTuples)
         {
             Card currentCard = _tupleManager.ExtractCard(tupleIndexInHandAndCard);
-            currentCard.PlayedType = "Reversal";
-            formattedReversalCards.Add(GetCardInPlayFormat(tupleIndexInHandAndCard));
-            
+            formattedReversalCards.Add(GetCardInPlayFormat(tupleIndexInHandAndCard, "Reversal"));
         }
         
         return formattedReversalCards;
     }
     
-    private string GetCardInPlayFormat((int, Card) tuple)
+    private string GetCardInPlayFormat((int, Card) tuple, string type)
     {
         Card card = _tupleManager.ExtractCard(tuple);
-        return card.GetCardInPlayFormat(card.PlayedType);
+        return card.GetCardInPlayFormat(type);
     }
 
     private bool CanUseHisAbility(Player currentPlayer)
@@ -577,7 +597,7 @@ public class Game
 
     private PlayerInfo GeneratePlayerInfo(Player player)
     {
-        return new PlayerInfo(player.GetSuperStarName(), player.Fortitude, player.GetHandSize(),
+        return new PlayerInfo(player.GetSuperStarName(), (int)player.Fortitude, player.GetHandSize(),
                 player.GetArsenalSize());
     }
 

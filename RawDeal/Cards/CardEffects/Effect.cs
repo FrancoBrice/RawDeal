@@ -14,11 +14,11 @@ public abstract class Effect
     protected Effect(View view)
     {
         _view = view;
-        _cardMobilizer = new CardMobilizer();
+        _cardMobilizer = new CardMobilizer(_view);
     }
     public abstract void ApplyEffect(Play currentPlay);
 
-    protected bool CanReverseByDamage(int maximumDamageThatCanReverse, int actualDamage)
+    protected bool CanReverseByDamage(int maximumDamageThatCanReverse, int? actualDamage)
     {
         return actualDamage <= maximumDamageThatCanReverse;
     }
@@ -26,8 +26,13 @@ public abstract class Effect
     protected void ApplyReversalDamageIfPossible(Card revesalCard)
     {
         if (revesalCard.GetCurrentDamage() < 0) return;
-        int reversalDamage = revesalCard.GetCurrentDamage();
+        int? reversalDamage = revesalCard.GetCurrentDamage();
         CurrentPlayer.ReceiveDamageWithView(reversalDamage);
+        
+    }
+
+    public virtual void SpecialEffect(Play play)
+    {
         
     }
 }

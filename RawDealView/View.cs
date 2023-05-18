@@ -150,7 +150,7 @@ public class View
         _view.WriteLine("La carta fue exitosamente jugada.");
     }
 
-    public void SayThatOpponentWillTakeSomeDamage(string opponentsSuperstarName, int damageToBeReceived)
+    public void SayThatOpponentWillTakeSomeDamage(string opponentsSuperstarName, int? damageToBeReceived)
         => _view.WriteLine($"{opponentsSuperstarName} recibe {damageToBeReceived} de daño.");
 
     public void ShowCardOverturnByTakingDamage(string overturnedCardInfo, int currentDamage, int totalDamage)

@@ -46,7 +46,7 @@ public class CardCollection
         return formattedCards;
     }
     
-    public List<Card> GetLastCardsReversed(int numberOfCards)
+    public List<Card> GetLastCardsReversed(int? numberOfCards)
     {
         List<Card> lastCards = new List<Card>();
         int index = CardListSize - 1;

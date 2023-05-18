@@ -3,9 +3,9 @@ using RawDealView;
 
 namespace RawDeal.Cards.CardEffects.ActionEffects;
 
-public class SimpleAction : Effect
+public class ActionSimple : Effect
 {
-    public SimpleAction(View view) : base(view)
+    public ActionSimple(View view) : base(view)
     {
     }
 
@@ -13,7 +13,7 @@ public class SimpleAction : Effect
     {
         (int, Card) tupleWithIndexInHandAndAttackingCard = currentPlay.AttackingCardTuple;
         Card attackingCard = currentPlay.AttackingCard;
-        _cardMobilizer.MoveCardFromHandToRingside(currentPlay.CurrentPlayer, tupleWithIndexInHandAndAttackingCard);
+        _cardMobilizer.MoveSpecificCardFromHandToRingside(currentPlay.CurrentPlayer, tupleWithIndexInHandAndAttackingCard);
         _view.SayThatPlayerSuccessfullyPlayedACard();
         currentPlay.CurrentPlayer.MoveCardFromArsenalToHand();
         _view.SayThatPlayerMustDiscardThisCard(currentPlay.CurrentPlayer.GetSuperStarName(), attackingCard.Title);

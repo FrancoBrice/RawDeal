@@ -6,14 +6,14 @@ public class Hand : CardCollection
 {
     
     public List<string> TypesOfPlayableCards { get; set; }
-    public List<(int, Card)> GetTuplesWithPositionInHandAndPlayableCards(int fortitude)
+    public List<(int, Card)> GetTuplesWithPositionInHandAndPlayableCards(int? fortitude)
     {
         List<(int, Card)> tuplesWithPositionInHandAndPlayableCards = new List<(int, Card)>();
         TypesOfPlayableCards = new List<string>();
         for (int indexInHand = 0; indexInHand < CardList.Count; indexInHand++)
         {
             Card card = CardList[indexInHand];
-            if (card.GetFortitude() <= fortitude && card.TypeIsPlayable())
+            if (card.GetCurrentFortitude() <= fortitude && card.TypeIsPlayable())
             {
                 tuplesWithPositionInHandAndPlayableCards.Add((indexInHand, card));
             }
@@ -25,10 +25,10 @@ public class Hand : CardCollection
     {
         List<(int, Card)> tuplesWithPositionInHandAndReversalCards = new List<(int, Card)>();
         TypesOfPlayableCards = new List<string>();
-
         for (int indexInHand = 0; indexInHand < CardList.Count; indexInHand++)
         {
             Card reversalCard = CardList[indexInHand];
+
             if (player.IsCorrectReversalCard(attackingCard, reversalCard))
             {
                 tuplesWithPositionInHandAndReversalCards.Add((indexInHand, reversalCard));

@@ -13,7 +13,7 @@ public class ReversalStrikeSpecial : Effect
     public override void ApplyEffect(Play currentPlay)
     {
         int maximumDamageThatCanReverse = 7;
-        int actualDamage = currentPlay.AttackingCard.GetCurrentDamage();
+        int? actualDamage = currentPlay.AttackingCard.GetCurrentDamage();
         if (CanReverseByDamage(maximumDamageThatCanReverse, actualDamage))
         {
             ReversalSimple cardEffect = new ReversalSimple(_view);

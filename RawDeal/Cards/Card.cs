@@ -1,5 +1,6 @@
 using Newtonsoft.Json;
 using RawDeal.Cards.CardEffects;
+using RawDeal.GameLogic;
 using RawDealView.Formatters;
 using RawDealView;
 
@@ -29,8 +30,8 @@ public class Card : IViewableCardInfo
     public string PlayedType { get; set; }
     public string ReversalType { get; set; }
 
-    public int CurrentDamage;
-    public int CurrentFortitude;
+    public int? CurrentDamage;
+    public int? CurrentFortitude;
 
     private View _view;
     
@@ -80,7 +81,7 @@ public class Card : IViewableCardInfo
 
     public int AmountOfTypes => Types.Count;
 
-    public int GetCurrentDamage()
+    public int? GetCurrentDamage()
     {
         return CurrentDamage;
     }
@@ -104,17 +105,17 @@ public class Card : IViewableCardInfo
         CurrentFortitude = Convert.ToInt32(cardFortitudeString);
     }
 
-    public void SetCurrentDamage(int currentDamage)
+    public void SetCurrentDamage(int? currentDamage)
     {
         CurrentDamage = currentDamage;
     }
     
-    public void SetCurrentFortitude(int currentFortitude)
+    public void SetCurrentFortitude(int? currentFortitude)
     {
         CurrentFortitude = currentFortitude;
     }
 
-    public int GetFortitude()
+    public int? GetCurrentFortitude()
     {
         return CurrentFortitude;
     }
@@ -185,6 +186,11 @@ public class Card : IViewableCardInfo
     {
         SetDefaultDamage();
         SetDefaultFortitude();
+    }
+
+    public void ApplyEffect(Play currentPlay)
+    {
+        Effect.ApplyEffect(currentPlay);
     }
 
 

@@ -13,7 +13,10 @@ public class Player
     public Ringside Ringside  { get; set; }
     private Hand Hand { get; set; }
     private RingArea RingArea { get; set; }
-    public int Fortitude;
+    public bool HasReversedTheLastCard { get; set; }
+
+    private List<Card> _allCardsList;
+    public int? Fortitude;
     private View _view;
     public bool HasUsedHisAbilityInTheTurn;
     public bool EndsHisTurn;
@@ -25,6 +28,7 @@ public class Player
     {
         _view = view;
         SuperStar = superstar;
+        _allCardsList = cardList;
         Fortitude = 0;
         Ringside = new Ringside();
         RingArea = new RingArea();
@@ -37,7 +41,8 @@ public class Player
         EndsHisTurn = false;
         DamageReducedByShield = 0;
         _tupleManager = new TupleManager();
-        _cardMobilizer = new CardMobilizer();
+        _cardMobilizer = new CardMobilizer(_view);
+        HasReversedTheLastCard = false;
     }
 
     private void DistributeOpeningHand()
@@ -130,6 +135,14 @@ public class Player
         return SuperStar.Name;
     }
 
+    public void SetDefaultValuesInCards()
+    {
+        foreach (Card card in _allCardsList)
+        {
+            card.SetDefaultValues();
+        }
+    }
+
     public List<(int, Card)> GetPlayableCardsFromPlayer()
     {
         return Hand.GetTuplesWithPositionInHandAndPlayableCards(Fortitude);
@@ -141,7 +154,7 @@ public class Player
     }
     
     
-    public List<Card> GetReversalFromArsenal(Card attackingCard)
+    public List<Card> GetReversalsFromArsenal(Card attackingCard)
     {
         List<Card> validReversals = new List<Card>();
         foreach (Card card in Arsenal.CardList)
@@ -149,19 +162,19 @@ public class Player
             if (IsCorrectReversalCard(attackingCard, card))
             {
                 validReversals.Add(card);
+                card.SetDefaultValues();
             }
         }
-
+    
         return validReversals;
     }
 
     public bool IsCorrectReversalCard(Card attackingCard, Card reversalCard)
     {
-        if (reversalCard.GetFortitude() > Fortitude)
+        if (reversalCard.GetCurrentFortitude() > Fortitude)
         {
             return false;
         }
-        
         if (reversalCard.Subtypes.Contains("ReversalStrike"))
         {
             if (attackingCard.PlayedType.Contains("Maneuver") && attackingCard.Subtypes.Contains("Strike"))
@@ -195,7 +208,11 @@ public class Player
         {
             if (attackingCard.PlayedType.Contains("Maneuver") && attackingCard.Subtypes.Contains("Grapple"))
             {
-                return true;
+                const int maximumDamageThatCanReverse = 7;
+                if (attackingCard.GetCurrentDamage() <= maximumDamageThatCanReverse)
+                {
+                    return true;
+                }
             }
         }
         
@@ -203,7 +220,11 @@ public class Player
         {
             if (attackingCard.PlayedType.Contains("Maneuver") && attackingCard.Subtypes.Contains("Strike"))
             {
-                return true;
+                const int maximumDamageThatCanReverse = 7;
+                if (attackingCard.GetCurrentDamage() <= maximumDamageThatCanReverse)
+                {
+                    return true;
+                }
             }
         }
         
@@ -221,7 +242,7 @@ public class Player
         switch (reversalCard.Title)
         {
             case "Elbow to the Face":
-                if (attackingCard.PlayedType.Contains("Maneuver"))
+                if (attackingCard.PlayedType.Contains("Maneuver") && attackingCard.GetCurrentDamage() <= 7)
                 {
                     return true;
                 }
@@ -248,7 +269,7 @@ public class Player
         return false;
     }
     
-    public void ReceiveDamageWithView(int damage)
+    public void ReceiveDamageWithView(int? damage)
     {
         _cardMobilizer.MoveCardsFromArsenalToRingSideByDamageAmount(this, damage);
         _view.SayThatOpponentWillTakeSomeDamage(GetSuperStarName(), damage);
@@ -259,9 +280,9 @@ public class Player
         _cardMobilizer.MoveCardsFromArsenalToRingSideByDamageAmount(this, damage);
     }
 
-    public int CalculateDamage(int damage)
+    public int CalculateDamage(int? damage)
     {
-        int actualDamage = Math.Max(damage - DamageReducedByShield, 0);
+        int actualDamage = Math.Max((int)(damage - DamageReducedByShield), 0);
         return actualDamage;
     }
     
@@ -352,7 +373,7 @@ public class Player
         Arsenal.RemoveLastCard(); 
     }
 
-    public List<Card> GetLastCardsFromArsenalReversed(int numberOfCards)
+    public List<Card> GetLastCardsFromArsenalReversed(int? numberOfCards)
     {
         return Arsenal.GetLastCardsReversed(numberOfCards);
     }
@@ -361,5 +382,18 @@ public class Player
     {
         SuperStar.AddView(_view);
     }
-    
+
+    public List<Card> GetReversalCards()
+    {
+        List<Card> reversalCards = new List<Card>(); 
+        foreach (Card card in _allCardsList)
+        {
+            if (card.IsTypeReversal)
+            {
+                reversalCards.Add(card);
+            }
+        }
+
+        return reversalCards;
+    }
 }

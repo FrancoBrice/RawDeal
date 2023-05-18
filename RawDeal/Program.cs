@@ -2,8 +2,8 @@
 using RawDeal.GameLogic;
 using RawDealView;
 
-string folder = "05-SuperstarAbilities";
-int idTest = 1;
+string folder = "08-Reversals";
+int idTest = 8;
 string pathToTest = Path.Combine("data", $"{folder}-Tests", $"{idTest}.txt");
 
 // Esta vista permite verificar el comportamiento de un test particular.

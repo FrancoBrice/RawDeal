@@ -13,7 +13,7 @@ public class ReversalSimple : Effect
     public override void ApplyEffect(Play currentPlay)
     {
         SetPlayers(currentPlay);
-        _cardMobilizer.MoveCardFromHandToRingside(CurrentPlayer, currentPlay.AttackingCardTuple);
+        _cardMobilizer.MoveSpecificCardFromHandToRingside(CurrentPlayer, currentPlay.AttackingCardTuple);
         CurrentPlayer.EndsHisTurn = true;
         _view.SayThatPlayerReversedTheCard(NotCurrentPlayer.GetSuperStarName(), currentPlay.ReversalCard.GetCardInPlayFormat(currentPlay.ReversalCard.PlayedType));
         _cardMobilizer.MoveCardFromHandToRingArea(NotCurrentPlayer, currentPlay.ReversalCardTuple);
