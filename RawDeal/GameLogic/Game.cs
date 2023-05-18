@@ -146,6 +146,7 @@ public class Game
         Card attackingCard = _tupleManager.ExtractCard(tupleWithIndexInHandAndAttackingCard);
         attackingCard.PlayedType = _typesOfPlayableCards[selectedCardIndex];
         _currentPlay.SetAttackingCardTuple(tupleWithIndexInHandAndAttackingCard);
+        Console.WriteLine($" attakingcard {attackingCard.GetCurrentDamage()}");
         SayPlayerIsTryingToPlayCard(attackingCard);
         List<(int, Card)> validReversals = NotCurrentPlayer.GetReversalTuplesFromHand(attackingCard);
         if (validReversals.Count > 0) 
@@ -379,7 +380,7 @@ public class Game
 
     private void CheckForGameOver()
     {
-        if (NotCurrentPlayer.HasCeroCardsInArsenal() && CurrentPlayer.EndsHisTurn && !NotCurrentPlayer.HasReversedTheLastCard)
+        if (NotCurrentPlayer.HasCeroCardsInArsenal() && CurrentPlayer.EndsHisTurn )
         {
             EndGame(winnerPlayer: CurrentPlayer);
         }
@@ -421,7 +422,7 @@ public class Game
             {
                 cardWasReversedByDeck = true;
                 attackingPlayer.EndsHisTurn = true;
-                if (index == cardsToBeDamaged.Count - 1) cardWasReversedInLastCardOfDeck = true;
+                if (index == pretendedDamage - 1) cardWasReversedInLastCardOfDeck = true;
                 break;
             }
         }
@@ -451,11 +452,11 @@ public class Game
         }
         else
         {
-            opponentHasRunOutOfCards = OpponentLostDuringDamage(pretendedDamage);
+            opponentHasRunOutOfCards = OpponentLostDuringDamage(damagedPlayer, pretendedDamage);
         }
         damagedPlayer.ReceiveDamageWithoutView(actualDamage);
 
-        if (opponentHasRunOutOfCards)
+        if (opponentHasRunOutOfCards && !cardWasReversedByDeck)
         {
             EndGame(attackingPlayer);
         }
@@ -463,14 +464,15 @@ public class Game
         attackingCard.SetDefaultValues();
     }
 
-    private bool OpponentLostDuringDamage(int actualDamage)
+    private bool OpponentLostDuringDamage(Player opponentPlayer, int damage)
     {
-        int maximumDamage = NotCurrentPlayer.GetArsenalSize();
-        return actualDamage > maximumDamage;
+        int maximumDamage = opponentPlayer.GetArsenalSize();
+        return damage > maximumDamage;
     }
 
     private int CalculateActualDamage(Player damagedPlayer, Card selectedCard)
     {
+        Console.WriteLine($" currentdam {selectedCard.GetCurrentDamage()}");
         return damagedPlayer.CalculateDamage(selectedCard.GetCurrentDamage());
     }
     

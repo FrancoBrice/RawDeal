@@ -63,9 +63,6 @@ public class Play
             case true:
                 ApplyPendingEffects();
                 break;
-            case false:
-                SetDefaultValuesOnCards();
-                break;
         }
     }
     
