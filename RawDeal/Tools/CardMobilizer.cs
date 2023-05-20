@@ -37,8 +37,6 @@ public class CardMobilizer
         }
     }
     
-
-    
     public void MoveCardsFromArsenalToHand(Player player, int numberOfCards)
     {
         if (player.GetArsenalSize() >= 1)
@@ -62,6 +60,14 @@ public class CardMobilizer
             Card currentCard = cardsList[(int)index];
             player.AddCardToRingside(currentCard);
             player.RemoveLastCardFromArsenal(); 
+        }
+    }
+
+    public void DrawStunValueCards(Player attackingPlayer, int numberOfCardsToDraw)
+    {
+        for (int i = 0; i < numberOfCardsToDraw; i++)
+        {
+            attackingPlayer.MoveCardFromArsenalToHand();
         }
     }
 }

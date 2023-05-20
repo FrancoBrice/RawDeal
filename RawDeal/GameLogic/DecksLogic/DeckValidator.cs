@@ -9,8 +9,7 @@ public class DeckValidator
     public List<Card> CardList { get; set; }
     public List<SuperStar> SuperStarsList { get; set; }
     private List<string> _allSuperStarLogosList;
-
-
+    
     public DeckValidator(List<SuperStar> superStarsList, List<Card> cardList)
     {
         CardList = cardList;
@@ -41,14 +40,13 @@ public class DeckValidator
         return true;
     }
 
-    private const int _correctNumberOfCards = 60;
+    private const int CorrectNumberOfCards = 60;
     private bool HasCorrectNumberOfCards()
     {
-        if (CardList.Count != _correctNumberOfCards) return false;
+        if (CardList.Count != CorrectNumberOfCards) return false;
         return true;
     }
     
-
     private bool SatisfyRuleTwo()
     {
         var groupedCardsByTitle = CardList.GroupBy(card => card.Title);
@@ -60,7 +58,6 @@ public class DeckValidator
             }
         }
         return true;
-
     }
 
     private bool HasMoreThanOneUnique(IGrouping<string, Card> groupOfCards)
@@ -95,6 +92,7 @@ public class DeckValidator
         if (HasCorrectSuperStarLogo()) return true;
         return false;
     }
+    
     private bool HasCorrectSuperStarLogo()
     {
         IEnumerable<Card> invalidCards = FoundCardsWithIncorrectLogo();
@@ -107,5 +105,4 @@ public class DeckValidator
         string superstarLogo = SuperStarsList.First().Logo;
         return CardList.Where(card => card.Subtypes.Any(s => s != superstarLogo && _allSuperStarLogosList.Contains(s)));
     }
-    
 }

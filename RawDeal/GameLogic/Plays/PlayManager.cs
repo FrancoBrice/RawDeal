@@ -4,24 +4,23 @@ namespace RawDeal.GameLogic;
 
 public class PlayManager
 {
+    private Play CurrentPlay => (_plays.Count > 0 ? _plays[^1] : null)!;
+    private Play PreviousPlay => (_plays.Count > 1 ? _plays[^2] : null)!;
+    private int _nextPlayId;
     private List<Play> _plays;
     private View _view;
-    public Play CurrentPlay => _plays.Count > 0 ? _plays[^1] : null;
-
-    public Play PreviousPlay => _plays.Count > 1 ? _plays[^2] : null;
-    public int NextPlayId;
-
+    
     public PlayManager(View view)
     {
         _view = view;
         _plays = new List<Play>();
-        NextPlayId = 1;
+        _nextPlayId = 1;
     }
 
     public void AddPlay(Play play)
     {
-        play.Id = NextPlayId;
-        NextPlayId++;
+        play.Id = _nextPlayId;
+        _nextPlayId++;
         _plays.Add(play);
         ApplyPendingEffectsIfPossible();
     }

@@ -1,3 +1,4 @@
+using RawDeal.Cards;
 using RawDealView;
 using RawDealView.Options;
 
@@ -7,9 +8,9 @@ public class Turn
 {
     private View _view;
     private ViewManager _viewManager;
-    private Play CurrentPlay;
-    private Player CurrentPlayer;
-    private Player NotCurrentPlayer;
+    private Play _currentPlay;
+    private Player _currentPlayer;
+    private Player _notCurrentPlayer;
     private Game _game;
     
 
@@ -17,53 +18,53 @@ public class Turn
     {
         _view = view;
         _viewManager = new ViewManager(_view);
-        CurrentPlay = currentPlay;
+        _currentPlay = currentPlay;
         SetPlayers();
     }
     
     public void PlayTurn(Game game)
     {
         _game = game;
-        _view.SayThatATurnBegins(CurrentPlayer.SuperStar.Name);
+        _view.SayThatATurnBegins(_currentPlayer.SuperStar.Name);
         ResetPlayerStatusInTurn();
-        ExecuteDrawSegment();
-        ExecuteTurnLoop();
+        RunDrawSegment();
+        RunTurnLoop();
 
     }
     
     private void ResetPlayerStatusInTurn()
     {
-        CurrentPlayer.HasUsedHisAbilityInTheTurn = false;
-        CurrentPlayer.HasEndsHisTurn = false;
+        _currentPlayer.HasUsedHisAbilityInTheTurn = false;
+        _currentPlayer.HasEndsHisTurn = false;
     }
     
-    private void ExecuteDrawSegment()
+    private void RunDrawSegment()
     {
-        CurrentPlayer.MoveCardFromArsenalToHand();
+        _currentPlayer.MoveCardFromArsenalToHand();
     }
     
-    private void ExecuteTurnLoop()
+    private void RunTurnLoop()
     {
-        while (!CurrentPlayer.HasEndsHisTurn && !_game.GameIsOver)
+        while (!_currentPlayer.HasEndsHisTurn && !_game.GameIsOver)
         {
             ExecuteAutomaticAbilities();
-            _viewManager.ShowPlayersInfo(CurrentPlay);
+            _viewManager.ShowPlayersInfo(_currentPlay);
             UserAsker userAsker = new UserAsker(_view);
-            NextPlay nextPlay = userAsker.AskUserNextPlay(CurrentPlayer);
+            NextPlay nextPlay = userAsker.GetNextPlay(_currentPlayer);
             ExecuteNextPlay(nextPlay);
             UpdatePlayersFortitude();
-            _game.CheckForGameOver();
+            GameEndChecker.CheckForGameOver(_game);
 
         }
     }
     
     private void ExecuteAutomaticAbilities()
     {
-        if (CurrentPlayer.CanUseHisAbility() && CurrentPlayer.IsAbilityAutomatic())
+        if (_currentPlayer.CanUseHisAbility() && _currentPlayer.IsAbilityAutomatic())
         {
-            CurrentPlayer.UseSuperStarAbility(NotCurrentPlayer);
+            _currentPlayer.UseSuperStarAbility(_notCurrentPlayer);
         }
-        if (CurrentPlayer.IsAbilityAutomatic()) CurrentPlayer.HasUsedHisAbilityInTheTurn = true;
+        if (_currentPlayer.IsAbilityAutomatic()) _currentPlayer.HasUsedHisAbilityInTheTurn = true;
         
     }
     
@@ -72,35 +73,36 @@ public class Turn
         switch (nextPlay)
         {
             case NextPlay.ShowCards:
-                _viewManager.ShowCardsBasedOnSelection(CurrentPlay);
+                _viewManager.ShowCardsBasedOnSelection(_currentPlay);
                 break;
             case NextPlay.PlayCard:
                 _game.MakePlayManagerApplyPendingEffects();
-                _game.PlayCard();
+                CardPlayer cardPlayer = new CardPlayer(_game, _view);
+                cardPlayer.PlayCard();
                 break;
             case NextPlay.UseAbility:
-                CurrentPlayer.UseSuperStarAbility(NotCurrentPlayer);
+                _currentPlayer.UseSuperStarAbility(_notCurrentPlayer);
                 break;
             case NextPlay.EndTurn:
-                CurrentPlayer.HasEndsHisTurn = true;
+                _currentPlayer.HasEndsHisTurn = true;
                 break;
             case NextPlay.GiveUp:
-                _game.EndGame(winnerPlayer: NotCurrentPlayer);
+                _game.EndGame(winnerPlayer: _notCurrentPlayer);
                 break;
         }
     }
     
     private void UpdatePlayersFortitude()
     {
-        CurrentPlayer.UpdateFortitude();
-        NotCurrentPlayer.UpdateFortitude();
+        _currentPlayer.UpdateFortitude();
+        _notCurrentPlayer.UpdateFortitude();
         
     }
     
     private void SetPlayers()
     {
-        CurrentPlayer = CurrentPlay.CurrentPlayer;
-        NotCurrentPlayer = CurrentPlay.NotCurrentPlayer;
+        _currentPlayer = _currentPlay.CurrentPlayer;
+        _notCurrentPlayer = _currentPlay.NotCurrentPlayer;
     }
     
 }

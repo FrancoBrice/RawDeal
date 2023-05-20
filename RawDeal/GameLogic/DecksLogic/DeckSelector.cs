@@ -27,6 +27,12 @@ public class DeckSelector
         }
     }
     
+    public bool AreDecksValid()
+    {
+        const int correctNumberOfDecks = 2;
+        return _game.SelectedDecks.Count == correctNumberOfDecks;
+    }
+    
     private DeckValidator GetDeckFromPath(string path)
     {
         List<Card> cards = GetCardsFromDeck(path);
@@ -67,13 +73,4 @@ public class DeckSelector
 
         return superStarsList;
     }
-
-    public bool AreDecksValid()
-    {
-        const int correctNumberOfDecks = 2;
-        return _game.SelectedDecks.Count == correctNumberOfDecks;
-    }
-    
-    
-
 }

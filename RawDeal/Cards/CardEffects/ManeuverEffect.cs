@@ -11,14 +11,7 @@ public class ManeuverEffect : Effect
 
     protected override void ApplyCustomEffect(Play currentPlay)
     {
-        {
-            Card attackingCard = AttackingCard;
-            _cardMobilizer.MoveCardFromHandToRingArea(CurrentPlayer, AttackingCardTuple);
-            _view.SayThatPlayerSuccessfullyPlayedACard();
-            if (currentPlay.NotCurrentPlayer.CalculateDamage(attackingCard) > 0) 
-            {
-                //ApplyCardDamage(CurrentPlayer, NotCurrentPlayer, attackingCard);
-            }
-        }
+        _cardMobilizer.MoveCardFromHandToRingArea(currentPlay.CurrentPlayer, currentPlay.AttackingCardTuple);
+        _view.SayThatPlayerSuccessfullyPlayedACard();
     }
 }

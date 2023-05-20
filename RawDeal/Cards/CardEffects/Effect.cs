@@ -6,7 +6,7 @@ namespace RawDeal.Cards.CardEffects;
 
 public abstract class Effect
 {
-    protected Play CurrentPlay;
+    private Play _currentPlay;
     protected Player CurrentPlayer;
     protected Player NotCurrentPlayer;
     protected Card AttackingCard;
@@ -24,7 +24,7 @@ public abstract class Effect
 
     public void ApplyEffect(Play currentPlay)
     {
-        CurrentPlay = currentPlay;
+        _currentPlay = currentPlay;
         SetPlayers();
         SetCards();
         ApplyCustomEffect(currentPlay);
@@ -39,15 +39,15 @@ public abstract class Effect
 
     private void SetPlayers()
     {
-        CurrentPlayer = CurrentPlay.CurrentPlayer;
-        NotCurrentPlayer = CurrentPlay.NotCurrentPlayer;
+        CurrentPlayer = _currentPlay.CurrentPlayer;
+        NotCurrentPlayer = _currentPlay.NotCurrentPlayer;
     }
 
     private void SetCards()
     {
-        AttackingCard = CurrentPlay.AttackingCard;
-        AttackingCardTuple = CurrentPlay.AttackingCardTuple;
-        ReversalCard = CurrentPlay.ReversalCard;
-        ReversalCardTuple = CurrentPlay.ReversalCardTuple;
+        AttackingCard = _currentPlay.AttackingCard;
+        AttackingCardTuple = _currentPlay.AttackingCardTuple;
+        ReversalCard = _currentPlay.ReversalCard;
+        ReversalCardTuple = _currentPlay.ReversalCardTuple;
     }
 }

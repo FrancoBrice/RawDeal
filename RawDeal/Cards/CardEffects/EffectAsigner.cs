@@ -8,8 +8,8 @@ namespace RawDeal.Cards.CardEffects;
 
 public class EffectAsigner
 {
-    private Player CurrentPlayer; 
-    private Player NotCurrentPlayer; 
+    private Player _currentPlayer; 
+    private Player _notCurrentPlayer; 
     private View _view;
     
 
@@ -17,6 +17,11 @@ public class EffectAsigner
     {
         _view = view;
         SetPlayers(playersDictionary);
+    }
+    
+    public Effect AssignManeuverEffect(Card attackingCard)
+    {
+        return new ManeuverEffect(_view);
     }
 
     public Effect AssignActionEffect(Card card)
@@ -45,13 +50,13 @@ public class EffectAsigner
                     ReversalWithMaximumDamage rollingTakeDownEffect = new ReversalWithMaximumDamage(_view);
                     const int maximumDamageReversalRollingTakeDown = 7;
                     rollingTakeDownEffect.SetMaximumDamageThatCanReverse(maximumDamageReversalRollingTakeDown);
-                    selectedReversalCard.SetCurrentDamage(NotCurrentPlayer.CalculateDamage(currentPlay.AttackingCard));
+                    selectedReversalCard.SetCurrentDamage(_notCurrentPlayer.CalculateDamage(currentPlay.AttackingCard));
                     return rollingTakeDownEffect;
                 case "Knee to the Gut":
                     ReversalWithMaximumDamage kneeToTheGutEffect = new ReversalWithMaximumDamage(_view);
                     const int maximumDamageReversalKneeToTheGut = 7;
                     kneeToTheGutEffect.SetMaximumDamageThatCanReverse(maximumDamageReversalKneeToTheGut);
-                    selectedReversalCard.SetCurrentDamage(NotCurrentPlayer.CalculateDamage(currentPlay.AttackingCard));
+                    selectedReversalCard.SetCurrentDamage(_notCurrentPlayer.CalculateDamage(currentPlay.AttackingCard));
                     return kneeToTheGutEffect;
                 case "Elbow to the Face":
                     ReversalWithMaximumDamage reversalElbowToTheFace = new ReversalWithMaximumDamage(_view);
@@ -79,9 +84,11 @@ public class EffectAsigner
 
     private void SetPlayers(Dictionary<string, Player> playersDictionary)
     {
-        CurrentPlayer = playersDictionary["CurrentPlayer"];
-        NotCurrentPlayer = playersDictionary["NotCurrentPlayer"];
-    } 
+        _currentPlayer = playersDictionary["CurrentPlayer"];
+        _notCurrentPlayer = playersDictionary["NotCurrentPlayer"];
+    }
+
+
 }
 
     

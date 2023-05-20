@@ -73,6 +73,14 @@ public class ViewManager
         string cardFormattedInfo = damagedCard.GetCardFormattedInfo();
         _view.ShowCardOverturnByTakingDamage(cardFormattedInfo, indexShowedCard, actualDamage);
     }
+
+    public void SayPlayerIsTryingToPlayCard(Play currentPlay)
+    {
+        Card selectedCard = currentPlay.GetLastCard();
+        string superStarName = currentPlay.CurrentPlayer.GetSuperStarName();
+        string cardInPlayFormat = selectedCard.GetCardInPlayFormat(selectedCard.PlayedType);
+        _view.SayThatPlayerIsTryingToPlayThisCard(superStarName, cardInPlayFormat);
+    }
     
     
 }
