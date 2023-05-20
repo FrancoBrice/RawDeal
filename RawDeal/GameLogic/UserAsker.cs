@@ -16,7 +16,7 @@ public class UserAsker
         _view = view;
     }
 
-    private NextPlay AskUserNextPlay(Player player)
+    public NextPlay AskUserNextPlay(Player player)
     {
         bool canUserUseHisAbility = player.CanUseHisAbility();
         if (canUserUseHisAbility && !player.IsAbilityAutomatic())

@@ -35,7 +35,6 @@ public class Play
         _tupleManager = new TupleManager();
         IsAPendingEffect = false;
         _view = view;
-        SetDefaultValuesOnCards();
     }
 
     public void SetAttackingCardTuple((int, Card) attackingCardTuple)
@@ -93,6 +92,11 @@ public class Play
         {
             card.SetDefaultValues();
         }
+        SwapCurrentAndNotCurrentPlayer();
+    }
+
+    public void SwapCurrentAndNotCurrentPlayer()
+    {
         (CurrentPlayer, NotCurrentPlayer) = (NotCurrentPlayer, CurrentPlayer);
     }
 

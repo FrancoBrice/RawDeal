@@ -41,7 +41,7 @@ public class DeckValidator
         return true;
     }
 
-    private int _correctNumberOfCards = 60;
+    private const int _correctNumberOfCards = 60;
     private bool HasCorrectNumberOfCards()
     {
         if (CardList.Count != _correctNumberOfCards) return false;
