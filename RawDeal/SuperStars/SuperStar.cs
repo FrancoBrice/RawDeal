@@ -1,7 +1,8 @@
 using Newtonsoft.Json;
+using RawDeal.Cards;
 using RawDealView;
 
-namespace RawDeal
+namespace RawDeal.SuperStars
 {
     public abstract class SuperStar
     {
@@ -44,18 +45,17 @@ namespace RawDeal
         protected Card ApplyDamageToOpponent(Player opponentPlayer, int damage)
         {
             Card discartedCard = opponentPlayer.GetCardsFromArsenal(damage)[0];
-            opponentPlayer.ReceiveDamage(1);
+            opponentPlayer.ReceiveDamageWithView(1);
             return discartedCard;
         }
         protected bool DoesPlayerWantToUseAbility(Player player)
         {
-            bool doesPlayerCanUseHisAbility = false;
-            if (player.Ringside.CardListSize > 0)
+            if (player.Ringside.CardListSize > 0 && !player.HasUsedHisAbilityInTheTurn)
             { 
-                doesPlayerCanUseHisAbility = _view.DoesPlayerWantToUseHisAbility(Name);
+                return _view.DoesPlayerWantToUseHisAbility(Name);
             }
-
-            return doesPlayerCanUseHisAbility;
+            
+            return false;
         }
 
         protected void RecoverCardFromRingide(Player player)

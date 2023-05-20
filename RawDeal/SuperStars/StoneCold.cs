@@ -1,4 +1,4 @@
-namespace RawDeal;
+namespace RawDeal.SuperStars;
 
 public class StoneCold : SuperStar
 {
@@ -32,4 +32,5 @@ public class StoneCold : SuperStar
     {
         return false;
     }
+    
 }

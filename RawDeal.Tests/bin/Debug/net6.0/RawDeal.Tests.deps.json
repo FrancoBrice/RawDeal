@@ -8,6 +8,7 @@
     ".NETCoreApp,Version=v6.0": {
       "RawDeal.Tests/1.0.0": {
         "dependencies": {
+          "JSON": "1.0.1",
           "Microsoft.NET.Test.Sdk": "16.11.0",
           "Newtonsoft.Json": "13.0.3",
           "RawDeal": "1.0.0",
@@ -21,6 +22,14 @@
         }
       },
       "coverlet.collector/3.1.0": {},
+      "JSON/1.0.1": {
+        "runtime": {
+          "lib/net40/Json.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
       "Microsoft.CodeCoverage/16.11.0": {
         "runtime": {
           "lib/netcoreapp1.0/Microsoft.VisualStudio.CodeCoverage.Shim.dll": {
@@ -1025,6 +1034,7 @@
       "xunit.runner.visualstudio/2.4.3": {},
       "RawDeal/1.0.0": {
         "dependencies": {
+          "JSON": "1.0.1",
           "Newtonsoft.Json": "13.0.3",
           "RawDealView": "1.0.0"
         },
@@ -1034,6 +1044,7 @@
       },
       "RawDealView/1.0.0": {
         "dependencies": {
+          "JSON": "1.0.1",
           "Newtonsoft.Json": "13.0.3"
         },
         "runtime": {
@@ -1054,6 +1065,13 @@
       "sha512": "sha512-YzYqSRrjoP5lULBhTDcTOjuM4IDPPi6PhFsl4w8EI4WdZhE6llt7E38Tg4CHyrS+QKwyu1+9OwkdDgluOdoBTw==",
       "path": "coverlet.collector/3.1.0",
       "hashPath": "coverlet.collector.3.1.0.nupkg.sha512"
+    },
+    "JSON/1.0.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-n387Xh1oDWolCIVb2oMV1bWkEKBBk5iLkMuaiAQuLUaAZwowyym2s/6b/hFnmS5J3bzINmZ7I2WEbBAZMQd2dg==",
+      "path": "json/1.0.1",
+      "hashPath": "json.1.0.1.nupkg.sha512"
     },
     "Microsoft.CodeCoverage/16.11.0": {
       "type": "package",

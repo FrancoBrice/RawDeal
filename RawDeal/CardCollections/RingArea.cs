@@ -1,22 +1,20 @@
-namespace RawDeal;
+using RawDeal.Cards;
 
-public class RingArea : CardCollection
+namespace RawDeal.CardCollections
 {
-    public int GetFortitude()
+    public class RingArea : CardCollection
     {
-        int fortitude = 0;
-        foreach (Card card in CardList)
+        public int GetFortitude()
         {
-          int cardDamageInt = TransformCardDamageToInt(card);
-          fortitude += cardDamageInt;
+            int fortitude = 0;
+            foreach (Card card in CardList)
+            {
+                if (int.TryParse(card.Damage, out int cardDamageInt))
+                {
+                    fortitude += cardDamageInt;
+                }
+            }
+            return fortitude;
         }
-        return fortitude;
-    }
-
-    private int TransformCardDamageToInt(Card card)
-    {
-        string cardDamageString = card.Damage;
-        if (cardDamageString != "#") return Convert.ToInt32(cardDamageString);
-        return 0;
     }
 }

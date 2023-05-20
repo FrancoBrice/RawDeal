@@ -1,4 +1,6 @@
-namespace RawDeal;
+using RawDeal.Cards;
+
+namespace RawDeal.SuperStars;
 
 public class Kane : SuperStar
 {

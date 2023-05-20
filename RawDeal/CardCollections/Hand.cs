@@ -1,30 +1,51 @@
-using System.Diagnostics.CodeAnalysis;
+using RawDeal.Cards;
 
-namespace RawDeal;
+namespace RawDeal.CardCollections;
 
 public class Hand : CardCollection
 {
-    public List<(int, Card)> GetTuplesWithPositionInHandAndPlayableCards(int fortitude)
+    
+    public List<string> TypesOfPlayableCards { get; set; }
+    public List<(int, Card)> GetTuplesWithPositionInHandAndPlayableCards(int? fortitude)
     {
         List<(int, Card)> tuplesWithPositionInHandAndPlayableCards = new List<(int, Card)>();
+        TypesOfPlayableCards = new List<string>();
         for (int indexInHand = 0; indexInHand < CardList.Count; indexInHand++)
         {
             Card card = CardList[indexInHand];
-            if (card.Fortitude <= fortitude && CheckIfTypeOfCardIsPlayable(card))
+            if (card.GetCurrentFortitude() <= fortitude && card.TypeIsPlayable())
             {
                 tuplesWithPositionInHandAndPlayableCards.Add((indexInHand, card));
             }
         }
         return tuplesWithPositionInHandAndPlayableCards;
     }
-
-    private bool CheckIfTypeOfCardIsPlayable(Card card)
+    
+    public List<(int, Card)> GetTuplesWithPositionInHandAndReversalCards(Player player, Card attackingCard)
     {
-        if (card.ItsTypeManeuver() || card.IsTypeAction())
+        List<(int, Card)> tuplesWithPositionInHandAndReversalCards = new List<(int, Card)>();
+        TypesOfPlayableCards = new List<string>();
+        for (int indexInHand = 0; indexInHand < CardList.Count; indexInHand++)
         {
-            return true;
+            Card reversalCard = CardList[indexInHand];
+
+            if (player.IsCorrectReversalCard(attackingCard, reversalCard))
+            {
+                tuplesWithPositionInHandAndReversalCards.Add((indexInHand, reversalCard));
+            }
         }
-        return false;
+
+        return tuplesWithPositionInHandAndReversalCards;
+    }
+
+
+    public string GetTypeOfPlayedCard(int indexOfPlayableCards)
+    {
+        return TypesOfPlayableCards[indexOfPlayableCards];
     }
     
+    private bool TypeOfCardIsHybrid(Card card)
+    {
+        return card.IsHybrid;
+    }
 }

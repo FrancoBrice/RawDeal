@@ -1,11 +1,13 @@
-namespace RawDeal;
+using RawDeal.Cards;
+
+namespace RawDeal.CardCollections;
 
 public class CardCollection
 {
-    protected List<Card> CardList;
+    public List<Card> CardList;
     public int CardListSize => CardList.Count;
 
-    protected CardCollection()
+    public CardCollection()
     {
         CardList = new List<Card>();
     }
@@ -44,7 +46,7 @@ public class CardCollection
         return formattedCards;
     }
     
-    public List<Card> GetLastCardsReversed(int numberOfCards)
+    public List<Card> GetLastCardsReversed(int? numberOfCards)
     {
         List<Card> lastCards = new List<Card>();
         int index = CardListSize - 1;
@@ -56,6 +58,25 @@ public class CardCollection
         lastCards.Reverse();
         return lastCards;
     }
+
+    public Card GetLastCard()
+    {
+        try
+        {
+            if (CardList.Count == 0)
+            {
+                throw new InvalidOperationException("La lista de cartas está vacía.");
+            }
+            return CardList[^1];
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+    }
+
+    
     public Card GetCardByIndex(int index)
     {
         Card card = CardList[index];
