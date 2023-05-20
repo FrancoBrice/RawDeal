@@ -1,7 +1,7 @@
 using RawDeal.GameLogic;
 using RawDealView;
 
-namespace RawDeal.Cards.CardEffects;
+namespace RawDeal.Cards.CardEffects.GeneralEffects;
 
 public class NextCardDamageBonusByTypeAndSubtype : Effect
 {
@@ -28,9 +28,9 @@ public class NextCardDamageBonusByTypeAndSubtype : Effect
     {
         _damageBonus = bonus;
     }
-    
 
-    public override void ApplyEffect(Play currentPlay)
+
+    protected override void ApplyCustomEffect(Play currentPlay)
     {
         currentPlay.IsAPendingEffect = true;
         try

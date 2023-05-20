@@ -125,7 +125,6 @@ public class Card : IViewableCardInfo
         return Convert.ToInt32(StunValue);
     }
 
-
     public bool ItsUnique()
     {
         return Subtypes.Contains("Unique");
@@ -179,7 +178,6 @@ public class Card : IViewableCardInfo
         {
             ReversalType = "ReversalSpecial";
         }
-
     }
 
     public void SetDefaultValues()

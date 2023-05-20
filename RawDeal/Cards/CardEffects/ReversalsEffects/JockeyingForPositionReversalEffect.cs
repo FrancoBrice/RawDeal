@@ -1,4 +1,5 @@
 using RawDeal.Cards.CardEffects.ActionEffects;
+using RawDeal.Cards.CardEffects.SpecificCardEffects;
 using RawDeal.GameLogic;
 using RawDealView;
 using RawDealView.Options;
@@ -13,13 +14,13 @@ public class JockeyingForPositionReversalEffect : Effect
     {
     }
 
-    public override void ApplyEffect(Play currentPlay)
+    protected override void ApplyCustomEffect(Play currentPlay)
     {
         ReversalByTitle cardEffect = new ReversalByTitle(_view);
         cardEffect.SetCardTitleThatCanReverse("Jockeying for Position");
         cardEffect.ApplyEffect(currentPlay);
-        JockeyingForPositionActionEffect specialEffect = new JockeyingForPositionActionEffect(_view);
         currentPlay.EndPlay();
-        specialEffect.SpecialEffect(currentPlay);
+        JockeyingForPositionSelectableEffect selectableEffect = new JockeyingForPositionSelectableEffect(_view);
+        selectableEffect.ApplyEffect(currentPlay);
     }
 }

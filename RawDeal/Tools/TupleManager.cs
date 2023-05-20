@@ -1,6 +1,6 @@
 using RawDeal.Cards;
 
-namespace RawDeal.GameLogic;
+namespace RawDeal.Tools;
 
 public class TupleManager
 {

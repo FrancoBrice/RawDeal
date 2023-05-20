@@ -9,15 +9,13 @@ public class ActionSimple : Effect
     {
     }
 
-    public override void ApplyEffect(Play currentPlay)
+    protected override void ApplyCustomEffect(Play currentPlay)
     {
-        (int, Card) tupleWithIndexInHandAndAttackingCard = currentPlay.AttackingCardTuple;
-        Card attackingCard = currentPlay.AttackingCard;
-        _cardMobilizer.MoveSpecificCardFromHandToRingside(currentPlay.CurrentPlayer, tupleWithIndexInHandAndAttackingCard);
+        _cardMobilizer.MoveSpecificCardFromHandToRingside(CurrentPlayer, AttackingCardTuple);
         _view.SayThatPlayerSuccessfullyPlayedACard();
-        currentPlay.CurrentPlayer.MoveCardFromArsenalToHand();
-        _view.SayThatPlayerMustDiscardThisCard(currentPlay.CurrentPlayer.GetSuperStarName(), attackingCard.Title);
-        _view.SayThatPlayerDrawCards(currentPlay.CurrentPlayer.GetSuperStarName(), 1);
+        CurrentPlayer.MoveCardFromArsenalToHand();
+        _view.SayThatPlayerMustDiscardThisCard(CurrentPlayer.GetSuperStarName(), AttackingCard.Title);
+        _view.SayThatPlayerDrawCards(CurrentPlayer.GetSuperStarName(), 1);
     }
 
 }

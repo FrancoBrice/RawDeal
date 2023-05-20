@@ -9,10 +9,9 @@ public class ReversalByTitle : Effect
     
     public ReversalByTitle(View view) : base(view)
     {
-        
     }
-    
-    public override void ApplyEffect(Play currentPlay)
+
+    protected override void ApplyCustomEffect(Play currentPlay)
     {
         string attackingCardTitle = currentPlay.AttackingCard.Title;
         if (attackingCardTitle == _cardTitleThatCanReverse)

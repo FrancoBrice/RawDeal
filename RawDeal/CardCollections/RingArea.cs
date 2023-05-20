@@ -1,29 +1,20 @@
 using RawDeal.Cards;
 
-namespace RawDeal.CardCollections;
-
-public class RingArea : CardCollection
+namespace RawDeal.CardCollections
 {
-    public int? GetFortitude()
+    public class RingArea : CardCollection
     {
-        int? fortitude = 0;
-        foreach (Card card in CardList)
+        public int GetFortitude()
         {
-            int cardDamageInt;
-            try
+            int fortitude = 0;
+            foreach (Card card in CardList)
             {
-                cardDamageInt = Convert.ToInt32(card.Damage);
-                fortitude += cardDamageInt;
+                if (int.TryParse(card.Damage, out int cardDamageInt))
+                {
+                    fortitude += cardDamageInt;
+                }
             }
-            catch (FormatException)
-            {
-                // El valor de "Damage" no se puede convertir a entero
-                // Puedes agregar aquí el manejo de error apropiado o tomar otra acción
-                // Por ejemplo, puedes asignar un valor predeterminado a fortitude o lanzar una excepción personalizada.
-            }
+            return fortitude;
         }
-        return fortitude;
     }
-
-    
 }

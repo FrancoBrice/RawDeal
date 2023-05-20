@@ -2,24 +2,23 @@ using RawDeal.CardCollections;
 using RawDeal.Cards;
 using RawDeal.GameLogic;
 using RawDeal.SuperStars;
+using RawDeal.Tools;
 using RawDealView;
 
 namespace RawDeal;
 
 public class Player
 {
-    public SuperStar SuperStar { get; set; }
-    private Arsenal Arsenal { get; set; }
-    public Ringside Ringside  { get; set; }
-    private Hand Hand { get; set; }
-    private RingArea RingArea { get; set; }
-    public bool HasReversedTheLastCard { get; set; }
-
+    public SuperStar SuperStar { get; }
+    private Arsenal Arsenal { get; }
+    public Ringside Ringside  { get; }
+    private Hand Hand { get; }
+    private RingArea RingArea { get; }
     private List<Card> _allCardsList;
     public int? Fortitude;
     private View _view;
     public bool HasUsedHisAbilityInTheTurn;
-    public bool EndsHisTurn;
+    public bool HasEndsHisTurn;
     public int DamageReducedByShield;
     private TupleManager _tupleManager;
     private CardMobilizer _cardMobilizer;
@@ -38,11 +37,10 @@ public class Player
         DistributeOpeningHand();
         AddViewToSuperStar();
         HasUsedHisAbilityInTheTurn = false;
-        EndsHisTurn = false;
+        HasEndsHisTurn = false;
         DamageReducedByShield = 0;
         _tupleManager = new TupleManager();
         _cardMobilizer = new CardMobilizer(_view);
-        HasReversedTheLastCard = false;
     }
 
     private void DistributeOpeningHand()
@@ -280,9 +278,9 @@ public class Player
         _cardMobilizer.MoveCardsFromArsenalToRingSideByDamageAmount(this, damage);
     }
 
-    public int CalculateDamage(int? damage)
+    public int CalculateDamage(Card card)
     {
-        int actualDamage = Math.Max((int)(damage - DamageReducedByShield), 0);
+        int actualDamage = Math.Max((int)(card.GetCurrentDamage() - DamageReducedByShield), 0);
         return actualDamage;
     }
     
@@ -317,12 +315,12 @@ public class Player
         Fortitude = RingArea.GetFortitude();
     }
 
-    public bool HasCeroCardsInArsenal()
+    public bool HasZeroCardsInArsenal()
     {
         return Arsenal.CardListSize == 0;
     }
     
-    public bool CanUseAbility()
+    public bool CanUseHisAbility()
     {
         return SuperStar.CanUseAbility(this);
     }

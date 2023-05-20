@@ -1,6 +1,3 @@
-using RawDeal.Cards;
-using RawDeal.Cards.CardEffects;
-using RawDeal.Cards.CardEffects.ActionEffects;
 using RawDealView;
 
 namespace RawDeal.GameLogic;
@@ -37,7 +34,7 @@ public class PlayManager
         {
             var pendingEffect = PreviousPlay.PendingEffect; 
             CurrentPlay.SetPendingEffect(pendingEffect);
-            pendingEffect.SpecialEffect(CurrentPlay);
+            pendingEffect.ApplyEffect(PreviousPlay);
         }
     }
     

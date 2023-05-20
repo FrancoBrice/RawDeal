@@ -3,6 +3,8 @@ using RawDeal.CardCollections;
 using RawDeal.Cards;
 using RawDeal.Cards.CardEffects;
 using RawDeal.Cards.CardEffects.ActionEffects;
+using RawDeal.Cards.CardEffects.GeneralEffects;
+using RawDeal.Tools;
 using RawDealView;
 
 namespace RawDeal.GameLogic;
@@ -13,7 +15,7 @@ public class Play
     public Player CurrentPlayer;
     public Player NotCurrentPlayer;
     public List<Player> Players;
-    public CardCollection PlayedCards; 
+    private CardCollection _playedCards; 
     public (int,Card) AttackingCardTuple ;
     public Card AttackingCard; 
     public (int,Card) ReversalCardTuple;
@@ -29,10 +31,11 @@ public class Play
         NotCurrentPlayer = playersDictionary["NotCurrentPlayer"];
         Players = new List<Player>();
         Players?.AddRange(new[] { CurrentPlayer, NotCurrentPlayer });
-        PlayedCards = new CardCollection();
+        _playedCards = new CardCollection();
         _tupleManager = new TupleManager();
         IsAPendingEffect = false;
         _view = view;
+        SetDefaultValuesOnCards();
     }
 
     public void SetAttackingCardTuple((int, Card) attackingCardTuple)
@@ -54,10 +57,9 @@ public class Play
         AddCardToPlayedCardsWithPendingEffectsApplied(damagedCard);
     }
 
-    public void AddCardToPlayedCardsWithPendingEffectsApplied(Card card)
+    private void AddCardToPlayedCardsWithPendingEffectsApplied(Card card)
     {
-        PlayedCards.AddCard(card);
-        Console.WriteLine($"playId: {Id} card added {card.Title} pendingeffect = {IsAPendingEffect}");
+        _playedCards.AddCard(card);
         switch (IsAPendingEffect)
         {
             case true:
@@ -80,32 +82,14 @@ public class Play
         IsAPendingEffect = false;
     }
 
-    public void NextCardDamageBonusByTypeAndSubtype(Card card, string playedType,  string subtype, int damageBonus)
-    {
-        NextCardDamageBonusByTypeAndSubtype effect = new NextCardDamageBonusByTypeAndSubtype(_view);
-        effect.SetPlayedTypeThatAppliesBonus(playedType);
-        effect.SetSubtypeThatAppliesBonus(subtype);
-        effect.SetDamageBonus(damageBonus);
-        SetPendingEffect(effect);
-    }
-
-    public void NextReversalRequiresMoreFortitudeBySubtype(Card card, string playedType,  string subtype, int extraFortitude)
-    {
-        NextReversalHasMoreFortitudeBySubtype effect = new NextReversalHasMoreFortitudeBySubtype(_view);
-        effect.SetPlayedTypeThatAppliesExtraFortitude(playedType);
-        effect.SetSubtypeThatAppliesExtraFortitude(subtype);
-        effect.SetExtraFortitude(extraFortitude);
-        SetPendingEffect(effect);
-    }
-
     public Card GetLastCard()
     {
-        return PlayedCards.GetLastCard();
+        return _playedCards.GetLastCard();
     }
 
     public void EndPlay()
     {
-        foreach (Card card in PlayedCards.CardList)
+        foreach (Card card in _playedCards.CardList)
         {
             card.SetDefaultValues();
         }
