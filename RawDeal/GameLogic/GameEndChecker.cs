@@ -2,9 +2,9 @@ namespace RawDeal.GameLogic;
 
 public static class GameEndChecker
 {
-    public static bool OpponentRanOutOfCardsDuringDamage(Player opponentPlayer, int damage)
+    public static bool PlayerRanOutOfCardsDuringDamage(Player player, int damage)
     {
-        int maximumDamage = opponentPlayer.GetArsenalSize();
+        int maximumDamage = player.GetArsenalSize();
         return damage > maximumDamage;
     }
     

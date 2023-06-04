@@ -31,7 +31,6 @@ public class CardDamager
 
     public void ApplyCardDamage()
     {
-        
         SetPlayers(_currentPlay);
         Player attackingPlayer = _currentPlay.CurrentPlayer;
         Player damagedPlayer = _currentPlay.NotCurrentPlayer;
@@ -40,16 +39,42 @@ public class CardDamager
         if (_pretendedDamage == 0) return;
         DealActualDamage(damagedPlayer);
         HandleReversalsByDeck(attackingPlayer, damagedPlayer);
-        _opponentRanOutOfCards = GameEndChecker.OpponentRanOutOfCardsDuringDamage(damagedPlayer, _pretendedDamage);
+        _opponentRanOutOfCards = GameEndChecker.PlayerRanOutOfCardsDuringDamage(damagedPlayer, _pretendedDamage);
         damagedPlayer.ReceiveDamageWithoutView(_actualDamage);
         FinishCardDamage(attackingPlayer);
+    }
+    
+    public void ApplyCollateralCardDamage(int damageAmount)
+    {
+        _cardWasReversedByDeck = false;
+        SetPlayers(_currentPlay);
+        _view.SayThatSuperstarWillTakeSomeDamage(_currentPlayer.GetSuperStarName(), damageToBeReceived: damageAmount);
+        Player damagedPlayer = _currentPlay.CurrentPlayer;
+        if (damageAmount == 0) return;
+        _pretendedDamage = damageAmount;
+        List<Card> cardsToBeDamaged = damagedPlayer.GetCardsFromArsenal(damageAmount);
+        _viewManager.ShowDamagedCards(cardsToBeDamaged, _pretendedDamage);
+        _actualDamage = 0;
+        for (int index = cardsToBeDamaged.Count - 1; index >= 0; index--)
+        {
+            _actualDamage++;
+            Card damagedCard = cardsToBeDamaged[index];
+            cardsToBeDamaged.Add(damagedCard);
+        }
+        _opponentRanOutOfCards = GameEndChecker.PlayerRanOutOfCardsDuringDamage(damagedPlayer, _pretendedDamage);
+        if (_opponentRanOutOfCards)
+        {
+            _view.SayThatPlayerLostDueToSelfDamage(damagedPlayer.GetSuperStarName());
+        }
+        damagedPlayer.ReceiveDamageWithoutView(_actualDamage);
+        FinishCardDamage(_currentPlay.NotCurrentPlayer);
     }
      
      private void DealActualDamage(Player damagedPlayer)
      {
          _actualDamage = 0;
          List<Card> cardsToBeDamaged = damagedPlayer.GetCardsFromArsenal(_pretendedDamage);
-         _view.SayThatOpponentWillTakeSomeDamage(damagedPlayer.GetSuperStarName(), _pretendedDamage);
+         _view.SayThatSuperstarWillTakeSomeDamage(damagedPlayer.GetSuperStarName(), _pretendedDamage);
          RunDamageLoop(cardsToBeDamaged, _attackingCard);
          _viewManager.ShowDamagedCards(_actualDamagedCards, _pretendedDamage);
      }

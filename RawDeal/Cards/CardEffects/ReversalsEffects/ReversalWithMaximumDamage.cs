@@ -6,8 +6,9 @@ namespace RawDeal.Cards.CardEffects.ReversalsEffects;
 public class ReversalWithMaximumDamage : Effect
 {
     private int _maximumDamageThatCanReverse;
-    public ReversalWithMaximumDamage(View view) : base(view)
+    public ReversalWithMaximumDamage(View view, int maximumDamageThatCanReverse) : base(view)
     {
+        _maximumDamageThatCanReverse = maximumDamageThatCanReverse;
     }
 
     protected override void ApplyCustomEffect(Play currentPlay)
@@ -19,11 +20,4 @@ public class ReversalWithMaximumDamage : Effect
             cardEffect.ApplyEffect(currentPlay);
         }
     }
-
-    public void SetMaximumDamageThatCanReverse(int maximumDamageThatCanReverse)
-    {
-        _maximumDamageThatCanReverse = maximumDamageThatCanReverse;
-    }
-
-
 }

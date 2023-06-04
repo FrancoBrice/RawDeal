@@ -268,7 +268,7 @@ public class Player
     public void ReceiveDamageWithView(int? damage)
     {
         _cardMobilizer.MoveCardsFromArsenalToRingSideByDamageAmount(this, damage);
-        _view.SayThatOpponentWillTakeSomeDamage(GetSuperStarName(), damage);
+        _view.SayThatSuperstarWillTakeSomeDamage(GetSuperStarName(), (int)damage);
     }
     
     public void ReceiveDamageWithoutView(int damage)

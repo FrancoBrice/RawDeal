@@ -14,13 +14,9 @@ public class NextCardDamageBonusByTypeAndSubtype : Effect
     {
     }
 
-    public void SetPlayedTypeThatAppliesBonus(string type)
+    public void SetPlayedTypeAndSubtypeThatAppliesBonus(string type, string subtype)
     {
         _playedTypeThatAppliesBonus = type;
-    }
-    
-    public void SetSubtypeThatAppliesBonus(string subtype)
-    {
         _subtypeThatAppliesBonus = subtype;
     }
     
@@ -41,7 +37,7 @@ public class NextCardDamageBonusByTypeAndSubtype : Effect
             }
 
             Card card = currentPlay.GetLastCard();
-            if (card.PlayedType == _playedTypeThatAppliesBonus && card.Subtypes.Contains(_subtypeThatAppliesBonus))
+            if (card.PlayedType == _playedTypeThatAppliesBonus && (card.Subtypes.Contains(_subtypeThatAppliesBonus) || _subtypeThatAppliesBonus == "All"))
             {
                 card.SetCurrentDamage(card.GetCurrentDamage() + _damageBonus);
             }

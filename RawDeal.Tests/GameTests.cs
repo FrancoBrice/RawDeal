@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using RawDeal.GameLogic;
 using RawDealView;
 using Xunit;
 
@@ -38,6 +37,11 @@ public class GameTests
     [Theory]
     [MemberData(nameof(GetTestsAssociatedWithThisFolder), parameters: "08-Reversals")]
     public void TestReversals(string deckFolder, string testFile)
+        => RunTest(deckFolder, testFile);
+    
+    [Theory]
+    [MemberData(nameof(GetTestsAssociatedWithThisFolder), parameters: "09-SimpleEffects")]
+    public void TestSimpleEffects(string deckFolder, string testFile)
         => RunTest(deckFolder, testFile);
 
     public static IEnumerable<object[]> GetTestsAssociatedWithThisFolder(string deckFolder)

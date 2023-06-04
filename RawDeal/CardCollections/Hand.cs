@@ -4,7 +4,6 @@ namespace RawDeal.CardCollections;
 
 public class Hand : CardCollection
 {
-    
     public List<string> TypesOfPlayableCards { get; set; }
     public List<(int, Card)> GetTuplesWithPositionInHandAndPlayableCards(int? fortitude)
     {
@@ -42,10 +41,5 @@ public class Hand : CardCollection
     public string GetTypeOfPlayedCard(int indexOfPlayableCards)
     {
         return TypesOfPlayableCards[indexOfPlayableCards];
-    }
-    
-    private bool TypeOfCardIsHybrid(Card card)
-    {
-        return card.IsHybrid;
     }
 }

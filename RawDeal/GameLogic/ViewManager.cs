@@ -61,7 +61,7 @@ public class ViewManager
         
         return cardStrings;
     }
-    
+
     private PlayerInfo GeneratePlayerInfo(Player player)
     {
         return new PlayerInfo(player.GetSuperStarName(), (int)player.Fortitude, player.GetHandSize(),

@@ -47,7 +47,6 @@ public class CardMobilizer
                 player.AddCardToHand(drawnCard);
                 player.RemoveLastCardFromArsenal();    
             }
-            
         }
     }
     

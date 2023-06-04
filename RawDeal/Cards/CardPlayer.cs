@@ -53,21 +53,25 @@ public class CardPlayer
 
     private void PlayManeuverOrActionCard(Card attackingCard)
     {
-        EffectAsigner effectAssigner = new EffectAsigner(_game.GetDictionaryOfCurrentAndNotCurrentPlayer(), _view);
+        EffectAsigner effectAssigner = new EffectAsigner(_game, _view);
+        List<Effect> assignedEffects; 
         switch (attackingCard.PlayedType)
         {
             case "Maneuver":
-                Effect maneuverEffect = effectAssigner.AssignManeuverEffect(attackingCard);
-                maneuverEffect.ApplyEffect(_currentPlay);
-                _cardDamager.ApplyCardDamage();
+                assignedEffects = effectAssigner.AssignManeuverEffect(attackingCard);
+                ApplyAssignedEffects(assignedEffects);
+                if (!_game.GameIsOver)
+                {
+                    _cardDamager.ApplyCardDamage();
+                }
                 break;
             case "Action":
-                Effect actionEffect = effectAssigner.AssignActionEffect(attackingCard);
-                actionEffect.ApplyEffect(_currentPlay);
+                assignedEffects = effectAssigner.AssignActionEffect(attackingCard);
+                ApplyAssignedEffects(assignedEffects);
                 break;
-        }
+        } 
     }
-
+    
     private void HandleReversals(List<(int, Card)> validReversals, Card attackingCard) 
     {
         List<string> validReversalsInString = _playableCardsFormatter.GetReversalCards(validReversals);
@@ -86,10 +90,17 @@ public class CardPlayer
 
     private void HandleReversalEffects()
     {
-        EffectAsigner effectAssigner = new EffectAsigner(_game.GetDictionaryOfCurrentAndNotCurrentPlayer(), _view);
-        Effect assignedEffect = effectAssigner.AssignReversalEffect(_currentPlay);
-        assignedEffect.ApplyEffect(_currentPlay);
+        EffectAsigner effectAssigner = new EffectAsigner(_game, _view);
+        List<Effect> assignedEffect = effectAssigner.AssignReversalEffect(_currentPlay);
+        ApplyAssignedEffects(assignedEffect);
     }
-
-
+    
+    private void ApplyAssignedEffects(List<Effect> assignedEffects)
+    {
+        foreach (Effect effect in assignedEffects)
+        {
+            if (_game.GameIsOver) return;
+            effect.ApplyEffect(_currentPlay);
+        }
+    }
 }

@@ -7,8 +7,10 @@ public class ReversalByTitle : Effect
 {
     private string _cardTitleThatCanReverse;
     
-    public ReversalByTitle(View view) : base(view)
+    public ReversalByTitle(View view, string cardTitleThatCanReverse) : base(view)
     {
+        _cardTitleThatCanReverse = cardTitleThatCanReverse;
+
     }
 
     protected override void ApplyCustomEffect(Play currentPlay)
@@ -21,10 +23,4 @@ public class ReversalByTitle : Effect
             
         }
     }
-
-    public void SetCardTitleThatCanReverse(string cardTitle)
-    {
-        _cardTitleThatCanReverse = cardTitle;
-    }
-
 }
