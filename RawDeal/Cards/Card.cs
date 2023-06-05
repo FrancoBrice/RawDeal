@@ -29,6 +29,7 @@ public class Card : IViewableCardInfo
     public string CardEffect { get; set; }
     public string PlayedType { get; set; }
     public string ReversalType { get; set; }
+    public string PlayedFrom { get; set; }
 
     public int? CurrentDamage;
     public int? CurrentFortitude;
@@ -80,10 +81,35 @@ public class Card : IViewableCardInfo
     public bool IsTypeReversal => Types.Contains("Reversal");
 
     public int AmountOfTypes => Types.Count;
-
-    public int? GetCurrentDamage()
+    
+    public bool CanBeReversed
     {
+        get
+        {
+            string[] titlesThatReturnFalse = { "Tree of Woe", "Austin Elbow Smash", "Leaping Knee to the Face" };
+
+            return !titlesThatReturnFalse.Contains(Title);
+        }
+    }
+
+    public int? GetCurrentDamage(string playedType)
+    {
+        if (Title == "Undertaker's Tombstone Piledriver" && PlayedType == "Action")
+        {
+            if (playedType == "Maneuver") return CurrentFortitude;
+            return 0;
+        }
         return CurrentDamage;
+    }
+    
+    public int? GetCurrentFortitude(string playedType)
+    {
+        if (Title == "Undertaker's Tombstone Piledriver" )
+        {
+            if (playedType == "Maneuver") return CurrentFortitude;
+            return 0;
+        }
+        return CurrentFortitude;
     }
 
     public void SetDefaultDamage()
@@ -95,6 +121,18 @@ public class Card : IViewableCardInfo
             return;
         }
         CurrentDamage = Convert.ToInt32(cardDamageString);
+
+
+    }
+    
+    public int GetDefaultDamage()
+    {
+        string cardDamageString = Damage;
+        if (cardDamageString.Contains("#"))
+        {
+            return 0;
+        }
+        return Convert.ToInt32(cardDamageString);
 
 
     }
@@ -115,10 +153,7 @@ public class Card : IViewableCardInfo
         CurrentFortitude = currentFortitude;
     }
 
-    public int? GetCurrentFortitude()
-    {
-        return CurrentFortitude;
-    }
+
     
     public int GetStunValue()
     {

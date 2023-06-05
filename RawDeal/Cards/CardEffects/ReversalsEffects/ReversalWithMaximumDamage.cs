@@ -13,7 +13,11 @@ public class ReversalWithMaximumDamage : Effect
 
     protected override void ApplyCustomEffect(Play currentPlay)
     {
-        int? actualDamage = AttackingCard.GetCurrentDamage();
+        int? currentCardDamage = AttackingCard.GetCurrentDamage(AttackingCard.PlayedType);
+        int actualDamage = currentPlay.CurrentPlayer.CalculateDamage(AttackingCard);
+        Console.WriteLine($"En reversalwithmd");
+        Console.WriteLine(currentCardDamage);
+        Console.WriteLine(actualDamage);
         if (CanReverseByDamage(_maximumDamageThatCanReverse, actualDamage))
         {
             ReversalSimple cardEffect = new ReversalSimple(_view);

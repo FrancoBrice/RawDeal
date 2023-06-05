@@ -1,8 +1,9 @@
+using System.Collections;
 using RawDeal.Cards;
 
 namespace RawDeal.CardCollections;
 
-public class CardCollection
+public class CardCollection : IEnumerable
 {
     public List<Card> CardList;
     public int CardListSize => CardList.Count;
@@ -75,6 +76,27 @@ public class CardCollection
             throw;
         }
     }
+    
+    public Card GetPenultimateCard
+    {
+        get
+        {
+            try
+            {
+                if (CardList.Count >= 2)
+                {
+                    return CardList[^2];
+                }
+                throw new InvalidOperationException("Insufficient number of cards.");
+            }
+            catch (InvalidOperationException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+            throw new InvalidOperationException("Insufficient number of cards.");
+        }
+    }
 
     
     public Card GetCardByIndex(int index)
@@ -88,5 +110,9 @@ public class CardCollection
             CardList.RemoveAt(index);
     }
 
-    
+
+    public IEnumerator GetEnumerator()
+    {
+        throw new NotImplementedException();
+    }
 }

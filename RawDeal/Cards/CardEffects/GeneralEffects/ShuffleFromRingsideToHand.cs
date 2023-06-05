@@ -17,10 +17,12 @@ public class ShuffleFromRingsideToHand : Effect
         if (CurrentPlayer.GetRingsideSize() >= _pretendedNumberCardsToShuffle)
             _actualNumberCardsToShuffle = _pretendedNumberCardsToShuffle;
         else _actualNumberCardsToShuffle = CurrentPlayer.GetRingsideSize();
+        int remainingCardsToShuffle = _actualNumberCardsToShuffle;
         for (int i = 0; i < _actualNumberCardsToShuffle; i++)
         {
-            int indexInputByUser = _view.AskPlayerToSelectCardsToRecover(CurrentPlayer.GetSuperStarName(), _actualNumberCardsToShuffle, CurrentPlayer.Ringside.GetFormattedCards());
-            CurrentPlayer.MoveCardByIndexFromRingsideToArsenalBeginning(indexInputByUser);    
+            int indexInputByUser = _view.AskPlayerToSelectCardsToRecover(CurrentPlayer.GetSuperStarName(), remainingCardsToShuffle, CurrentPlayer.Ringside.GetFormattedCards());
+            CurrentPlayer.MoveCardByIndexFromRingsideToArsenalBeginning(indexInputByUser);
+            remainingCardsToShuffle--;
         }
     }
 }

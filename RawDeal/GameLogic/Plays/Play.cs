@@ -15,25 +15,28 @@ public class Play
     public Player CurrentPlayer;
     public Player NotCurrentPlayer;
     public List<Player> Players;
-    private CardCollection _playedCards; 
+    public CardCollection PlayedCards; 
     public (int,Card) AttackingCardTuple ;
     public Card AttackingCard; 
     public (int,Card) ReversalCardTuple;
     public Card ReversalCard; 
     private TupleManager _tupleManager;
     public bool IsAPendingEffect;
-    public Effect PendingEffect;
+    public List<Effect> PendingEffects;
     private View _view;
-    
+    public int PlayedCardsCount => PlayedCards.CardList.Count;
+    public event EventHandler<Card> CardAddedToPlayedCards;
+
     public Play(Dictionary<string, Player> playersDictionary, View view)
     {
         CurrentPlayer = playersDictionary["CurrentPlayer"];
         NotCurrentPlayer = playersDictionary["NotCurrentPlayer"];
         Players = new List<Player>();
         Players?.AddRange(new[] { CurrentPlayer, NotCurrentPlayer });
-        _playedCards = new CardCollection();
+        PlayedCards = new CardCollection();
         _tupleManager = new TupleManager();
         IsAPendingEffect = false;
+        PendingEffects = new List<Effect>();
         _view = view;
     }
 
@@ -47,48 +50,42 @@ public class Play
     {
         ReversalCardTuple = reversalCardTuple;
         ReversalCard = _tupleManager.ExtractCard(ReversalCardTuple);
+        ReversalCard.PlayedType = "Reversal";
         AddCardToPlayedCardsWithPendingEffectsApplied(ReversalCard);
-    }
-
-    public void AddDamagedCard(Card damagedCard)
-    {
-        damagedCard.PlayedType = "Damaged";
-        AddCardToPlayedCardsWithPendingEffectsApplied(damagedCard);
     }
 
     private void AddCardToPlayedCardsWithPendingEffectsApplied(Card card)
     {
-        _playedCards.AddCard(card);
-        switch (IsAPendingEffect)
-        {
-            case true:
-                ApplyPendingEffects();
-                break;
-        }
-    }
-    
-    public void SetDefaultValuesOnCards()
-    {
-        foreach (Player player in Players)
-        {
-            player.SetDefaultValuesInCards();
-        }
+        PlayedCards.AddCard(card);
+        if (IsAPendingEffect) ApplyPendingEffects();
+        CardAddedToPlayedCards?.Invoke(this, card);
+
     }
 
     public void ApplyPendingEffects()
     {
-        PendingEffect.ApplyEffect(currentPlay: this);
-        IsAPendingEffect = false;
+        int pendingEffectsCount = PendingEffects.Count;
+        Console.WriteLine($"En play cantidad de efectos pendientes: {pendingEffectsCount}");
+        if (pendingEffectsCount > 0) Console.WriteLine(PendingEffects[^1]);
+        Console.WriteLine(AttackingCard.Title);
+        Console.WriteLine(AttackingCard.GetCurrentDamage(AttackingCard.PlayedType));
+        for (int i = 0; i < pendingEffectsCount; i++)
+        {
+            Effect effect = PendingEffects[i];
+            effect.ApplyEffect(currentPlay: this);
+            i--;
+            pendingEffectsCount--;
+        }
     }
 
     public Card GetLastCard()
     {
-        return _playedCards.GetLastCard();
+        return PlayedCards.GetLastCard();
     }
 
     public void EndPlay()
     {
-        foreach (Card card in _playedCards.CardList)
+        foreach (Card card in PlayedCards.CardList)
         {
             card.SetDefaultValues();
         }
@@ -100,9 +97,11 @@ public class Play
         (CurrentPlayer, NotCurrentPlayer) = (NotCurrentPlayer, CurrentPlayer);
     }
 
-    public void SetPendingEffect(Effect pendingEffect)
+    public void AddPendingEffect(Effect pendingEffect)
     {
-        PendingEffect = pendingEffect;
+        PendingEffects.Add(pendingEffect);
         IsAPendingEffect = true;
     }
+    
+    
 }

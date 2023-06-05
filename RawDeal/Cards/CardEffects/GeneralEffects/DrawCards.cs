@@ -3,11 +3,11 @@ using RawDealView;
 
 namespace RawDeal.Cards.CardEffects.GeneralEffects;
 
-public class OpponentDrawCards : Effect
+public class DrawCards : Effect
 {
     private Player _playerThatMustDraw;
     private int _numberOfCardsToDraw; 
-    public OpponentDrawCards(View view, Player playerThatMustDraw, int numberOfCardsToDraw) : base(view)
+    public DrawCards(View view, Player playerThatMustDraw, int numberOfCardsToDraw) : base(view)
     {
         _playerThatMustDraw = playerThatMustDraw;
         _numberOfCardsToDraw = numberOfCardsToDraw;
@@ -17,6 +17,7 @@ public class OpponentDrawCards : Effect
     {
         if (_playerThatMustDraw.GetArsenalSize() >= _numberOfCardsToDraw)
         {
+            _view.SayThatPlayerDrawCards(_playerThatMustDraw.GetSuperStarName(), numberOfCardsToDraw: _numberOfCardsToDraw);
             _cardMobilizer.MoveCardsFromArsenalToHand(_playerThatMustDraw, _numberOfCardsToDraw);
         }
     }

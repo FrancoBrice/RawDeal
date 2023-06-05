@@ -1,7 +1,6 @@
 using System.Reflection.Metadata;
 using RawDeal.Cards.CardEffects.ActionEffects;
 using RawDeal.Cards.CardEffects.GeneralEffects;
-using RawDeal.Cards.CardEffects.ManeuverEffects;
 using RawDeal.Cards.CardEffects.ReversalsEffects;
 using RawDeal.Cards.CardEffects.ReversalsEffects.SpecificCards;
 using RawDeal.Cards.CardEffects.SpecificCardEffects;
@@ -11,7 +10,7 @@ using RawDealView.Options;
 
 namespace RawDeal.Cards.CardEffects;
 
-public class EffectAsigner
+public class EffectAssigner
 {
     private Player CurrentPlayer; 
     private Player NotCurrentPlayer;
@@ -19,15 +18,16 @@ public class EffectAsigner
     private View _view;
     
 
-    public EffectAsigner(Game game, View view)
+    public EffectAssigner(Game game, View view)
     {
         _view = view;
         _game = game;
         SetPlayers();
     }
     
-    public List<Effect> AssignManeuverEffect(Card attackingCard)
+    public List<Effect> AssignManeuverEffect(Play currentPlay)
     {
+        Card attackingCard = currentPlay.AttackingCard; 
         List<Effect> effectsAssigned = new List<Effect>();
         effectsAssigned.Add(new ManeuverInitialEffect(_view));
         switch (attackingCard.Title)
@@ -35,7 +35,7 @@ public class EffectAsigner
             case "Head Butt":
             case "Arm Drag":
             case "Arm Bar":
-                effectsAssigned.Add(new MakePlayerDiscardCard(_view, playerThatMustDiscard: CurrentPlayer, numberOfCardToDiscard: 1));
+                effectsAssigned.Add(new MakePlayerDiscardCard(_view, _game,  playerThatMustDiscard: CurrentPlayer, numberOfCardToDiscard: 1));
                 break;
             case "Bear Hug":
             case "Choke Hold":
@@ -46,15 +46,15 @@ public class EffectAsigner
             case "Boston Crab":
             case "Torture Rack":
             case "Figure Four Leg Lock":
-                effectsAssigned.Add(new MakePlayerDiscardCard(_view,
+                effectsAssigned.Add(new MakePlayerDiscardCard(_view, _game, 
                     playerThatMustDiscard: NotCurrentPlayer, numberOfCardToDiscard: 1));
                 break;
             case "Pump Handle Slam":
-                effectsAssigned.Add(new MakePlayerDiscardCard(_view,
+                effectsAssigned.Add(new MakePlayerDiscardCard(_view, _game, 
                     playerThatMustDiscard: NotCurrentPlayer, numberOfCardToDiscard: 2));
                 break;
             case "Bulldog":
-                effectsAssigned.Add(new MakePlayerDiscardCard(_view,
+                effectsAssigned.Add(new MakePlayerDiscardCard(_view, _game, 
                     playerThatMustDiscard: CurrentPlayer, numberOfCardToDiscard: 1));
                 effectsAssigned.Add( new DiscardCardFromOpponentsHand(view: _view));
                 break;
@@ -68,7 +68,7 @@ public class EffectAsigner
                 break;
             case "Headlock Takedown":
             case "Standing Side Headlock":
-                effectsAssigned.Add(new OpponentDrawCards(_view, playerThatMustDraw: NotCurrentPlayer,
+                effectsAssigned.Add(new DrawCards(_view, playerThatMustDraw: NotCurrentPlayer,
                     numberOfCardsToDraw: 1));
                 break;
             case "Undertaker's Tombstone Piledriver":
@@ -81,112 +81,114 @@ public class EffectAsigner
             case "Press Slam":
             case "DDT":
                 effectsAssigned.Add( new TopCardOfArsenalToRingsidePile(_view, _game));
-                effectsAssigned.Add(new MakePlayerDiscardCard(view: _view, NotCurrentPlayer,  numberOfCardToDiscard: 2));
+                effectsAssigned.Add(new MakePlayerDiscardCard(view: _view, _game, NotCurrentPlayer,  numberOfCardToDiscard: 2));
                 break;
             case "Guillotine Stretch":
-                effectsAssigned.Add(new MakePlayerDiscardCard(_view, playerThatMustDiscard: NotCurrentPlayer, numberOfCardToDiscard: 1));
+                effectsAssigned.Add(new MakePlayerDiscardCard(_view, _game, playerThatMustDiscard: NotCurrentPlayer, numberOfCardToDiscard: 1));
                 effectsAssigned.Add( new DrawCardsAskingNumber(_view, playerThatMustDraw: CurrentPlayer, numberOfCardsToDraw: 1));
-                break;
-            case "Spit At Opponent":
-                // TODO add playable condition
-                effectsAssigned.Add(new MakePlayerDiscardCard( _view, playerThatMustDiscard: CurrentPlayer, numberOfCardToDiscard: 1));
-                effectsAssigned.Add(new MakePlayerDiscardCard(_view, playerThatMustDiscard: NotCurrentPlayer, numberOfCardToDiscard: 4));
                 break;
             case "Chicken Wing":
                 effectsAssigned.Add(new ShuffleFromRingsideToHand(_view, pretendedNumberCardsToShuffle: 2));
                 break;
-            case "Puppies! Puppies!":
-                effectsAssigned.Add(new ShuffleFromRingsideToHand(_view, pretendedNumberCardsToShuffle: 5));
-                effectsAssigned.Add(new DrawCardsAskingNumber(_view, playerThatMustDraw: CurrentPlayer, numberOfCardsToDraw: 2));
-                break;
-            case "Recovery":
-                effectsAssigned.Add(new ShuffleFromRingsideToHand(_view, pretendedNumberCardsToShuffle: 2));
-                effectsAssigned.Add(new DrawCardsAskingNumber(_view, playerThatMustDraw: CurrentPlayer, numberOfCardsToDraw: 1));
-                break;
             case "Lionsault":
-                // TODO game condition
-                effectsAssigned.Add(new MakePlayerDiscardCard(_view, playerThatMustDiscard: NotCurrentPlayer, numberOfCardToDiscard: 1));
+                effectsAssigned.Add(new MakePlayerDiscardCard(_view, _game, playerThatMustDiscard: NotCurrentPlayer, numberOfCardToDiscard: 1));
                 break;
             case "Tree of Woe":
-                // TODO cannot be reversed
-                effectsAssigned.Add(new MakePlayerDiscardCard(_view, playerThatMustDiscard: NotCurrentPlayer, numberOfCardToDiscard: 2));
+                effectsAssigned.Add(new MakePlayerDiscardCard(_view, _game, playerThatMustDiscard: NotCurrentPlayer, numberOfCardToDiscard: 2));
                 break;
             case "Austin Elbow Smash":
-                // TODO cannot be reversed and game condition
                 break;
-
             case "Back Body Drop":
-                SelectedEffect selectedEffectBBD = _view.AskUserToChooseBetweenDrawingOrForcingOpponentToDiscardCards(CurrentPlayer.GetSuperStarName());
-                if (selectedEffectBBD == SelectedEffect.DrawCards)
-                    effectsAssigned.Add(new DrawCardsAskingNumber(_view, playerThatMustDraw: CurrentPlayer, numberOfCardsToDraw: 2));
-                else if (selectedEffectBBD == SelectedEffect.ForceOpponentToDiscard)
-                    effectsAssigned.Add(new MakePlayerDiscardCard(_view, playerThatMustDiscard: NotCurrentPlayer, numberOfCardToDiscard: 2));
+                effectsAssigned.Add(new DrawCardsOrForceOpponentDiscardSelectableEffect(_view, _game));
                 break;
-            
             case "Leaping Knee to the Face":
-                effectsAssigned.Add(new MakePlayerDiscardCard( _view, playerThatMustDiscard: NotCurrentPlayer, numberOfCardToDiscard: 1));
+                effectsAssigned.Add(new MakePlayerDiscardCard( _view,_game, playerThatMustDiscard: NotCurrentPlayer, numberOfCardToDiscard: 1));
                 break;
             case "Haymaker":
                 NextCardDamageBonusByTypeAndSubtype haymakerEffect = new NextCardDamageBonusByTypeAndSubtype(view: _view);
                 haymakerEffect.SetDamageBonus(bonus: 1);
-                haymakerEffect.SetPlayedTypeAndSubtypeThatAppliesBonus(type: "Maneuver", subtype: "Strike");
-                effectsAssigned.Add(haymakerEffect);
+                haymakerEffect.SetTypeAndSubtypeThatAppliesBonus(type: "Maneuver", subtype: "Strike");
+                effectsAssigned.Add(new EffectForTheRestOfTheTurn(_view, currentPlay, haymakerEffect));
                 break;
             case "Superkick":
-                // Código para la carta "Superkick"
+                effectsAssigned.Add(new DamageBonusIfPlayedAfterSpecificDamageAndType(_view, damageBonus: 5, minimumDamage: 5, typeOfPreviousCardThatAppliesBonus: "Maneuver"));
                 break;
             case "Clothesline":
             case "Atomic Drop":
                 NextCardDamageBonusByTypeAndSubtype damageBonusEffect = new NextCardDamageBonusByTypeAndSubtype(view: _view);
                 damageBonusEffect.SetDamageBonus(bonus: 2);
-                damageBonusEffect.SetPlayedTypeAndSubtypeThatAppliesBonus(type: "Maneuver", subtype: "All");
-                effectsAssigned.Add(damageBonusEffect);
+                damageBonusEffect.SetTypeAndSubtypeThatAppliesBonus(type: "Maneuver", subtype: "All");
+                currentPlay.AddPendingEffect(damageBonusEffect);
                 break;
             case "Snap Mare":
                 NextCardDamageBonusByTypeAndSubtype snapMaraEffect = new NextCardDamageBonusByTypeAndSubtype(view: _view);
                 snapMaraEffect.SetDamageBonus(bonus: 2);
-                snapMaraEffect.SetPlayedTypeAndSubtypeThatAppliesBonus(type: "Maneuver", subtype: "Strike");
-                effectsAssigned.Add(snapMaraEffect);
+                snapMaraEffect.SetTypeAndSubtypeThatAppliesBonus(type: "Maneuver", subtype: "Strike");
+                currentPlay.AddPendingEffect(snapMaraEffect);
                 break;
         }
         return effectsAssigned;
     }
 
-    public List<Effect> AssignActionEffect(Card card)
+    public List<Effect> AssignActionEffect(Play currentPlay)
     {
+        Card card = currentPlay.AttackingCard;
         List<Effect> effectsAssigned = new List<Effect>();
         _view.SayThatPlayerSuccessfullyPlayedACard();
         switch (card.Title)
         {
             case "Jockeying for Position":
+                effectsAssigned.Add(new MoveCardFromHandToRingArea(_view));
                 effectsAssigned.Add(new JockeyingForPositionActionEffect(_view));
                 break;
             case "Offer Handshake":
+                effectsAssigned.Add(new MoveCardFromHandToRingArea(_view));
                 effectsAssigned.Add(new DrawCardsAskingNumber(_view, CurrentPlayer, numberOfCardsToDraw: 3));
-                effectsAssigned.Add(new MakePlayerDiscardCard(_view, CurrentPlayer, numberOfCardToDiscard: 1));
+                effectsAssigned.Add(new MakePlayerDiscardCard(_view, _game, CurrentPlayer, numberOfCardToDiscard: 1));
                 break;
             case "Irish Whip":
-                var irishBonusEffect = new NextCardDamageBonusByTypeAndSubtype(_view);
-                irishBonusEffect.SetDamageBonus(bonus: 5);
-                irishBonusEffect.SetPlayedTypeAndSubtypeThatAppliesBonus("Maneuver", "Strike");
-                effectsAssigned.Add(new NextCardDamageBonusByTypeAndSubtype(_view));
+                effectsAssigned.Add(new MoveCardFromHandToRingArea(_view));
+                var irishWhipBonusEffect = new NextCardDamageBonusByTypeAndSubtype(_view);
+                irishWhipBonusEffect.SetDamageBonus(bonus: 5);
+                irishWhipBonusEffect.SetTypeAndSubtypeThatAppliesBonus("Maneuver","Strike");
+                effectsAssigned.Add(new EffectForNextCard(_view, irishWhipBonusEffect));
                 break;
             case "I Am the Game":
+                effectsAssigned.Add(new MoveCardFromHandToRingArea(_view));
                 var iAmTheGameBonusEffect = new NextCardDamageBonusByTypeAndSubtype(_view);
                 iAmTheGameBonusEffect.SetDamageBonus(bonus: 3);
-                iAmTheGameBonusEffect.SetPlayedTypeAndSubtypeThatAppliesBonus("Maneuver", "All");
-                effectsAssigned.Add(new NextCardDamageBonusByTypeAndSubtype(_view));
+                iAmTheGameBonusEffect.SetTypeAndSubtypeThatAppliesBonus("Maneuver", "All");
+                effectsAssigned.Add(new EffectForTheRestOfTheTurn(_view, currentPlay, iAmTheGameBonusEffect));
+                effectsAssigned.Add(new DrawCardsOrForceOpponentDiscardSelectableEffect(_view, _game));
                 break;
             case "Y2J":
-                SelectedEffect selectedEffectY2J = _view.AskUserToChooseBetweenDrawingOrForcingOpponentToDiscardCards(CurrentPlayer.GetSuperStarName());
+                effectsAssigned.Add(new MoveCardFromHandToRingArea(_view));
+                SelectedEffect selectedEffectY2J =
+                    _view.AskUserToChooseBetweenDrawingOrForcingOpponentToDiscardCards(CurrentPlayer.GetSuperStarName());
                 if (selectedEffectY2J == SelectedEffect.DrawCards)
                     effectsAssigned.Add(new DrawCardsAskingNumber(_view, playerThatMustDraw: CurrentPlayer, numberOfCardsToDraw: 5));
                 else if (selectedEffectY2J == SelectedEffect.ForceOpponentToDiscard)
-                    effectsAssigned.Add( new MakePlayerDiscardCard( _view, playerThatMustDiscard: NotCurrentPlayer, numberOfCardToDiscard: 5));
+                    effectsAssigned.Add( new MakePlayerDiscardCard( _view, _game, playerThatMustDiscard: NotCurrentPlayer, numberOfCardToDiscard: 5));
                 break;
             case "Roll Out of the Ring":
-                effectsAssigned.Add(new MakePlayerDiscardCard(_view, CurrentPlayer, numberOfCardToDiscard: 2));
+                effectsAssigned.Add(new MoveCardFromHandToRingArea(_view));
+                effectsAssigned.Add(new MakePlayerDiscardCard(_view, _game, CurrentPlayer, numberOfCardToDiscard: 2));
                 effectsAssigned.Add(new ShuffleFromRingsideToHand(_view, pretendedNumberCardsToShuffle: 2));
+                break;
+            case "Spit At Opponent":
+                effectsAssigned.Add(new MoveCardFromHandToRingArea(_view));
+                effectsAssigned.Add(new MakePlayerDiscardCard( _view, _game, CurrentPlayer, numberOfCardToDiscard: 1));
+                effectsAssigned.Add(new MakePlayerDiscardCard(_view, _game, NotCurrentPlayer, numberOfCardToDiscard: 4));
+                break;
+            case "Recovery":
+                effectsAssigned.Add(new MoveCardFromHandToRingArea(_view));
+                effectsAssigned.Add(new ShuffleFromRingsideToHand(_view, pretendedNumberCardsToShuffle: 2));
+                effectsAssigned.Add(new DrawCards(_view, playerThatMustDraw: CurrentPlayer, numberOfCardsToDraw: 1));
+                break;
+            case "Puppies! Puppies!":
+                effectsAssigned.Add(new MoveCardFromHandToRingArea(_view));
+                effectsAssigned.Add(new ShuffleFromRingsideToHand(_view, pretendedNumberCardsToShuffle: 5));
+                effectsAssigned.Add(new DrawCards(_view, playerThatMustDraw: CurrentPlayer, numberOfCardsToDraw: 2));
                 break;
             default:
                 effectsAssigned.Add( new DiscardToDrawWithoutDamage(_view));
@@ -218,10 +220,16 @@ public class EffectAsigner
                 effectsAssigned.Add(new ReversalWithMaximumDamage(_view, maximumDamageReversalElbowToTheFace));;
                 break;
             case "Manager Interferes":
-                effectsAssigned.Add(new ManagerInterferesEffect(_view));
+                if (selectedCard.PlayedFrom == "Hand")
+                {
+                    effectsAssigned.Add(new ManagerInterferesEffect(_view));
+                }
                 break;
             case "Chyna Interferes":
-                effectsAssigned.Add(new ChynaInterferesEffect(_view));
+                if (selectedCard.PlayedFrom == "Hand")
+                {
+                    effectsAssigned.Add(new ChynaInterferesEffect(_view));
+                }
                 break;
             case "Clean Break":
                 effectsAssigned.Add(new CleanBreakEffect(_view));
@@ -230,29 +238,32 @@ public class EffectAsigner
                 effectsAssigned.Add(new JockeyingForPositionReversalEffect(_view));
                 break;
             case "Irish Whip":
+                Console.WriteLine("reversal irish");
                 effectsAssigned.Add(new ReversalByTitle(_view, cardTitleThatCanReverse: "Irish Whip"));
                 NextCardDamageBonusByTypeAndSubtype irishBonusEffect = new NextCardDamageBonusByTypeAndSubtype(_view);
                 irishBonusEffect.SetDamageBonus(bonus: 5);
-                irishBonusEffect.SetPlayedTypeAndSubtypeThatAppliesBonus("Maneuver", "Strike");
-                effectsAssigned.Add(irishBonusEffect);
+                irishBonusEffect.SetTypeAndSubtypeThatAppliesBonus("Maneuver", "Strike");
+                currentPlay.AddPendingEffect(irishBonusEffect);
                 break;
             case "Shoulder Block":
-                // Código para la carta "Shoulder Block"
+                effectsAssigned.Add(new ReversalSimple(_view));
                 break;
             case "Spear":
-                // Código para la carta "Spear"
+                effectsAssigned.Add(new ReversalSimple(_view));
                 break;
             case "Facebuster":
-                // Código para la carta "Facebuster"
+                effectsAssigned.Add(new ReversalSimple(_view));
+                effectsAssigned.Add(new DrawCardsAskingNumber(_view, NotCurrentPlayer, numberOfCardsToDraw: 2));
                 break;
             case "Lou Thesz Press":
-                // Código para la carta "Lou Thesz Press"
+                effectsAssigned.Add(new ReversalSimple(_view));
+                effectsAssigned.Add(new DrawCardsAskingNumber(_view, NotCurrentPlayer, numberOfCardsToDraw: 1));
                 break;
             case "Cross Body Block":
-                // Código para la carta "Cross Body Block"
+                effectsAssigned.Add(new ReversalSimple(_view));
                 break;
             case "Belly to Belly Suplex":
-                // Código para la carta "Belly to Belly Suplex"
+                effectsAssigned.Add(new ReversalSimple(_view));
                 break;
             case "Vertical Suplex":
                 effectsAssigned.Add(new ReversalByTitle(_view, "Vertical Suplex"));

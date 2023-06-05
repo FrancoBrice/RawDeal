@@ -15,6 +15,7 @@ public class NextReversalRequiresMoreFortitudeByTypeAndSubtype : Effect
     
     protected override void ApplyCustomEffect(Play currentPlay)
     {
+        currentPlay.IsAPendingEffect = true;
         try
         {
             if (string.IsNullOrEmpty(_playedTypeThatAppliesEffect) || string.IsNullOrEmpty(_subtypeThatAppliesEffect) || !_extraFortitude.HasValue)
@@ -24,11 +25,16 @@ public class NextReversalRequiresMoreFortitudeByTypeAndSubtype : Effect
             List<Card> opponentReversals = CurrentPlayer.GetReversalCards();
             Card lastCard = currentPlay.GetLastCard();
             if (lastCard.PlayedType != _playedTypeThatAppliesEffect ||
-                !lastCard.Subtypes.Contains(_subtypeThatAppliesEffect)) return;
+                !lastCard.Subtypes.Contains(_subtypeThatAppliesEffect))
+            {
+                currentPlay.PendingEffects.Remove(this);
+                return;
+            }
             foreach (Card opponentCard in opponentReversals)
             {
                 opponentCard.SetCurrentFortitude(Convert.ToInt32(opponentCard.Fortitude) + _extraFortitude);
             }
+            currentPlay.PendingEffects.Remove(this);
         }
         catch (InvalidOperationException ex) 
         {
@@ -50,7 +56,4 @@ public class NextReversalRequiresMoreFortitudeByTypeAndSubtype : Effect
     {
         _extraFortitude = extraFortitude;
     }
-
-
-    
 }

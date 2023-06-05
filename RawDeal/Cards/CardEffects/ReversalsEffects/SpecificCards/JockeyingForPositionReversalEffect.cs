@@ -19,7 +19,7 @@ public class JockeyingForPositionReversalEffect : Effect
         ReversalByTitle cardEffect = new ReversalByTitle(_view,  cardTitleThatCanReverse: "Jockeying for Position");
         cardEffect.ApplyEffect(currentPlay);
         currentPlay.EndPlay();
-        JockeyingForPositionSelectableEffect selectableEffect = new JockeyingForPositionSelectableEffect(_view);
+        var selectableEffect = new JockeyingForPositionSelectableEffect(_view);
         selectableEffect.ApplyEffect(currentPlay);
     }
 }

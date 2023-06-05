@@ -16,6 +16,6 @@ public class ManagerInterferesEffect : Effect
         reversalSimpleEffect.ApplyEffect(currentPlay);
         const int numberOfCardsToDrawByManagerInterferes = 1;
         _view.SayThatPlayerDrawCards(NotCurrentPlayer.GetSuperStarName(), numberOfCardsToDrawByManagerInterferes);
-        _cardMobilizer.MoveCardsFromArsenalToHand(NotCurrentPlayer, numberOfCardsToDrawByManagerInterferes);
+        _cardMobilizer.MoveCardsReversedFromArsenalToHand(NotCurrentPlayer, numberOfCardsToDrawByManagerInterferes);
     }
 }

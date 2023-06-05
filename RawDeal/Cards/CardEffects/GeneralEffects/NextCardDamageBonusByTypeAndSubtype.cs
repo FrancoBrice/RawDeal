@@ -14,7 +14,7 @@ public class NextCardDamageBonusByTypeAndSubtype : Effect
     {
     }
 
-    public void SetPlayedTypeAndSubtypeThatAppliesBonus(string type, string subtype)
+    public void SetTypeAndSubtypeThatAppliesBonus(string type, string subtype)
     {
         _playedTypeThatAppliesBonus = type;
         _subtypeThatAppliesBonus = subtype;
@@ -28,23 +28,23 @@ public class NextCardDamageBonusByTypeAndSubtype : Effect
 
     protected override void ApplyCustomEffect(Play currentPlay)
     {
-        currentPlay.IsAPendingEffect = true;
         try
         {
             if (string.IsNullOrEmpty(_playedTypeThatAppliesBonus) || string.IsNullOrEmpty(_subtypeThatAppliesBonus) || !_damageBonus.HasValue)
             {
                 throw new InvalidOperationException("Played type or subtype not set.");
             }
-
+            currentPlay.IsAPendingEffect = true;
             Card card = currentPlay.GetLastCard();
             if (card.PlayedType == _playedTypeThatAppliesBonus && (card.Subtypes.Contains(_subtypeThatAppliesBonus) || _subtypeThatAppliesBonus == "All"))
             {
-                card.SetCurrentDamage(card.GetCurrentDamage() + _damageBonus);
+                card.SetCurrentDamage(card.GetCurrentDamage(card.PlayedType) + _damageBonus);
             }
         }
         catch (InvalidOperationException ex)
         {
             Console.WriteLine("Error applying effect: " + ex.Message);
         }
+        currentPlay.PendingEffects.Remove(this);
     }
 }

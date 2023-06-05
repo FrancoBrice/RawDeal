@@ -7,21 +7,21 @@ public class MakePlayerDiscardCard : Effect
 {
     private Player _playerThatMustDiscard;
     private int _numberOfCardsToDiscard;
-    public MakePlayerDiscardCard(View view, Player playerThatMustDiscard, int numberOfCardToDiscard) : base(view)
+    private Game _game;
+    public MakePlayerDiscardCard(View view, Game game, Player playerThatMustDiscard, int numberOfCardToDiscard) : base(view)
     {
         _playerThatMustDiscard = playerThatMustDiscard;
         _numberOfCardsToDiscard = numberOfCardToDiscard;
+        _game = game;
     }
 
     protected override void ApplyCustomEffect(Play currentPlay)
     {
-        if (_playerThatMustDiscard.GetHandSize() == 0)
-        {
-            return;
-        }
+
         int remainingCardsToDiscard = _numberOfCardsToDiscard;
         for (int i = 0; i < _numberOfCardsToDiscard; i++)
         {
+            if (_playerThatMustDiscard.GetHandSize() == 0) return;
             int indexCardFromHand = _view.AskPlayerToSelectACardToDiscard(_playerThatMustDiscard.GetCardsInStringFormatFromHand(), _playerThatMustDiscard.GetSuperStarName(),
                 _playerThatMustDiscard.GetSuperStarName(), remainingCardsToDiscard);
             _playerThatMustDiscard.MoveCardFromHandToRingsideByIndex(indexCardFromHand);

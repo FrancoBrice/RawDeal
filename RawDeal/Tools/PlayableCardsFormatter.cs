@@ -15,23 +15,23 @@ public class PlayableCardsFormatter
         _tupleManager = new TupleManager();
     }
 
-    public List<string> GetPlayableCards(List<(int, Card)> playableCardsTuples)
+    public List<string> GetPlayableCards(List<(int, Card)> playableCardsTuples, int fortitude)
     {
         TypesOfPlayableCards = new List<string>();
         ListOfTuplesOfPlayableCards = new List<(int, Card)>();
         _formattedPlayableCards = new List<string>();
-        RunCardAdditionLoop(playableCardsTuples);
+        RunCardAdditionLoop(playableCardsTuples, fortitude);
         return _formattedPlayableCards;
     }
 
-    private void RunCardAdditionLoop(List<(int, Card)> playableCardsTuples)
+    private void RunCardAdditionLoop(List<(int, Card)> playableCardsTuples, int fortitude)
     {
         foreach (var tupleIndexInHandAndCard in playableCardsTuples)
         {
             _currentCard = _tupleManager.ExtractCard(tupleIndexInHandAndCard);
             if (_currentCard.IsHybrid)
             {
-                AddHybridCardToPlayableCards(tupleIndexInHandAndCard);
+                AddHybridCardToPlayableCards(tupleIndexInHandAndCard, fortitude);
             }
             else
             {
@@ -48,12 +48,12 @@ public class PlayableCardsFormatter
         ListOfTuplesOfPlayableCards.Add(tupleIndexInHandAndCard);
     }
 
-    private void AddHybridCardToPlayableCards((int, Card) tupleIndexInHandAndCard)
+    private void AddHybridCardToPlayableCards((int, Card) tupleIndexInHandAndCard, int fortitude)
     {
-        for (int j = 0; j < _currentCard.AmountOfTypes; j++)
+        foreach (string type in _currentCard.Types)
         {
-            _currentCard.PlayedType = _currentCard.Types[j];
-            if (_currentCard.CurrentPlayedTypeIsPlayable())
+            _currentCard.PlayedType = type;
+            if (_currentCard.CurrentPlayedTypeIsPlayable() && _currentCard.GetCurrentFortitude(_currentCard.PlayedType) <= fortitude)
             {
                 _formattedPlayableCards.Add(GetCardInPlayFormat(tupleIndexInHandAndCard, _currentCard.PlayedType));
                 TypesOfPlayableCards.Add(_currentCard.PlayedType);

@@ -15,7 +15,7 @@ public class ChynaInterferesEffect : Effect
         ReversalSimple simpleReversalEffect = new ReversalSimple(_view);
         simpleReversalEffect.ApplyEffect(currentPlay);
         const int numberOfCardsToDrawByChynaInterferes = 2;
-        _cardMobilizer.MoveCardsFromArsenalToHand(NotCurrentPlayer, numberOfCardsToDrawByChynaInterferes);
+        _cardMobilizer.MoveCardsReversedFromArsenalToHand(NotCurrentPlayer, numberOfCardsToDrawByChynaInterferes);
         _view.SayThatPlayerDrawCards(NotCurrentPlayer.GetSuperStarName(), numberOfCardsToDrawByChynaInterferes);
     }
 }

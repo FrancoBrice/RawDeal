@@ -28,10 +28,11 @@ public class UserAsker
         return _view.AskUserWhatToDoWhenHeCannotUseHisAbility();
     }
 
-    public int SelectACard(Player player)
+    public int SelectACard(PlayManager playManager)
     {
-        List<(int, Card)> playableCards = player.GetPlayableCardsFromPlayer();
-        List<string> playableCardsFormatted = _playableCardsFormatter.GetPlayableCards(playableCards);
+        Player currentPlayer = playManager.CurrentPlay.CurrentPlayer;
+        List<(int, Card)> playableCards = currentPlayer.GetPlayableCardsFromPlayer(playManager);
+        List<string> playableCardsFormatted = _playableCardsFormatter.GetPlayableCards(playableCards, currentPlayer.Fortitude);
         TypesOfPlayableCards = _playableCardsFormatter.TypesOfPlayableCards;
         ListOfTuplesOfPlayableCards = _playableCardsFormatter.ListOfTuplesOfPlayableCards;
         return _view.AskUserToSelectAPlay(playableCardsFormatted);

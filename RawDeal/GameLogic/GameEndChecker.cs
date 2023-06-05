@@ -15,4 +15,5 @@ public static class GameEndChecker
             game.EndGame(winnerPlayer: game.CurrentPlayer);
         }
     }
+    
 }

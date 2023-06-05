@@ -17,18 +17,18 @@ public class JockeyingForPositionSelectableEffect : Effect
         SelectedEffect selectedEffect = _view.AskUserToSelectAnEffectForJockeyForPosition(CurrentPlayer.GetSuperStarName());
         if (selectedEffect == SelectedEffect.NextGrappleIsPlus4D)
         {
-            NextCardDamageBonusByTypeAndSubtype effect = new NextCardDamageBonusByTypeAndSubtype(_view);
-            effect.SetPlayedTypeAndSubtypeThatAppliesBonus(type: "Maneuver", subtype: "Grapple");
-            effect.SetDamageBonus(4);
-            currentPlay.SetPendingEffect(effect);
+            var effect = new NextCardDamageBonusByTypeAndSubtype(_view);
+            effect.SetTypeAndSubtypeThatAppliesBonus(type: "Maneuver", subtype: "Grapple");
+            effect.SetDamageBonus(bonus: 4);
+            currentPlay.AddPendingEffect(effect);
         }
         else if (selectedEffect == SelectedEffect.NextGrapplesReversalIsPlus8F)
         {
-            NextReversalRequiresMoreFortitudeByTypeAndSubtype effect = new NextReversalRequiresMoreFortitudeByTypeAndSubtype(_view);
+            var effect = new NextReversalRequiresMoreFortitudeByTypeAndSubtype(_view);
             effect.SetPlayedTypeThatAppliesExtraFortitude("Maneuver");
             effect.SetSubtypeThatAppliesExtraFortitude("Grapple");
             effect.SetExtraFortitude(8);
-            currentPlay.SetPendingEffect(effect);
+            currentPlay.AddPendingEffect(effect);
         }
     }
 }

@@ -20,7 +20,6 @@ public class ReversalByTitle : Effect
         {
             ReversalSimple cardEffect = new ReversalSimple(_view);
             cardEffect.ApplyEffect(currentPlay);
-            
         }
     }
 }

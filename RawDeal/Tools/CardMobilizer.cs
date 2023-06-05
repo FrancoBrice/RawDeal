@@ -37,11 +37,25 @@ public class CardMobilizer
         }
     }
     
+    public void MoveCardsReversedFromArsenalToHand(Player player, int numberOfCards)
+    {
+        if (player.GetArsenalSize() >= 1)
+        {
+            List<Card> drawnCards = player.GetLastCardsFromArsenalReversed(numberOfCards);
+            foreach (Card drawnCard in drawnCards)
+            {
+                player.AddCardToHand(drawnCard);
+                player.RemoveLastCardFromArsenal();    
+            }
+        }
+    }
+    
     public void MoveCardsFromArsenalToHand(Player player, int numberOfCards)
     {
         if (player.GetArsenalSize() >= 1)
         {
             List<Card> drawnCards = player.GetLastCardsFromArsenalReversed(numberOfCards);
+            drawnCards.Reverse();
             foreach (Card drawnCard in drawnCards)
             {
                 player.AddCardToHand(drawnCard);

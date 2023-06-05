@@ -1,3 +1,4 @@
+using RawDeal.Cards.CardEffects;
 using RawDeal.GameLogic;
 using RawDealView;
 
@@ -41,6 +42,7 @@ public class CardDamager
         HandleReversalsByDeck(attackingPlayer, damagedPlayer);
         _opponentRanOutOfCards = GameEndChecker.PlayerRanOutOfCardsDuringDamage(damagedPlayer, _pretendedDamage);
         damagedPlayer.ReceiveDamageWithoutView(_actualDamage);
+        damagedPlayer.DamagesReceived.Add(_actualDamage);
         FinishCardDamage(attackingPlayer);
     }
     
@@ -67,7 +69,7 @@ public class CardDamager
             _view.SayThatPlayerLostDueToSelfDamage(damagedPlayer.GetSuperStarName());
         }
         damagedPlayer.ReceiveDamageWithoutView(_actualDamage);
-        FinishCardDamage(_currentPlay.NotCurrentPlayer);
+        EndGameIfPlayerRanOutOfCardsAndNotReverse(_currentPlay.NotCurrentPlayer);
     }
      
      private void DealActualDamage(Player damagedPlayer)
@@ -96,16 +98,21 @@ public class CardDamager
              _actualDamage++;
              Card damagedCard = cardsToBeDamaged[index];
              _actualDamagedCards.Add(damagedCard);
-             CheckAndApplyReversalByDeck(attackingCard, damagedCard);
+             CheckAndApplyReversalByDeck(attackingCard, damagedCard, index);
              if (_cardWasReversedByDeck) break;
          }
      }
 
-     private void CheckAndApplyReversalByDeck(Card attackingCard, Card damagedCard)
+     private void CheckAndApplyReversalByDeck(Card attackingCard, Card damagedCard, int index)
      {
-         List<Card> possibleReversals = _notCurrentPlayer.GetReversalsFromArsenal(attackingCard);
-         if (possibleReversals.Contains(damagedCard) && _notCurrentPlayer.IsCorrectReversalCard(attackingCard, damagedCard))
+         EffectAssigner effectAssigner = new EffectAssigner(_game, _view); 
+         List<Card> possibleReversals = _notCurrentPlayer.GetReversalsFromArsenal(_game.PlayManager);
+         if (possibleReversals.Contains(damagedCard) && _notCurrentPlayer.IsCorrectReversalCard(_game.PlayManager, damagedCard, "Arsenal") && attackingCard.CanBeReversed)
          {
+             damagedCard.PlayedFrom = "Deck";
+             _currentPlay.SetReversalCardTuple((index, damagedCard));
+             List<Effect> effectsAssigned = effectAssigner.AssignReversalEffect(_currentPlay);
+             EffectsApplier.ApplyAssignedEffects(_game, effectsAssigned);
              _cardWasReversedByDeck = true;
              _currentPlayer.HasEndsHisTurn = true;
              if (_actualDamage == _pretendedDamage) _cardWasReversedInLastCardOfDeck = true;
@@ -126,11 +133,11 @@ public class CardDamager
      
      private void FinishCardDamage(Player attackingPlayer)
      {
-         EndGameIfOpponentRanOutOfCardsAndNotReverse(attackingPlayer);
+         EndGameIfPlayerRanOutOfCardsAndNotReverse(attackingPlayer);
          _game.MakePlayManagerRemoveEffectsOnCards();
      }
 
-     private void EndGameIfOpponentRanOutOfCardsAndNotReverse(Player attackingPlayer)
+     private void EndGameIfPlayerRanOutOfCardsAndNotReverse(Player attackingPlayer)
      {
          if (_opponentRanOutOfCards && !_cardWasReversedByDeck)
          {

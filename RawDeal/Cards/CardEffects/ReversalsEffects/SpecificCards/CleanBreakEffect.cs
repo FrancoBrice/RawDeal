@@ -17,7 +17,7 @@ public class CleanBreakEffect : Effect
         const int numberOfCardsThatOpponentMustDiscard = 4;
         _cardMobilizer.MakePlayerDiscardCards(CurrentPlayer, numberOfCardsThatOpponentMustDiscard);
         const int numberOfCardsToDrawByCleanBreak = 1;
-        _cardMobilizer.MoveCardsFromArsenalToHand(NotCurrentPlayer, numberOfCardsToDrawByCleanBreak);
+        _cardMobilizer.MoveCardsReversedFromArsenalToHand(NotCurrentPlayer, numberOfCardsToDrawByCleanBreak);
         _view.SayThatPlayerDrawCards(NotCurrentPlayer.GetSuperStarName(), numberOfCardsToDrawByCleanBreak);
     }
 }

@@ -78,7 +78,7 @@ public class Turn
             case NextPlay.PlayCard:
                 _game.MakePlayManagerApplyPendingEffects();
                 CardPlayer cardPlayer = new CardPlayer(_game, _view);
-                cardPlayer.PlayCard();
+                cardPlayer.PlayCard(_game.PlayManager);
                 break;
             case NextPlay.UseAbility:
                 _currentPlayer.UseSuperStarAbility(_notCurrentPlayer);

@@ -13,7 +13,6 @@ public class JockeyingForPositionActionEffect : Effect
 
     protected override void ApplyCustomEffect(Play currentPlay)
     {
-        _cardMobilizer.MoveCardFromHandToRingArea(CurrentPlayer, AttackingCardTuple);
         currentPlay.IsAPendingEffect = true;
         JockeyingForPositionSelectableEffect selectableEffect = new JockeyingForPositionSelectableEffect(_view);
         selectableEffect.ApplyEffect(currentPlay);

@@ -19,7 +19,7 @@ public class Game
     public Player NotCurrentPlayer => PlayersList[_indexNotCurrentPlayer];
     public List<DeckValidator> SelectedDecks;
     public Play CurrentPlay;
-    private PlayManager _playManager;
+    public PlayManager PlayManager;
     private readonly View _view;
     private readonly string _deckFolder;
     
@@ -35,7 +35,7 @@ public class Game
         _indexCurrentPlayer = 0;
         _indexNotCurrentPlayer = 1;
         SelectedDecks = new List<DeckValidator>();
-        _playManager = new PlayManager(_view);
+        PlayManager = new PlayManager(_view);
     }
 
     public void Play()
@@ -58,7 +58,8 @@ public class Game
         {
             if (NotCurrentPlayer.HasZeroCardsInArsenal()) EndGame(winnerPlayer: CurrentPlayer);
             CurrentPlay = new Play(GetDictionaryOfCurrentAndNotCurrentPlayer(), _view);
-            _playManager.AddPlay(CurrentPlay);
+            PlayManager.AddPlay(CurrentPlay);
+            Console.WriteLine($"jugada creada en game, efectos pendientes {CurrentPlay.PendingEffects.Count}");
             if (!GameIsOver)
             {
                 Turn currentTurn = new Turn(CurrentPlay, _view);
@@ -84,12 +85,12 @@ public class Game
 
     public void MakePlayManagerApplyPendingEffects()
     {
-        _playManager.ApplyPendingEffectsIfPossible();
+        PlayManager.ApplyPendingEffectsIfPossible();
     }
     
     public void MakePlayManagerRemoveEffectsOnCards()
     {
-        _playManager.RemoveEffectsOnCards();
+        PlayManager.RemoveEffectsOnCards();
     }
 
     private void UpdatePlayersIndex()
