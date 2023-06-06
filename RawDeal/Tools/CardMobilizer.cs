@@ -4,38 +4,31 @@ using RawDealView;
 
 namespace RawDeal.GameLogic;
 
-public class CardMobilizer
+public static class CardMobilizer
 {
-    private View _view; 
-    
-    public CardMobilizer(View view)
-    {
-        _view = view;
-    }
-    
-    public void MoveCardFromHandToRingArea(Player player, (int, Card) tupleWithIndexInHandAndSelectedCard)
+    public static void MoveCardFromHandToRingArea(Player player, (int, Card) tupleWithIndexInHandAndSelectedCard)
     {
         int indexInHand = TupleManager.ExtractCardIndex(tupleWithIndexInHandAndSelectedCard);
         player.MoveCardFromHandToRingAreaByIndex(indexInHand);
     }
 
-    public void MoveSpecificCardFromHandToRingside(Player player, (int, Card) tupleWithIndexInHandAndSelectedCard)
+    public static void MoveSpecificCardFromHandToRingside(Player player, (int, Card) tupleWithIndexInHandAndSelectedCard)
     {
         int indexInHand = TupleManager.ExtractCardIndex(tupleWithIndexInHandAndSelectedCard);
         player.MoveCardFromHandToRingsideByIndex(indexInHand);
     }
 
-    public void MakePlayerDiscardCards(Player player, int numberOfCardsToDiscard)
+    public static void MakePlayerDiscardCards(View view, Player player, int numberOfCardsToDiscard)
     {
         for (int remainingCardsToDiscard = numberOfCardsToDiscard; remainingCardsToDiscard > 0; remainingCardsToDiscard--)
         {
-            int indexCardFromPlayerHand = _view.AskPlayerToSelectACardToDiscard(player.GetCardsInStringFormatFromHand(), player.GetSuperStarName(),
+            int indexCardFromPlayerHand = view.AskPlayerToSelectACardToDiscard(player.GetCardsInStringFormatFromHand(), player.GetSuperStarName(),
                 player.GetSuperStarName(), remainingCardsToDiscard);
             player.MoveCardFromHandToRingsideByIndex(indexCardFromPlayerHand);
         }
     }
     
-    public void MoveCardsReversedFromArsenalToHand(Player player, int numberOfCards)
+    public static void MoveCardsReversedFromArsenalToHand(Player player, int numberOfCards)
     {
         if (player.GetArsenalSize() >= 1)
         {
@@ -48,7 +41,7 @@ public class CardMobilizer
         }
     }
     
-    public void MoveCardsFromArsenalToHand(Player player, int numberOfCards)
+    public static void MoveCardsFromArsenalToHand(Player player, int numberOfCards)
     {
         if (player.GetArsenalSize() >= 1)
         {
@@ -62,7 +55,7 @@ public class CardMobilizer
         }
     }
     
-    public void MoveCardsFromArsenalToRingSideByDamageAmount(Player player, int? damageAmount)
+    public static void MoveCardsFromArsenalToRingSideByDamageAmount(Player player, int? damageAmount)
     {
         List<Card> cardsList = player.GetLastCardsFromArsenalReversed(damageAmount);
         if (damageAmount >= player.GetArsenalSize()) damageAmount = player.GetArsenalSize();
@@ -74,7 +67,7 @@ public class CardMobilizer
         }
     }
 
-    public void DrawStunValueCards(Player attackingPlayer, int numberOfCardsToDraw)
+    public static void DrawStunValueCards(Player attackingPlayer, int numberOfCardsToDraw)
     {
         for (int i = 0; i < numberOfCardsToDraw; i++)
         {

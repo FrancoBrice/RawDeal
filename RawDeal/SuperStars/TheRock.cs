@@ -15,7 +15,7 @@ public class TheRock : SuperStar
             return;
         }
         int numberOfCards = 1; 
-        int indexInputByUser = _view.AskPlayerToSelectCardsToRecover(Name, numberOfCards, player.Ringside.GetFormattedCards() );
+        int indexInputByUser = _view.AskPlayerToSelectCardsToRecover(Name, numberOfCards, player.GetCardsInStringFormatFromRingside());
         player.MoveCardByIndexFromRingsideToArsenalBeginning(indexInputByUser);
     }
 

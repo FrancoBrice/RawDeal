@@ -12,14 +12,12 @@ public abstract class Effect
     protected Card AttackingCard;
     protected Card ReversalCard;
     protected readonly View _view;
-    protected CardMobilizer _cardMobilizer;
     protected (int, Card) AttackingCardTuple;
     protected (int, Card) ReversalCardTuple;
 
     protected Effect(View view)
     {
         _view = view;
-        _cardMobilizer = new CardMobilizer(_view);
     }
 
     public void ApplyEffect(Play currentPlay)

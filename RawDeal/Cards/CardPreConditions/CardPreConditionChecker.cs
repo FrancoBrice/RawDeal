@@ -5,8 +5,6 @@ namespace RawDeal.Cards.CardPreConditions;
 
 public static class CardPreConditionChecker
 {
-
-
     public static bool IsPlayableCard(Card cardToCheck, PlayManager playManager)
     {
         Play currentPlay = playManager.CurrentPlay;

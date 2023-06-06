@@ -52,12 +52,11 @@ public class CardPlayer
 
     private void PlayManeuverOrActionCard(Card attackingCard)
     {
-        EffectAssigner effectAssigner = new EffectAssigner(_game);
         List<Effect> assignedEffects; 
         switch (attackingCard.PlayedType)
         {
             case "Maneuver":
-                assignedEffects = effectAssigner.AssignManeuverEffect(_currentPlay);
+                assignedEffects = EffectAssigner.AssignManeuverEffect(_game);
                 ApplyAssignedEffects(assignedEffects);
                 if (!_game.GameIsOver)
                 {
@@ -65,7 +64,7 @@ public class CardPlayer
                 }
                 break;
             case "Action":
-                assignedEffects = effectAssigner.AssignActionEffect(_currentPlay);
+                assignedEffects = EffectAssigner.AssignActionEffect(_game);
                 ApplyAssignedEffects(assignedEffects);
                 break;
         } 
@@ -76,22 +75,26 @@ public class CardPlayer
         List<string> validReversalsInString = _playableCardsFormatter.GetReversalCards(validReversals);
         int selectedReversalIndex = _view.AskUserToSelectAReversal(_notCurrentPlayer.GetSuperStarName(), validReversalsInString);
         if (selectedReversalIndex == -1) return;
-        attackingCard.PlayedType = "Reversed";
         (int, Card) tupleWithIndexInHandAndReverseCard = validReversals[selectedReversalIndex];
         _currentPlay.SetReversalCardTuple(tupleWithIndexInHandAndReverseCard);
         Card selectedReversalCard = TupleManager.ExtractCard(tupleWithIndexInHandAndReverseCard);
-        selectedReversalCard.PlayedType = "Reversal";
-        selectedReversalCard.PlayedFrom = "Hand";
-        selectedReversalCard.SetReversalTypeAndSubtype();
+        ApplyReversalTypesToCards(attackingCard, selectedReversalCard);
         HandleReversalEffects();
         _currentPlay.SwapCurrentAndNotCurrentPlayer();
         _cardDamager.ApplyCardDamage();
     }
 
+    private void ApplyReversalTypesToCards(Card attackingCard, Card reversalCard)
+    {
+        attackingCard.PlayedType = "Reversed";
+        reversalCard.PlayedType = "Reversal";
+        reversalCard.PlayedFrom = "Hand";
+        reversalCard.SetReversalTypeAndSubtype();
+    }
+
     private void HandleReversalEffects()
     {
-        EffectAssigner effectAssigner = new EffectAssigner(_game);
-        List<Effect> assignedEffects = effectAssigner.AssignReversalEffect(_currentPlay);
+        List<Effect> assignedEffects = EffectAssigner.AssignReversalEffect(_game);
         ApplyAssignedEffects(assignedEffects);
     }
     

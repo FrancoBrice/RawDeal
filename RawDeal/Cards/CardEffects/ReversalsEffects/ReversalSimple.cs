@@ -15,10 +15,10 @@ public class ReversalSimple : Effect
         if (ReversalCard.Damage != "#") ReversalCard.SetDefaultValues();
         if (ReversalCard.PlayedFrom == "Hand")
         {
-            _cardMobilizer.MoveSpecificCardFromHandToRingside(CurrentPlayer, AttackingCardTuple);
+            CardMobilizer.MoveSpecificCardFromHandToRingside(CurrentPlayer, AttackingCardTuple);
             CurrentPlayer.HasEndsHisTurn = true;
             _view.SayThatPlayerReversedTheCard(NotCurrentPlayer.GetSuperStarName(), ReversalCard.GetCardInPlayFormat(ReversalCard.PlayedType));
-            _cardMobilizer.MoveCardFromHandToRingArea(NotCurrentPlayer, ReversalCardTuple);
+            CardMobilizer.MoveCardFromHandToRingArea(NotCurrentPlayer, ReversalCardTuple);
         }
         else if (ReversalCard.PlayedFrom == "Deck")
         {

@@ -15,9 +15,9 @@ public class CleanBreakEffect : Effect
         var reversalByTitleEffect = new ReversalSimple(_view);
         reversalByTitleEffect.ApplyEffect(currentPlay);
         const int numberOfCardsThatOpponentMustDiscard = 4;
-        _cardMobilizer.MakePlayerDiscardCards(CurrentPlayer, numberOfCardsThatOpponentMustDiscard);
+        CardMobilizer.MakePlayerDiscardCards(_view, CurrentPlayer, numberOfCardsThatOpponentMustDiscard);
         const int numberOfCardsToDrawByCleanBreak = 1;
-        _cardMobilizer.MoveCardsReversedFromArsenalToHand(NotCurrentPlayer, numberOfCardsToDrawByCleanBreak);
+        CardMobilizer.MoveCardsReversedFromArsenalToHand(NotCurrentPlayer, numberOfCardsToDrawByCleanBreak);
         _view.SayThatPlayerDrawCards(NotCurrentPlayer.GetSuperStarName(), numberOfCardsToDrawByCleanBreak);
     }
 }

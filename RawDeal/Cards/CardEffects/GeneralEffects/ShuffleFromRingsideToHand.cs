@@ -20,7 +20,7 @@ public class ShuffleFromRingsideToHand : Effect
         int remainingCardsToShuffle = _actualNumberCardsToShuffle;
         for (int i = 0; i < _actualNumberCardsToShuffle; i++)
         {
-            int indexInputByUser = _view.AskPlayerToSelectCardsToPutInHisHand(CurrentPlayer.GetSuperStarName(), remainingCardsToShuffle, CurrentPlayer.Ringside.GetFormattedCards());
+            int indexInputByUser = _view.AskPlayerToSelectCardsToPutInHisHand(CurrentPlayer.GetSuperStarName(), remainingCardsToShuffle, CurrentPlayer.GetCardsInStringFormatFromRingside());
             CurrentPlayer.MoveCardFromRingsideToHandByIndex(indexInputByUser);
             remainingCardsToShuffle--;
         }

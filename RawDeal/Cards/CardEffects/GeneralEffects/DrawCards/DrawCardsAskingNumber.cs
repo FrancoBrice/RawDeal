@@ -5,8 +5,8 @@ namespace RawDeal.Cards.CardEffects.GeneralEffects;
 
 public class DrawCardsAskingNumber : Effect
 {
-    private Player _playerThatMustDraw;
-    private int _numberOfCardsToDraw; 
+    private readonly Player _playerThatMustDraw;
+    private readonly int _numberOfCardsToDraw; 
     public DrawCardsAskingNumber(View view, Player playerThatMustDraw, int numberOfCardsToDraw) : base(view)
     {
         _playerThatMustDraw = playerThatMustDraw;
@@ -21,7 +21,7 @@ public class DrawCardsAskingNumber : Effect
         if (_playerThatMustDraw.GetArsenalSize() >= _numberOfCardsToDraw)
         {
             _view.SayThatPlayerDrawCards(_playerThatMustDraw.GetSuperStarName(), actualNumberOfCardToDraw);
-            _cardMobilizer.MoveCardsFromArsenalToHand(_playerThatMustDraw, actualNumberOfCardToDraw);
+            CardMobilizer.MoveCardsFromArsenalToHand(_playerThatMustDraw, actualNumberOfCardToDraw);
         }
     }
 }

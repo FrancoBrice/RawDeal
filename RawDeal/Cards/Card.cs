@@ -34,8 +34,6 @@ public class Card : IViewableCardInfo
     public int? CurrentDamage;
     public int? CurrentFortitude;
 
-    private View _view;
-    
     public Effect Effect { get; set; }
 
     public Card()
@@ -52,11 +50,6 @@ public class Card : IViewableCardInfo
         Damage = cardInfo.Damage;
         StunValue = cardInfo.StunValue;
         CardEffect = cardInfo.CardEffect;
-    }
-    
-    public void SetViewObject(View view)
-    {
-        _view = view;
     }
 
     public string GetCardFormattedInfo()

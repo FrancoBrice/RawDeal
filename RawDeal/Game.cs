@@ -11,15 +11,15 @@ public class Game
 {
     public List<Card> AllCardsList { get; }
     public List<SuperStar> AllSuperStarList { get; }
-    public List<Player> PlayersList;
+    public readonly List<Player> PlayersList;
     public bool GameIsOver;
     private int _indexCurrentPlayer;
     private int _indexNotCurrentPlayer;
     public Player CurrentPlayer => PlayersList[_indexCurrentPlayer];
     public Player NotCurrentPlayer => PlayersList[_indexNotCurrentPlayer];
-    public List<DeckValidator> SelectedDecks;
+    public readonly List<DeckValidator> SelectedDecks;
     public Play CurrentPlay;
-    public PlayManager PlayManager;
+    public readonly PlayManager PlayManager;
     public readonly View ViewObject;
     private readonly string _deckFolder;
     
@@ -28,7 +28,6 @@ public class Game
         PlayersList = new List<Player>();
         ViewObject = viewObject;
         AllCardsList = CardsJsonReader.GenerateAllCardsListFromCardsFromJson();
-        SetViewObjectInCards(ViewObject);
         AllSuperStarList = SuperstarsJsonReader.GenerateAllSuperStarsListFromJson();
         _deckFolder = deckFolder;
         GameIsOver = false;
@@ -109,14 +108,6 @@ public class Game
     private static void ExchangePlayersPositions<TPlayer>(List<TPlayer> playersList)
     {
         (playersList[0], playersList[1]) = (playersList[1], playersList[0]);
-    }
-
-    private void SetViewObjectInCards(View view)
-    {
-        foreach (Card card in AllCardsList)
-        {
-            card.SetViewObject(view);
-        }
     }
 
     public Dictionary<string, Player> GetDictionaryOfCurrentAndNotCurrentPlayer()

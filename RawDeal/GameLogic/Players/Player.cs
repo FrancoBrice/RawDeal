@@ -1,8 +1,8 @@
 using RawDeal.CardCollections;
 using RawDeal.Cards;
+using RawDeal.Cards.CardPreConditions;
 using RawDeal.GameLogic;
 using RawDeal.SuperStars;
-using RawDeal.Tools;
 using RawDealView;
 
 namespace RawDeal;
@@ -11,19 +11,18 @@ public class Player
 {
     public SuperStar SuperStar { get; }
     private Arsenal Arsenal { get; }
-    public Ringside Ringside  { get; }
+    private Ringside Ringside  { get; }
     private Hand Hand { get; }
     private RingArea RingArea { get; }
-    public List<int> DamagesReceived;
+    public readonly List<int> DamagesReceived;
 
-    public List<(int, Card)> TuplesWithPlayIdAndPlayedCards;
-    private List<Card> _allCardsList;
+    public readonly List<(int, Card)> TuplesWithPlayIdAndPlayedCards;
+    private readonly List<Card> _allCardsList;
     public int Fortitude;
-    private View _view;
+    private readonly View _view;
     public bool HasUsedHisAbilityInTheTurn;
     public bool HasEndsHisTurn;
     private int _damageReducedByShield;
-    private CardMobilizer _cardMobilizer;
     
 
     public Player(SuperStar superstar, List<Card> cardList, View view)
@@ -42,7 +41,6 @@ public class Player
         HasUsedHisAbilityInTheTurn = false;
         HasEndsHisTurn = false;
         _damageReducedByShield = 0;
-        _cardMobilizer = new CardMobilizer(_view);
         DamagesReceived = new List<int>();
         TuplesWithPlayIdAndPlayedCards = new List<(int, Card)>();
     }
@@ -116,6 +114,7 @@ public class Player
     {
         return RingArea.GetFormattedCards();
     }
+    
     public List<Card> GetCardsFromArsenal(int damage)
     {
         if (damage > Arsenal.CardListSize) damage = Arsenal.CardListSize;
@@ -132,6 +131,7 @@ public class Player
     {
         return Arsenal.CardListSize;
     }
+    
     public string GetSuperStarName()
     {
         return SuperStar.Name;
@@ -155,194 +155,23 @@ public class Player
         return Hand.GetTuplesWithPositionInHandAndReversalCards(this, playManager);
     }
     
-    
     public List<Card> GetReversalsFromArsenal(PlayManager playManager)
     {
         List<Card> validReversals = new List<Card>();
         foreach (Card card in Arsenal.CardList)
         {
-            if (IsCorrectReversalCard(playManager, card, playedFrom: "Arsenal"))
+            if (ReversalsChecker.IsCorrectReversalCard(playManager, card, playedFrom: "Arsenal"))
             {
                 validReversals.Add(card);
                 card.SetDefaultValues();
             }
         }
-    
         return validReversals;
     }
 
-    public bool IsCorrectReversalCard(PlayManager playManager, Card reversalCard, string playedFrom)
+    public void ReceiveDamage(int damage)
     {
-        Play currentPlay = playManager.CurrentPlay;
-        Card attackingCard = currentPlay.AttackingCard;
-        if (reversalCard.GetCurrentFortitude(reversalCard.PlayedType) > Fortitude)
-        {
-            return false;
-        }
-        if (reversalCard.Subtypes.Contains("ReversalStrike"))
-        {
-            if (attackingCard.PlayedType.Contains("Maneuver") && attackingCard.Subtypes.Contains("Strike"))
-            {
-                return true;
-            }
-        }
-        if (reversalCard.Subtypes.Contains("ReversalGrapple"))
-        {
-            if (attackingCard.PlayedType.Contains("Maneuver") && attackingCard.Subtypes.Contains("Grapple"))
-            {
-                return true;
-            }
-        } 
-        if (reversalCard.Subtypes.Contains("ReversalSubmission"))
-        {
-            if (attackingCard.PlayedType.Contains("Maneuver") && attackingCard.Subtypes.Contains("Submission"))
-            {
-                return true;
-            }
-        }
-        if (reversalCard.Subtypes.Contains("ReversalAction"))
-        {
-            if (attackingCard.PlayedType.Contains("Action"))
-            {
-                return true;
-            }
-        }
-        
-        if (reversalCard.Subtypes.Contains("ReversalGrappleSpecial"))
-        {
-            if (attackingCard.PlayedType.Contains("Maneuver") && attackingCard.Subtypes.Contains("Grapple"))
-            {
-                const int maximumDamageThatCanReverse = 7;
-                if (attackingCard.GetCurrentDamage(attackingCard.PlayedType) <= maximumDamageThatCanReverse)
-                {
-                    return true;
-                }
-            }
-        }
-        
-        if (reversalCard.Subtypes.Contains("ReversalStrikeSpecial"))
-        {
-            if (attackingCard.PlayedType.Contains("Maneuver") && attackingCard.Subtypes.Contains("Strike"))
-            {
-                const int maximumDamageThatCanReverse = 7;
-                if (attackingCard.GetCurrentDamage(attackingCard.PlayedType) <= maximumDamageThatCanReverse)
-                {
-                    return true;
-                }
-            }
-        }
-        
-        if (reversalCard.Subtypes.Contains("ReversalSpecial"))
-        {
-            return IsValidTheConditionOfReversalSpecial(playManager, reversalCard, playedFrom);
-        }
-
-        return false;
-
-    }
-
-    private bool IsValidTheConditionOfReversalSpecial(PlayManager playManager, Card reversalCard, string playedFrom)
-    {
-        Play currentPlay = playManager.CurrentPlay;
-        Card attackingCard = currentPlay.AttackingCard;
-        Player playerThatCanReverse = currentPlay.NotCurrentPlayer;
-        switch (reversalCard.Title)
-        {
-            case "Elbow to the Face":
-                if (attackingCard.PlayedType.Contains("Maneuver") && playerThatCanReverse.CalculateDamage(attackingCard) <= 7)
-                {
-                    return true;
-                }
-                break;
-            case "Manager Interferes":
-                if (attackingCard.PlayedType.Contains("Maneuver"))
-                {
-                    return true;
-                }
-                break;
-            case "Chyna Interferes":
-                if (attackingCard.PlayedType.Contains("Maneuver"))
-                {
-                    return true;
-                }
-                break;
-            case "Clean Break" when attackingCard.Title == "Jockeying for Position":
-                return true;
-            case "Jockeying for Position" when attackingCard.Title == "Jockeying for Position":
-                return true;
-            case "Irish Whip" when attackingCard.Title == "Irish Whip":
-                return true;
-            case "Shoulder Block":
-                if (playManager.PlayedCards.CardListSize >= 2 && attackingCard.PlayedType == "Maneuver")
-                {
-                    if (playManager.PlayedCards.GetPenultimateCard.Title == "Irish Whip")
-                    {
-                        return true;
-                    }
-                }
-                break;
-            case "Spear":
-                if (playManager.PlayedCards.CardListSize >= 2 && attackingCard.PlayedType == "Maneuver")
-                {
-                    if (playManager.PlayedCards.GetPenultimateCard.Title == "Irish Whip")
-                    {
-                        return true;
-                    }
-                }
-                break;
-            case "Facebuster":
-                if (playManager.PlayedCards.CardListSize >= 2 && attackingCard.PlayedType == "Maneuver" && playedFrom == "Hand")
-                {
-                    if (playManager.PlayedCards.GetPenultimateCard.Title == "Irish Whip")
-                    {
-                        return true;
-                    }
-                }
-                break;
-            case "Lou Thesz Press":
-                if (playManager.PlayedCards.CardListSize >= 2 && attackingCard.PlayedType == "Maneuver" && playedFrom == "Hand")
-                {
-                    if (playManager.PlayedCards.GetPenultimateCard.Title == "Irish Whip")
-                    {
-                        return true;
-                    }
-                }
-                break;
-            case "Cross Body Block":
-                if (playManager.PlayedCards.CardListSize >= 2 && attackingCard.PlayedType == "Maneuver")
-                {
-                    if (playManager.PlayedCards.GetPenultimateCard.Title == "Irish Whip")
-                    {
-                        return true;
-                    }
-                }
-                break;
-            case "Belly to Belly Suplex" when attackingCard.Title == "Belly to Belly Suplex":
-                return true;
-            case "Vertical Suplex" when attackingCard.Title == "Vertical Suplex":
-                return true;
-            case "Belly to Back Suplex" when attackingCard.Title == "Belly to Back Suplex":
-                return true;
-            case "Ensugiri" when attackingCard.Title == "Kick":
-                return true;
-            case "Drop Kick" when attackingCard.Title == "Drop Kick":
-                return true;
-            case "Double Arm DDT" when attackingCard.Title == "Back Body Drop":
-                return true;
-        }
-
-        return false;
-    }
-    
-    public void ReceiveDamageWithView(int? damage)
-    {
-        _cardMobilizer.MoveCardsFromArsenalToRingSideByDamageAmount(this, damage);
-        _view.SayThatSuperstarWillTakeSomeDamage(GetSuperStarName(), (int)damage);
-    }
-    
-    public void ReceiveDamageWithoutView(int damage)
-    {
-        _cardMobilizer.MoveCardsFromArsenalToRingSideByDamageAmount(this, damage);
+        CardMobilizer.MoveCardsFromArsenalToRingSideByDamageAmount(this, damage);
     }
 
     public int CalculateDamage(Card card)
@@ -420,11 +249,6 @@ public class Player
         }
     }
 
-    public string GetTypeOfPlayedCard(int indexOfCardSelected)
-    {
-        return Hand.GetTypeOfPlayedCard(indexOfCardSelected);
-    }
-
     private void InitializeArsenal(List<Card> deck)
     {
         foreach (Card card in deck)
@@ -448,7 +272,7 @@ public class Player
         SuperStar.AddView(_view);
     }
 
-    public List<Card> GetReversalCards()
+    public List<Card> GetAllReversalCards()
     {
         List<Card> reversalCards = new List<Card>(); 
         foreach (Card card in _allCardsList)
@@ -458,7 +282,6 @@ public class Player
                 reversalCards.Add(card);
             }
         }
-
         return reversalCards;
     }
 }

@@ -22,7 +22,7 @@ public class NextReversalRequiresMoreFortitudeByTypeAndSubtype : Effect
             {
                 throw new InvalidOperationException("Played type, subtype or extraFortitude not set.");
             }
-            List<Card> opponentReversals = CurrentPlayer.GetReversalCards();
+            List<Card> opponentReversals = CurrentPlayer.GetAllReversalCards();
             Card lastCard = currentPlay.GetLastCard();
             if (lastCard.PlayedType != _playedTypeThatAppliesEffect ||
                 !lastCard.Subtypes.Contains(_subtypeThatAppliesEffect))

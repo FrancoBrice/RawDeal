@@ -11,7 +11,7 @@ public class ManeuverInitialEffect : Effect
 
     protected override void ApplyCustomEffect(Play currentPlay)
     {
-        _cardMobilizer.MoveCardFromHandToRingArea(currentPlay.CurrentPlayer, currentPlay.AttackingCardTuple);
+        CardMobilizer.MoveCardFromHandToRingArea(currentPlay.CurrentPlayer, currentPlay.AttackingCardTuple);
         _view.SayThatPlayerSuccessfullyPlayedACard();
     }
 }

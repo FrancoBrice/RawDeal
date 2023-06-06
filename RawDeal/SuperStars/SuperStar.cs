@@ -45,12 +45,13 @@ namespace RawDeal.SuperStars
         protected Card ApplyDamageToOpponent(Player opponentPlayer, int damage)
         {
             Card discartedCard = opponentPlayer.GetCardsFromArsenal(damage)[0];
-            opponentPlayer.ReceiveDamageWithView(1);
+            _view.SayThatSuperstarWillTakeSomeDamage(opponentPlayer.GetSuperStarName(), (int)damage);
+            opponentPlayer.ReceiveDamage(1);
             return discartedCard;
         }
         protected bool DoesPlayerWantToUseAbility(Player player)
         {
-            if (player.Ringside.CardListSize > 0 && !player.HasUsedHisAbilityInTheTurn)
+            if (player.GetRingsideSize() > 0 && !player.HasUsedHisAbilityInTheTurn)
             { 
                 return _view.DoesPlayerWantToUseHisAbility(Name);
             }

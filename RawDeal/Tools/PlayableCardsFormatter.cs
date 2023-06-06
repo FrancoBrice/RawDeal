@@ -8,10 +8,6 @@ public class PlayableCardsFormatter
     public List<(int, Card)> ListOfTuplesOfPlayableCards;
     private Card _currentCard;
     private List<string> _formattedPlayableCards;
-    
-    public PlayableCardsFormatter()
-    {
-    }
 
     public List<string> GetPlayableCards(List<(int, Card)> playableCardsTuples, int fortitude)
     {

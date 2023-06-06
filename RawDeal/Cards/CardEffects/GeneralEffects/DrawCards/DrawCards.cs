@@ -18,7 +18,7 @@ public class DrawCards : Effect
         if (_playerThatMustDraw.GetArsenalSize() >= _numberOfCardsToDraw)
         {
             _view.SayThatPlayerDrawCards(_playerThatMustDraw.GetSuperStarName(), numberOfCardsToDraw: _numberOfCardsToDraw);
-            _cardMobilizer.MoveCardsFromArsenalToHand(_playerThatMustDraw, _numberOfCardsToDraw);
+            CardMobilizer.MoveCardsFromArsenalToHand(_playerThatMustDraw, _numberOfCardsToDraw);
         }
     }
 }

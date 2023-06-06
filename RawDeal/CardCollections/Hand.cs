@@ -29,7 +29,7 @@ public class Hand : CardCollection
         for (int indexInHand = 0; indexInHand < CardList.Count; indexInHand++)
         {
             Card reversalCard = CardList[indexInHand];
-            if (player.IsCorrectReversalCard(playManager, reversalCard, "Hand"))
+            if (ReversalsChecker.IsCorrectReversalCard(playManager, reversalCard, "Hand"))
             {
                 tuplesWithPositionInHandAndReversalCards.Add((indexInHand, reversalCard));
             }
