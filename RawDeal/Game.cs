@@ -20,31 +20,31 @@ public class Game
     public List<DeckValidator> SelectedDecks;
     public Play CurrentPlay;
     public PlayManager PlayManager;
-    private readonly View _view;
+    public readonly View ViewObject;
     private readonly string _deckFolder;
     
-    public Game(View view, string deckFolder)
+    public Game(View viewObject, string deckFolder)
     {
         PlayersList = new List<Player>();
-        _view = view;
+        ViewObject = viewObject;
         AllCardsList = CardsJsonReader.GenerateAllCardsListFromCardsFromJson();
-        SetViewObjectInCards(_view);
+        SetViewObjectInCards(ViewObject);
         AllSuperStarList = SuperstarsJsonReader.GenerateAllSuperStarsListFromJson();
         _deckFolder = deckFolder;
         GameIsOver = false;
         _indexCurrentPlayer = 0;
         _indexNotCurrentPlayer = 1;
         SelectedDecks = new List<DeckValidator>();
-        PlayManager = new PlayManager(_view);
+        PlayManager = new PlayManager(ViewObject);
     }
 
     public void Play()
     {
-        DeckSelector deckSelector= new DeckSelector(this, _view);
+        DeckSelector deckSelector= new DeckSelector(this, ViewObject);
         deckSelector.AskUsersToSelectDecks(_deckFolder);
         if (deckSelector.AreDecksValid())
         {
-            PlayersCreator playersCreator = new PlayersCreator(this, _view);
+            PlayersCreator playersCreator = new PlayersCreator(this, ViewObject);
             playersCreator.CreatePlayers(SelectedDecks);
             OrderPlayersBySuperStarValue();
             ApplyInitialAbilities();
@@ -57,12 +57,11 @@ public class Game
         while (!GameIsOver)
         {
             if (NotCurrentPlayer.HasZeroCardsInArsenal()) EndGame(winnerPlayer: CurrentPlayer);
-            CurrentPlay = new Play(GetDictionaryOfCurrentAndNotCurrentPlayer(), _view);
+            CurrentPlay = new Play(GetDictionaryOfCurrentAndNotCurrentPlayer(), ViewObject);
             PlayManager.AddPlay(CurrentPlay);
-            Console.WriteLine($"jugada creada en game, efectos pendientes {CurrentPlay.PendingEffects.Count}");
             if (!GameIsOver)
             {
-                Turn currentTurn = new Turn(CurrentPlay, _view);
+                Turn currentTurn = new Turn(CurrentPlay, ViewObject);
                 currentTurn.PlayTurn(game: this);
             }
             UpdatePlayersIndex();
@@ -72,7 +71,7 @@ public class Game
     public void EndGame(Player winnerPlayer)
     {
         GameIsOver = true;
-        _view.CongratulateWinner(winnerPlayer.GetSuperStarName());
+        ViewObject.CongratulateWinner(winnerPlayer.GetSuperStarName());
     }
     
     private void ApplyInitialAbilities()

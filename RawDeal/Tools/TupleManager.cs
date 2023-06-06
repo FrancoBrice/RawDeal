@@ -2,13 +2,13 @@ using RawDeal.Cards;
 
 namespace RawDeal.Tools;
 
-public class TupleManager
+public static class TupleManager
 {
-    public Card ExtractCard((int, Card) tuple)
+    public static Card ExtractCard((int, Card) tuple)
     {
         return tuple.Item2;
     }
-    public int ExtractCardIndexInHand((int, Card) tuple)
+    public static int ExtractCardIndex((int, Card) tuple)
     {
         return tuple.Item1;
     }

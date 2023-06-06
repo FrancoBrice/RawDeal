@@ -1,9 +1,8 @@
-using System.Collections;
 using RawDeal.Cards;
 
 namespace RawDeal.CardCollections;
 
-public class CardCollection : IEnumerable
+public class CardCollection 
 {
     public List<Card> CardList;
     public int CardListSize => CardList.Count;
@@ -98,7 +97,6 @@ public class CardCollection : IEnumerable
         }
     }
 
-    
     public Card GetCardByIndex(int index)
     {
         Card card = CardList[index];
@@ -108,11 +106,5 @@ public class CardCollection : IEnumerable
     public void RemoveCardByIndex(int index)
     {
             CardList.RemoveAt(index);
-    }
-
-
-    public IEnumerator GetEnumerator()
-    {
-        throw new NotImplementedException();
     }
 }

@@ -3,11 +3,11 @@ using RawDealView;
 
 namespace RawDeal.Cards.CardEffects.GeneralEffects;
 
-public class ShuffleFromRingsideToHand : Effect
+public class ShuffleFromRingsideToArsenal: Effect
 {
     private int _pretendedNumberCardsToShuffle;
     private int _actualNumberCardsToShuffle;
-    public ShuffleFromRingsideToHand(View view, int pretendedNumberCardsToShuffle) : base(view)
+    public ShuffleFromRingsideToArsenal(View view, int pretendedNumberCardsToShuffle) : base(view)
     {
         _pretendedNumberCardsToShuffle = pretendedNumberCardsToShuffle;
     }
@@ -20,8 +20,8 @@ public class ShuffleFromRingsideToHand : Effect
         int remainingCardsToShuffle = _actualNumberCardsToShuffle;
         for (int i = 0; i < _actualNumberCardsToShuffle; i++)
         {
-            int indexInputByUser = _view.AskPlayerToSelectCardsToPutInHisHand(CurrentPlayer.GetSuperStarName(), remainingCardsToShuffle, CurrentPlayer.Ringside.GetFormattedCards());
-            CurrentPlayer.MoveCardFromRingsideToHandByIndex(indexInputByUser);
+            int indexInputByUser = _view.AskPlayerToSelectCardsToRecover(CurrentPlayer.GetSuperStarName(), remainingCardsToShuffle, CurrentPlayer.Ringside.GetFormattedCards());
+            CurrentPlayer.MoveCardByIndexFromRingsideToArsenalBeginning(indexInputByUser);
             remainingCardsToShuffle--;
         }
     }

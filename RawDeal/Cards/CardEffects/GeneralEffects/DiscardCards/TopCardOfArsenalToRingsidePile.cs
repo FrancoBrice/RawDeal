@@ -6,9 +6,9 @@ namespace RawDeal.Cards.CardEffects.GeneralEffects;
 public class TopCardOfArsenalToRingsidePile : Effect
 {
     CardDamager _cardDamager;
-    public TopCardOfArsenalToRingsidePile(View view, Game game) : base(view)
+    public TopCardOfArsenalToRingsidePile(Game game) : base(game.ViewObject)
     {
-        _cardDamager = new CardDamager(game, _view);
+        _cardDamager = new CardDamager(game, game.ViewObject);
     }
 
     protected override void ApplyCustomEffect(Play currentPlay)

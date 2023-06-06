@@ -105,7 +105,7 @@ public class CardDamager
 
      private void CheckAndApplyReversalByDeck(Card attackingCard, Card damagedCard, int index)
      {
-         EffectAssigner effectAssigner = new EffectAssigner(_game, _view); 
+         EffectAssigner effectAssigner = new EffectAssigner(_game); 
          List<Card> possibleReversals = _notCurrentPlayer.GetReversalsFromArsenal(_game.PlayManager);
          if (possibleReversals.Contains(damagedCard) && _notCurrentPlayer.IsCorrectReversalCard(_game.PlayManager, damagedCard, "Arsenal") && attackingCard.CanBeReversed)
          {

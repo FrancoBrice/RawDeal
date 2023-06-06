@@ -41,12 +41,11 @@ public class PlayManager
     {
         if (_plays.Count < 2) return;
         if (PreviousPlay.PendingEffects.Count < 1) return;
-        if (PreviousPlay.ReversalCard is { Title: "Jockeying for Position" })
-        {
-            var pendingEffect = PreviousPlay.PendingEffects[^1]; 
-            CurrentPlay.AddPendingEffect(pendingEffect);
-            pendingEffect.ApplyEffect(PreviousPlay);
-        }
+        if (PreviousPlay.ReversalCard == null) return;
+        var pendingEffect = PreviousPlay.PendingEffects[^1]; 
+        CurrentPlay.AddPendingEffect(pendingEffect);
+        pendingEffect.ApplyEffect(PreviousPlay);
+        
     }
     
     public void HandleCardAddedToPlayedCards(object sender, Card card)

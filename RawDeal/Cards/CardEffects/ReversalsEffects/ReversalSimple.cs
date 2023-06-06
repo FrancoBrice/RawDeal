@@ -12,8 +12,7 @@ public class ReversalSimple : Effect
 
     protected override void ApplyCustomEffect(Play currentPlay)
     {
-        Console.WriteLine("en efecto reversalsimple");
-        Console.WriteLine(ReversalCard.PlayedFrom);
+        if (ReversalCard.Damage != "#") ReversalCard.SetDefaultValues();
         if (ReversalCard.PlayedFrom == "Hand")
         {
             _cardMobilizer.MoveSpecificCardFromHandToRingside(CurrentPlayer, AttackingCardTuple);

@@ -20,7 +20,6 @@ public class Play
     public Card AttackingCard; 
     public (int,Card) ReversalCardTuple;
     public Card ReversalCard; 
-    private TupleManager _tupleManager;
     public bool IsAPendingEffect;
     public List<Effect> PendingEffects;
     private View _view;
@@ -34,7 +33,6 @@ public class Play
         Players = new List<Player>();
         Players?.AddRange(new[] { CurrentPlayer, NotCurrentPlayer });
         PlayedCards = new CardCollection();
-        _tupleManager = new TupleManager();
         IsAPendingEffect = false;
         PendingEffects = new List<Effect>();
         _view = view;
@@ -43,15 +41,17 @@ public class Play
     public void SetAttackingCardTuple((int, Card) attackingCardTuple)
     {
         AttackingCardTuple = attackingCardTuple;
-        AttackingCard = _tupleManager.ExtractCard(AttackingCardTuple);
+        AttackingCard = TupleManager.ExtractCard(AttackingCardTuple);
         AddCardToPlayedCardsWithPendingEffectsApplied(AttackingCard);
+        CurrentPlayer.TuplesWithPlayIdAndPlayedCards.Add((Id, AttackingCard));
     }
     public void SetReversalCardTuple((int, Card) reversalCardTuple)
     {
         ReversalCardTuple = reversalCardTuple;
-        ReversalCard = _tupleManager.ExtractCard(ReversalCardTuple);
+        ReversalCard = TupleManager.ExtractCard(ReversalCardTuple);
         ReversalCard.PlayedType = "Reversal";
         AddCardToPlayedCardsWithPendingEffectsApplied(ReversalCard);
+        NotCurrentPlayer.TuplesWithPlayIdAndPlayedCards.Add((Id, ReversalCard));
     }
 
     private void AddCardToPlayedCardsWithPendingEffectsApplied(Card card)
@@ -65,10 +65,6 @@ public class Play
     public void ApplyPendingEffects()
     {
         int pendingEffectsCount = PendingEffects.Count;
-        Console.WriteLine($"En play cantidad de efectos pendientes: {pendingEffectsCount}");
-        if (pendingEffectsCount > 0) Console.WriteLine(PendingEffects[^1]);
-        Console.WriteLine(AttackingCard.Title);
-        Console.WriteLine(AttackingCard.GetCurrentDamage(AttackingCard.PlayedType));
         for (int i = 0; i < pendingEffectsCount; i++)
         {
             Effect effect = PendingEffects[i];

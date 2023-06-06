@@ -4,7 +4,6 @@ namespace RawDeal.Tools;
 
 public class PlayableCardsFormatter
 {
-    private TupleManager _tupleManager;
     public List<string> TypesOfPlayableCards;
     public List<(int, Card)> ListOfTuplesOfPlayableCards;
     private Card _currentCard;
@@ -12,7 +11,6 @@ public class PlayableCardsFormatter
     
     public PlayableCardsFormatter()
     {
-        _tupleManager = new TupleManager();
     }
 
     public List<string> GetPlayableCards(List<(int, Card)> playableCardsTuples, int fortitude)
@@ -28,7 +26,7 @@ public class PlayableCardsFormatter
     {
         foreach (var tupleIndexInHandAndCard in playableCardsTuples)
         {
-            _currentCard = _tupleManager.ExtractCard(tupleIndexInHandAndCard);
+            _currentCard = TupleManager.ExtractCard(tupleIndexInHandAndCard);
             if (_currentCard.IsHybrid)
             {
                 AddHybridCardToPlayableCards(tupleIndexInHandAndCard, fortitude);
@@ -76,7 +74,7 @@ public class PlayableCardsFormatter
     
     private string GetCardInPlayFormat((int, Card) tuple, string type)
     {
-        Card card = _tupleManager.ExtractCard(tuple);
+        Card card = TupleManager.ExtractCard(tuple);
         return card.GetCardInPlayFormat(type);
     }
 

@@ -32,11 +32,6 @@ public abstract class Effect
 
     protected abstract void ApplyCustomEffect(Play currentPlay);
 
-    protected bool CanReverseByDamage(int maximumDamageThatCanReverse, int? actualDamage)
-    {
-        return actualDamage <= maximumDamageThatCanReverse;
-    }
-
     private void SetPlayers()
     {
         CurrentPlayer = _currentPlay.CurrentPlayer;

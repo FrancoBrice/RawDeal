@@ -6,24 +6,22 @@ namespace RawDeal.GameLogic;
 
 public class CardMobilizer
 {
-    private TupleManager _tupleManager;
     private View _view; 
     
     public CardMobilizer(View view)
     {
-        _tupleManager = new TupleManager();
         _view = view;
     }
     
     public void MoveCardFromHandToRingArea(Player player, (int, Card) tupleWithIndexInHandAndSelectedCard)
     {
-        int indexInHand = _tupleManager.ExtractCardIndexInHand(tupleWithIndexInHandAndSelectedCard);
+        int indexInHand = TupleManager.ExtractCardIndex(tupleWithIndexInHandAndSelectedCard);
         player.MoveCardFromHandToRingAreaByIndex(indexInHand);
     }
 
     public void MoveSpecificCardFromHandToRingside(Player player, (int, Card) tupleWithIndexInHandAndSelectedCard)
     {
-        int indexInHand = _tupleManager.ExtractCardIndexInHand(tupleWithIndexInHandAndSelectedCard);
+        int indexInHand = TupleManager.ExtractCardIndex(tupleWithIndexInHandAndSelectedCard);
         player.MoveCardFromHandToRingsideByIndex(indexInHand);
     }
 

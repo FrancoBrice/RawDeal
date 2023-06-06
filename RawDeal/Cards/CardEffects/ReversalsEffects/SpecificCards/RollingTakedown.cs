@@ -11,9 +11,8 @@ public class RollingTakedown : Effect
 
     protected override void ApplyCustomEffect(Play currentPlay)
     {
-        const int maximumDamageReversalRollingTakeDown = 7;
-        ReversalWithMaximumDamage reversalWithMaximumDamage = new ReversalWithMaximumDamage(_view, maximumDamageReversalRollingTakeDown);
+        var reversalEffect = new ReversalSimple(_view);
         ReversalCard.SetCurrentDamage(NotCurrentPlayer.CalculateDamage(AttackingCard));
-        reversalWithMaximumDamage.ApplyEffect(currentPlay);
+        reversalEffect.ApplyEffect(currentPlay);
     }
 }

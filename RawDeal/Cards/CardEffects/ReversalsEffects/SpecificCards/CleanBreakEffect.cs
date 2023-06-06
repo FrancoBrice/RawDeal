@@ -12,7 +12,7 @@ public class CleanBreakEffect : Effect
 
     protected override void ApplyCustomEffect(Play currentPlay)
     {
-        ReversalByTitle reversalByTitleEffect = new ReversalByTitle(_view, cardTitleThatCanReverse:"Jockeying for Position");
+        var reversalByTitleEffect = new ReversalSimple(_view);
         reversalByTitleEffect.ApplyEffect(currentPlay);
         const int numberOfCardsThatOpponentMustDiscard = 4;
         _cardMobilizer.MakePlayerDiscardCards(CurrentPlayer, numberOfCardsThatOpponentMustDiscard);

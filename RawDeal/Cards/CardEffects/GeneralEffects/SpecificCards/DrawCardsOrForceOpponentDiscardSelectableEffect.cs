@@ -8,7 +8,7 @@ namespace RawDeal.Cards.CardEffects.SpecificCardEffects;
 public class DrawCardsOrForceOpponentDiscardSelectableEffect : Effect
 {
     private Game _game;
-    public DrawCardsOrForceOpponentDiscardSelectableEffect(View view, Game game) : base(view)
+    public DrawCardsOrForceOpponentDiscardSelectableEffect(Game game) : base(game.ViewObject)
     {
         _game = game;
     }
@@ -23,7 +23,7 @@ public class DrawCardsOrForceOpponentDiscardSelectableEffect : Effect
         }
         else if (selectedEffectBBD == SelectedEffect.ForceOpponentToDiscard)
         {
-            MakePlayerDiscardCard discardCardEffect = new MakePlayerDiscardCard(_view, _game,  playerThatMustDiscard: NotCurrentPlayer, numberOfCardToDiscard: 2);
+            MakePlayerDiscardCard discardCardEffect = new MakePlayerDiscardCard( _game,  playerThatMustDiscard: NotCurrentPlayer, numberOfCardToDiscard: 2);
             discardCardEffect.ApplyEffect(currentPlay);
         }
     }

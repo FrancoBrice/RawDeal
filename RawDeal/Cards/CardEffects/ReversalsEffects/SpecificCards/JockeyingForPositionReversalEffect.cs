@@ -16,7 +16,7 @@ public class JockeyingForPositionReversalEffect : Effect
 
     protected override void ApplyCustomEffect(Play currentPlay)
     {
-        ReversalByTitle cardEffect = new ReversalByTitle(_view,  cardTitleThatCanReverse: "Jockeying for Position");
+        var cardEffect = new ReversalSimple(_view);
         cardEffect.ApplyEffect(currentPlay);
         currentPlay.EndPlay();
         var selectableEffect = new JockeyingForPositionSelectableEffect(_view);

@@ -16,6 +16,7 @@ public class Player
     private RingArea RingArea { get; }
     public List<int> DamagesReceived;
 
+    public List<(int, Card)> TuplesWithPlayIdAndPlayedCards;
     private List<Card> _allCardsList;
     public int Fortitude;
     private View _view;
@@ -23,6 +24,7 @@ public class Player
     public bool HasEndsHisTurn;
     private int _damageReducedByShield;
     private CardMobilizer _cardMobilizer;
+    
 
     public Player(SuperStar superstar, List<Card> cardList, View view)
     {
@@ -42,6 +44,7 @@ public class Player
         _damageReducedByShield = 0;
         _cardMobilizer = new CardMobilizer(_view);
         DamagesReceived = new List<int>();
+        TuplesWithPlayIdAndPlayedCards = new List<(int, Card)>();
     }
 
     private void DistributeOpeningHand()
@@ -242,10 +245,11 @@ public class Player
     {
         Play currentPlay = playManager.CurrentPlay;
         Card attackingCard = currentPlay.AttackingCard;
+        Player playerThatCanReverse = currentPlay.NotCurrentPlayer;
         switch (reversalCard.Title)
         {
             case "Elbow to the Face":
-                if (attackingCard.PlayedType.Contains("Maneuver") && attackingCard.GetCurrentDamage(attackingCard.PlayedType) <= 7)
+                if (attackingCard.PlayedType.Contains("Maneuver") && playerThatCanReverse.CalculateDamage(attackingCard) <= 7)
                 {
                     return true;
                 }

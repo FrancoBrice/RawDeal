@@ -8,7 +8,7 @@ public class MakePlayerDiscardCard : Effect
     private Player _playerThatMustDiscard;
     private int _numberOfCardsToDiscard;
     private Game _game;
-    public MakePlayerDiscardCard(View view, Game game, Player playerThatMustDiscard, int numberOfCardToDiscard) : base(view)
+    public MakePlayerDiscardCard(Game game, Player playerThatMustDiscard, int numberOfCardToDiscard) : base(game.ViewObject)
     {
         _playerThatMustDiscard = playerThatMustDiscard;
         _numberOfCardsToDiscard = numberOfCardToDiscard;

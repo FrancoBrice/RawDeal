@@ -12,9 +12,8 @@ public class KneeToTheGut : Effect
 
     protected override void ApplyCustomEffect(Play currentPlay)
     {
-        const int maximumDamageReversalKneeToTheGut = 7;
-        ReversalWithMaximumDamage reversalWithMaximumDamage = new ReversalWithMaximumDamage(_view, maximumDamageReversalKneeToTheGut);
+        ReversalSimple effect = new ReversalSimple(_view);
         ReversalCard.SetCurrentDamage(NotCurrentPlayer.CalculateDamage(AttackingCard));
-        reversalWithMaximumDamage.ApplyEffect(currentPlay);
+        effect.ApplyEffect(currentPlay);
     }
 }
