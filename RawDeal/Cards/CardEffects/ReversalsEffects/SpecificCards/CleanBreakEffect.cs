@@ -1,8 +1,8 @@
-using RawDeal.Cards.CardEffects.ReversalsEffects;
-using RawDeal.GameLogic;
+using RawDeal.GameLogic.Plays;
+using RawDeal.Tools;
 using RawDealView;
 
-namespace RawDeal.Cards.CardEffects.SpecificCardEffects;
+namespace RawDeal.Cards.CardEffects.ReversalsEffects.SpecificCards;
 
 public class CleanBreakEffect : Effect
 {

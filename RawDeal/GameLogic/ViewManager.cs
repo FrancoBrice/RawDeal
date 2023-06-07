@@ -1,20 +1,17 @@
 using RawDeal.Cards;
+using RawDeal.GameLogic.Players;
+using RawDeal.GameLogic.Plays;
 using RawDealView;
 using RawDealView.Options;
 
 namespace RawDeal.GameLogic;
 
-public class ViewManager
+public static class ViewManager
 {
-    private View _view;
-
-    public ViewManager(View view)
+    private static View _view;
+    public static void ShowDamagedCards(View view, List<Card> damagedCards, int actualDamage)
     {
         _view = view;
-    }
-
-    public void ShowDamagedCards(List<Card> damagedCards, int actualDamage)
-    {
         int indexShowedCard = 1;
         foreach (Card damagedCard in damagedCards)
         {
@@ -23,20 +20,20 @@ public class ViewManager
         }
     }
     
-    public void ShowPlayersInfo(Play currentPlay)
+    public static void ShowPlayersInfo(View view, Play currentPlay)
     {
-        _view.ShowGameInfo(GeneratePlayerInfo(currentPlay.CurrentPlayer), GeneratePlayerInfo(currentPlay.NotCurrentPlayer));
+        view.ShowGameInfo(GeneratePlayerInfo(currentPlay.CurrentPlayer), GeneratePlayerInfo(currentPlay.NotCurrentPlayer));
     }
     
-    public void ShowCardsBasedOnSelection(Play currentPlay)
+    public static void ShowCardsBasedOnSelection(View view, Play currentPlay)
     {
 
-        CardSet setOfCardsSelected = _view.AskUserWhatSetOfCardsHeWantsToSee();
-        List<string> cardstringsList = GetCardsAsStringListFromSelectedSet(currentPlay, setOfCardsSelected);
-        _view.ShowCards(cardstringsList);
+        CardSet setOfCardsSelected = view.AskUserWhatSetOfCardsHeWantsToSee();
+        List<string> cardStringsList = GetCardsAsStringListFromSelectedSet(currentPlay, setOfCardsSelected);
+        view.ShowCards(cardStringsList);
     }
     
-    private List<string> GetCardsAsStringListFromSelectedSet(Play currentPlay, CardSet setOfCardsSelected)
+    private static List<string> GetCardsAsStringListFromSelectedSet(Play currentPlay, CardSet setOfCardsSelected)
     {
         List<string> cardStrings = new List<string>();
         
@@ -58,29 +55,27 @@ public class ViewManager
                 cardStrings = currentPlay.NotCurrentPlayer.GetCardsInStringFormatFromRingside();
                 break;
         }
-        
         return cardStrings;
     }
 
-    private PlayerInfo GeneratePlayerInfo(Player player)
+    private static PlayerInfo GeneratePlayerInfo(Player player)
     {
         return new PlayerInfo(player.GetSuperStarName(), (int)player.Fortitude, player.GetHandSize(),
             player.GetArsenalSize());
     }
 
-    private void ShowCardOverturnByTakingDamage(Card damagedCard, int indexShowedCard, int actualDamage)
+    private static void ShowCardOverturnByTakingDamage(Card damagedCard, int indexShowedCard,
+        int actualDamage)
     {
         string cardFormattedInfo = damagedCard.GetCardFormattedInfo();
         _view.ShowCardOverturnByTakingDamage(cardFormattedInfo, indexShowedCard, actualDamage);
     }
 
-    public void SayPlayerIsTryingToPlayCard(Play currentPlay)
+    public static void SayPlayerIsTryingToPlayCard(View view, Play currentPlay)
     {
         Card selectedCard = currentPlay.GetLastCard();
         string superStarName = currentPlay.CurrentPlayer.GetSuperStarName();
         string cardInPlayFormat = selectedCard.GetCardInPlayFormat(selectedCard.PlayedType);
-        _view.SayThatPlayerIsTryingToPlayThisCard(superStarName, cardInPlayFormat);
+        view.SayThatPlayerIsTryingToPlayThisCard(superStarName, cardInPlayFormat);
     }
-    
-    
 }

@@ -1,8 +1,9 @@
 using RawDeal.CardCollections;
 using RawDeal.Cards;
+using RawDeal.GameLogic.Players;
 using RawDealView;
 
-namespace RawDeal.GameLogic;
+namespace RawDeal.GameLogic.Plays;
 
 public class PlayManager
 {

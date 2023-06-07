@@ -1,10 +1,9 @@
 using RawDeal.Cards;
-using RawDeal.GameLogic;
+using RawDeal.GameLogic.DecksLogic;
 using RawDeal.SuperStars;
-using RawDeal.Tools;
 using RawDealView;
 
-namespace RawDeal;
+namespace RawDeal.GameLogic.Players;
 
 public class PlayersCreator
 {

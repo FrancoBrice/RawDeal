@@ -1,4 +1,5 @@
 using RawDeal.GameLogic;
+using RawDeal.GameLogic.Plays;
 using RawDealView;
 
 namespace RawDeal.Cards.CardEffects.GeneralEffects;
@@ -38,7 +39,7 @@ public class NextCardDamageBonusByTypeAndSubtype : Effect
             Card card = currentPlay.GetLastCard();
             if (card.PlayedType == _playedTypeThatAppliesBonus && (card.Subtypes.Contains(_subtypeThatAppliesBonus) || _subtypeThatAppliesBonus == "All"))
             {
-                card.SetCurrentDamage(card.GetCurrentDamage(card.PlayedType) + _damageBonus);
+                card.SetCurrentDamage(card.GetCurrentDamage() + _damageBonus);
             }
         }
         catch (InvalidOperationException ex)

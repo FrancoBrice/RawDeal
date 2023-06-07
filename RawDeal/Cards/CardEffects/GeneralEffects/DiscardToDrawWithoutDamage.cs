@@ -1,7 +1,8 @@
-using RawDeal.GameLogic;
+using RawDeal.GameLogic.Plays;
+using RawDeal.Tools;
 using RawDealView;
 
-namespace RawDeal.Cards.CardEffects.ActionEffects;
+namespace RawDeal.Cards.CardEffects.GeneralEffects;
 
 public class DiscardToDrawWithoutDamage : Effect
 {

@@ -2,7 +2,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using RawDeal.SuperStars;
 
-namespace RawDeal.JsonReader;
+namespace RawDeal.JsonReaders;
 
 public static class SuperstarsJsonReader
 {

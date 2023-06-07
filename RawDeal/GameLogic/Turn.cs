@@ -1,4 +1,6 @@
 using RawDeal.Cards;
+using RawDeal.GameLogic.Players;
+using RawDeal.GameLogic.Plays;
 using RawDealView;
 using RawDealView.Options;
 
@@ -7,7 +9,6 @@ namespace RawDeal.GameLogic;
 public class Turn
 {
     private View _view;
-    private ViewManager _viewManager;
     private Play _currentPlay;
     private Player _currentPlayer;
     private Player _notCurrentPlayer;
@@ -17,7 +18,6 @@ public class Turn
     public Turn(Play currentPlay, View view)
     {
         _view = view;
-        _viewManager = new ViewManager(_view);
         _currentPlay = currentPlay;
         SetPlayers();
     }
@@ -25,7 +25,7 @@ public class Turn
     public void PlayTurn(Game game)
     {
         _game = game;
-        _view.SayThatATurnBegins(_currentPlayer.SuperStar.Name);
+        _view.SayThatATurnBegins(_currentPlayer.GetSuperStarName());
         ResetPlayerStatusInTurn();
         RunDrawSegment();
         RunTurnLoop();
@@ -48,9 +48,8 @@ public class Turn
         while (!_currentPlayer.HasEndsHisTurn && !_game.GameIsOver)
         {
             ExecuteAutomaticAbilities();
-            _viewManager.ShowPlayersInfo(_currentPlay);
-            UserAsker userAsker = new UserAsker(_view);
-            NextPlay nextPlay = userAsker.GetNextPlay(_currentPlayer);
+            ViewManager.ShowPlayersInfo(_view, _currentPlay);
+            NextPlay nextPlay = UserAsker.GetNextPlay(_view, _currentPlayer);
             ExecuteNextPlay(nextPlay);
             UpdatePlayersFortitude();
             GameEndChecker.CheckForGameOver(_game);
@@ -67,13 +66,13 @@ public class Turn
         if (_currentPlayer.IsAbilityAutomatic()) _currentPlayer.HasUsedHisAbilityInTheTurn = true;
         
     }
-    
+
     private void ExecuteNextPlay(NextPlay nextPlay)
     {
         switch (nextPlay)
         {
             case NextPlay.ShowCards:
-                _viewManager.ShowCardsBasedOnSelection(_currentPlay);
+                ViewManager.ShowCardsBasedOnSelection(_view, _currentPlay);
                 break;
             case NextPlay.PlayCard:
                 _game.MakePlayManagerApplyPendingEffects();

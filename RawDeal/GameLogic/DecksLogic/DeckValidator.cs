@@ -1,8 +1,8 @@
 using RawDeal.Cards;
-using RawDeal.JsonReader;
+using RawDeal.JsonReaders;
 using RawDeal.SuperStars;
 
-namespace RawDeal.Tools;
+namespace RawDeal.GameLogic.DecksLogic;
 
 public class DeckValidator
 {

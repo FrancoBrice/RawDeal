@@ -1,20 +1,20 @@
 using RawDeal.Cards;
-using RawDeal.Tools;
+using RawDeal.GameLogic.Players;
 using RawDealView;
 
-namespace RawDeal.GameLogic;
+namespace RawDeal.Tools;
 
 public static class CardMobilizer
 {
     public static void MoveCardFromHandToRingArea(Player player, (int, Card) tupleWithIndexInHandAndSelectedCard)
     {
-        int indexInHand = TupleManager.ExtractCardIndex(tupleWithIndexInHandAndSelectedCard);
+        int indexInHand = TupleManager.ExtractIndex(tupleWithIndexInHandAndSelectedCard);
         player.MoveCardFromHandToRingAreaByIndex(indexInHand);
     }
 
     public static void MoveSpecificCardFromHandToRingside(Player player, (int, Card) tupleWithIndexInHandAndSelectedCard)
     {
-        int indexInHand = TupleManager.ExtractCardIndex(tupleWithIndexInHandAndSelectedCard);
+        int indexInHand = TupleManager.ExtractIndex(tupleWithIndexInHandAndSelectedCard);
         player.MoveCardFromHandToRingsideByIndex(indexInHand);
     }
 

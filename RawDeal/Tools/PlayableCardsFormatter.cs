@@ -18,6 +18,17 @@ public class PlayableCardsFormatter
         return _formattedPlayableCards;
     }
 
+    public static List<string> GetReversalCards(List<(int, Card)> reversalCardsTuples)
+    {
+        List<string> formattedReversalCards = new List<string>();
+        foreach (var tupleIndexInHandAndCard in reversalCardsTuples)
+        {
+            formattedReversalCards.Add(GetCardInPlayFormat(tupleIndexInHandAndCard, "Reversal"));
+        }
+        
+        return formattedReversalCards;
+    }
+
     private void RunCardAdditionLoop(List<(int, Card)> playableCardsTuples, int fortitude)
     {
         foreach (var tupleIndexInHandAndCard in playableCardsTuples)
@@ -55,20 +66,8 @@ public class PlayableCardsFormatter
             }
         }
     }
-
-
-    public List<string> GetReversalCards(List<(int, Card)> reversalCardsTuples)
-    {
-        List<string> formattedReversalCards = new List<string>();
-        foreach (var tupleIndexInHandAndCard in reversalCardsTuples)
-        {
-            formattedReversalCards.Add(GetCardInPlayFormat(tupleIndexInHandAndCard, "Reversal"));
-        }
-        
-        return formattedReversalCards;
-    }
     
-    private string GetCardInPlayFormat((int, Card) tuple, string type)
+    private static string GetCardInPlayFormat((int, Card) tuple, string type)
     {
         Card card = TupleManager.ExtractCard(tuple);
         return card.GetCardInPlayFormat(type);

@@ -1,4 +1,5 @@
 using RawDeal.GameLogic;
+using RawDeal.GameLogic.Plays;
 using RawDealView;
 
 namespace RawDeal.Cards.CardEffects.GeneralEffects;
@@ -24,7 +25,7 @@ public class DamageBonusIfPlayedAfterSpecificDamageAndType : Effect
         int lastDamage = currentPlay.NotCurrentPlayer.DamagesReceived[^1];
         if (previousCardPlayed.PlayedType == _typeOfPreviusCardThatApliesBonus && lastDamage >= _minimumDamage)
         {
-            attackingCard.SetCurrentDamage(attackingCard.GetCurrentDamage(attackingCard.PlayedType) + _damageBonus);
+            attackingCard.SetCurrentDamage(attackingCard.GetCurrentDamage() + _damageBonus);
         }
     }
 }

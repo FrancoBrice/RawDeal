@@ -1,27 +1,27 @@
 using RawDeal.CardCollections;
 using RawDeal.Cards;
 using RawDeal.Cards.CardPreConditions;
-using RawDeal.GameLogic;
+using RawDeal.GameLogic.Plays;
 using RawDeal.SuperStars;
+using RawDeal.Tools;
 using RawDealView;
 
-namespace RawDeal;
+namespace RawDeal.GameLogic.Players;
 
 public class Player
 {
-    public SuperStar SuperStar { get; }
+    public readonly List<int> DamagesReceived;
+    public readonly List<(int, Card)> TuplesWithPlayIdAndPlayedCards;
+    public int Fortitude;
+    public bool HasUsedHisAbilityInTheTurn;
+    public bool HasEndsHisTurn;
+    private SuperStar SuperStar { get; }
     private Arsenal Arsenal { get; }
     private Ringside Ringside  { get; }
     private Hand Hand { get; }
     private RingArea RingArea { get; }
-    public readonly List<int> DamagesReceived;
-
-    public readonly List<(int, Card)> TuplesWithPlayIdAndPlayedCards;
     private readonly List<Card> _allCardsList;
-    public int Fortitude;
     private readonly View _view;
-    public bool HasUsedHisAbilityInTheTurn;
-    public bool HasEndsHisTurn;
     private int _damageReducedByShield;
     
 
@@ -57,13 +57,11 @@ public class Player
     
     public void MoveCardFromArsenalToHand()
     {
-        if (Arsenal.CardListSize >= 1)
-        {
-            List<Card> drawnCards = Arsenal.GetLastCardsReversed(1);
-            Card drawnCard = drawnCards[0];
-            Hand.AddCard(drawnCard);
-            Arsenal.RemoveLastCard();
-        }
+        if (Arsenal.CardListSize < 1) return;
+        List<Card> drawnCards = Arsenal.GetLastCardsReversed(1);
+        Card drawnCard = drawnCards[0];
+        Hand.AddCard(drawnCard);
+        Arsenal.RemoveLastCard();
     }
     
     public void MoveCardFromHandToRingAreaByIndex(int index)
@@ -137,6 +135,11 @@ public class Player
         return SuperStar.Name;
     }
 
+    public int GetSuperStarValue()
+    {
+        return SuperStar.SuperstarValue;
+    }
+
     public void SetDefaultValuesInCards()
     {
         foreach (Card card in _allCardsList)
@@ -160,7 +163,7 @@ public class Player
         List<Card> validReversals = new List<Card>();
         foreach (Card card in Arsenal.CardList)
         {
-            if (ReversalsChecker.IsCorrectReversalCard(playManager, card, playedFrom: "Arsenal"))
+            if (ReversalsChecker.IsCorrectReversalCard(playManager, card))
             {
                 validReversals.Add(card);
                 card.SetDefaultValues();
@@ -172,11 +175,12 @@ public class Player
     public void ReceiveDamage(int damage)
     {
         CardMobilizer.MoveCardsFromArsenalToRingSideByDamageAmount(this, damage);
+        DamagesReceived.Add(damage);
     }
 
     public int CalculateDamage(Card card)
     {
-        int actualDamage = Math.Max((int)(card.GetCurrentDamage(card.PlayedType) - _damageReducedByShield), 0);
+        int actualDamage = Math.Max((int)(card.GetCurrentDamage() - _damageReducedByShield), 0);
         return actualDamage;
     }
     
@@ -185,13 +189,13 @@ public class Player
         SuperStar.UseAbility(this, opponentPlayer);
         HasUsedHisAbilityInTheTurn = true;
     }
-    
-    public void AddCardToRingArea(Card card)
+
+    private void AddCardToRingArea(Card card)
     {
         RingArea.AddCard(card);
     }
-    
-    public void AddCardToArsenalAtTheBeginning(Card card)
+
+    private void AddCardToArsenalAtTheBeginning(Card card)
     {
         Arsenal.AddCardAtTheBeginning(card);
     }

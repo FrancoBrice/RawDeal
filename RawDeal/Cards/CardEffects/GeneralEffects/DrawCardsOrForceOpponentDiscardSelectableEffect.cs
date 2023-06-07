@@ -1,9 +1,7 @@
-using RawDeal.Cards.CardEffects.GeneralEffects;
-using RawDeal.GameLogic;
-using RawDealView;
+using RawDeal.GameLogic.Plays;
 using RawDealView.Options;
 
-namespace RawDeal.Cards.CardEffects.SpecificCardEffects;
+namespace RawDeal.Cards.CardEffects.GeneralEffects;
 
 public class DrawCardsOrForceOpponentDiscardSelectableEffect : Effect
 {
@@ -18,7 +16,7 @@ public class DrawCardsOrForceOpponentDiscardSelectableEffect : Effect
         SelectedEffect selectedEffectBBD = _view.AskUserToChooseBetweenDrawingOrForcingOpponentToDiscardCards(CurrentPlayer.GetSuperStarName());
         if (selectedEffectBBD == SelectedEffect.DrawCards)
         {
-            DrawCards drawCardsEffect = new DrawCards(_view, playerThatMustDraw: CurrentPlayer, numberOfCardsToDraw: 2);
+            DrawCards.DrawCards drawCardsEffect = new DrawCards.DrawCards(_view, playerThatMustDraw: CurrentPlayer, numberOfCardsToDraw: 2);
             drawCardsEffect.ApplyEffect(currentPlay);
         }
         else if (selectedEffectBBD == SelectedEffect.ForceOpponentToDiscard)

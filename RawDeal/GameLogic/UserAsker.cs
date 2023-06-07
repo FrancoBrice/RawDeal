@@ -1,4 +1,6 @@
 using RawDeal.Cards;
+using RawDeal.GameLogic.Players;
+using RawDeal.GameLogic.Plays;
 using RawDeal.Tools;
 using RawDealView;
 using RawDealView.Options;
@@ -9,8 +11,8 @@ public class UserAsker
 {
     public List<string> TypesOfPlayableCards;
     public List<(int, Card)> ListOfTuplesOfPlayableCards;
-    private PlayableCardsFormatter _playableCardsFormatter;
-    private View _view;
+    private readonly PlayableCardsFormatter _playableCardsFormatter;
+    private readonly View _view;
 
     public UserAsker(View view)
     {
@@ -18,14 +20,14 @@ public class UserAsker
         _view = view;
     }
 
-    public NextPlay GetNextPlay(Player player)
+    public static NextPlay GetNextPlay(View view, Player player)
     {
         bool canUserUseHisAbility = player.CanUseHisAbility();
         if (canUserUseHisAbility && !player.IsAbilityAutomatic())
         {
-            return _view.AskUserWhatToDoWhenUsingHisAbilityIsPossible();
+            return view.AskUserWhatToDoWhenUsingHisAbilityIsPossible();
         }
-        return _view.AskUserWhatToDoWhenHeCannotUseHisAbility();
+        return view.AskUserWhatToDoWhenHeCannotUseHisAbility();
     }
 
     public int SelectACard(PlayManager playManager)
@@ -37,6 +39,4 @@ public class UserAsker
         ListOfTuplesOfPlayableCards = _playableCardsFormatter.ListOfTuplesOfPlayableCards;
         return _view.AskUserToSelectAPlay(playableCardsFormatted);
     }
-    
-    
 }

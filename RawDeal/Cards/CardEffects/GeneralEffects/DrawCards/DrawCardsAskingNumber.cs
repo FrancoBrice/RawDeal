@@ -1,7 +1,9 @@
-using RawDeal.GameLogic;
+using RawDeal.GameLogic.Players;
+using RawDeal.GameLogic.Plays;
+using RawDeal.Tools;
 using RawDealView;
 
-namespace RawDeal.Cards.CardEffects.GeneralEffects;
+namespace RawDeal.Cards.CardEffects.GeneralEffects.DrawCards;
 
 public class DrawCardsAskingNumber : Effect
 {

@@ -1,3 +1,5 @@
+using RawDeal.GameLogic.Players;
+
 namespace RawDeal.SuperStars;
 
 public class Mankind : SuperStar

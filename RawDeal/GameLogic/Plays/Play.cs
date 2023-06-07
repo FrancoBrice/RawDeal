@@ -1,13 +1,11 @@
-using System.Net.Mail;
 using RawDeal.CardCollections;
 using RawDeal.Cards;
 using RawDeal.Cards.CardEffects;
-using RawDeal.Cards.CardEffects.ActionEffects;
-using RawDeal.Cards.CardEffects.GeneralEffects;
+using RawDeal.GameLogic.Players;
 using RawDeal.Tools;
 using RawDealView;
 
-namespace RawDeal.GameLogic;
+namespace RawDeal.GameLogic.Plays;
 
 public class Play
 {

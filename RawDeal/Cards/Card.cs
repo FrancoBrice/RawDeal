@@ -1,5 +1,4 @@
 using Newtonsoft.Json;
-using RawDeal.Cards.CardEffects;
 using RawDeal.GameLogic;
 using RawDealView.Formatters;
 using RawDealView;
@@ -28,13 +27,10 @@ public class Card : IViewableCardInfo
     [JsonProperty("CardEffect")]
     public string CardEffect { get; set; }
     public string PlayedType { get; set; }
-    public string ReversalType { get; set; }
     public string PlayedFrom { get; set; }
 
-    public int? CurrentDamage;
-    public int? CurrentFortitude;
-
-    public Effect Effect { get; set; }
+    private int? _currentDamage;
+    private int? _currentFortitude;
 
     public Card()
     {
@@ -73,80 +69,65 @@ public class Card : IViewableCardInfo
     
     public bool IsTypeReversal => Types.Contains("Reversal");
 
-    public int AmountOfTypes => Types.Count;
-    
     public bool CanBeReversed
     {
         get
         {
-            string[] titlesThatReturnFalse = { "Tree of Woe", "Austin Elbow Smash", "Leaping Knee to the Face" };
-
-            return !titlesThatReturnFalse.Contains(Title);
+            string[] titlesThatCannotReverse = { "Tree of Woe", "Austin Elbow Smash", "Leaping Knee to the Face" };
+            return !titlesThatCannotReverse.Contains(Title);
         }
     }
 
-    public int? GetCurrentDamage(string playedType)
+    public int? GetCurrentDamage()
     {
-        if (Title == "Undertaker's Tombstone Piledriver" && PlayedType == "Action")
+        switch (Title)
         {
-            if (playedType == "Maneuver") return CurrentFortitude;
-            return 0;
+            case "Chop" when PlayedType == "Action":
+            case "Arm Bar Takedown" when PlayedType == "Action":
+            case "Collar & Elbow Lockup" when PlayedType == "Action":
+            case "Undertaker's Tombstone Piledriver" when PlayedType == "Action":
+                return 0;
+            default:
+                return _currentDamage;
         }
-        return CurrentDamage;
     }
     
     public int? GetCurrentFortitude(string playedType)
     {
-        if (Title == "Undertaker's Tombstone Piledriver" )
+        if (Title == "Undertaker's Tombstone Piledriver")
         {
-            if (playedType == "Maneuver") return CurrentFortitude;
+            if (playedType == "Maneuver") return _currentFortitude;
             return 0;
         }
-        return CurrentFortitude;
+        return _currentFortitude;
     }
 
-    public void SetDefaultDamage()
+    private void SetDefaultDamage()
     {
         string cardDamageString = Damage;
-        if (cardDamageString.Contains("#"))
+        if (cardDamageString == "#")
         {
-            CurrentDamage = 0;
+            _currentDamage = 0;
             return;
         }
-        CurrentDamage = Convert.ToInt32(cardDamageString);
-
-
+        _currentDamage = Convert.ToInt32(cardDamageString);
     }
-    
-    public int GetDefaultDamage()
-    {
-        string cardDamageString = Damage;
-        if (cardDamageString.Contains("#"))
-        {
-            return 0;
-        }
-        return Convert.ToInt32(cardDamageString);
 
-
-    }
-    
     private void SetDefaultFortitude()
     {
         string cardFortitudeString = Fortitude;
-        CurrentFortitude = Convert.ToInt32(cardFortitudeString);
+        _currentFortitude = Convert.ToInt32(cardFortitudeString);
     }
 
     public void SetCurrentDamage(int? currentDamage)
     {
-        CurrentDamage = currentDamage;
+        _currentDamage = currentDamage;
     }
     
     public void SetCurrentFortitude(int? currentFortitude)
     {
-        CurrentFortitude = currentFortitude;
+        _currentFortitude = currentFortitude;
     }
-
-
     
     public int GetStunValue()
     {
@@ -179,33 +160,7 @@ public class Card : IViewableCardInfo
     
     public bool CurrentPlayedTypeIsPlayable()
     {
-        return PlayedType == "Maneuver" || PlayedType == "Action";
-    }
-
-    public void SetReversalTypeAndSubtype()
-    {
-        if (!IsTypeReversal) return;
-        PlayedType = "Reversal";
-        if (Subtypes.Contains("ReversalStrike"))
-        {
-            ReversalType = "ReversalStrike";
-        }
-        else if (Subtypes.Contains("ReversalGrapple"))
-        {
-            ReversalType = "ReversalGrapple";
-        }
-        else if (Subtypes.Contains("ReversalSubmission"))
-        {
-            ReversalType = "ReversalSubmission";
-        }
-        else if (Subtypes.Contains("ReversalAction"))
-        {
-            ReversalType = "ReversalAction";
-        }
-        else if (Subtypes.Contains("ReversalSpecial"))
-        {
-            ReversalType = "ReversalSpecial";
-        }
+        return PlayedType is "Maneuver" or "Action";
     }
 
     public void SetDefaultValues()
@@ -213,11 +168,4 @@ public class Card : IViewableCardInfo
         SetDefaultDamage();
         SetDefaultFortitude();
     }
-
-    public void ApplyEffect(Play currentPlay)
-    {
-        Effect.ApplyEffect(currentPlay);
-    }
-
-
 }

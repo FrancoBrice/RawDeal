@@ -1,10 +1,13 @@
 using System.Reflection.Metadata;
-using RawDeal.Cards.CardEffects.ActionEffects;
 using RawDeal.Cards.CardEffects.GeneralEffects;
+using RawDeal.Cards.CardEffects.GeneralEffects.DiscardCards;
+using RawDeal.Cards.CardEffects.GeneralEffects.DrawCards;
+using RawDeal.Cards.CardEffects.GeneralEffects.SpecificCards;
 using RawDeal.Cards.CardEffects.ReversalsEffects;
 using RawDeal.Cards.CardEffects.ReversalsEffects.SpecificCards;
-using RawDeal.Cards.CardEffects.SpecificCardEffects;
 using RawDeal.GameLogic;
+using RawDeal.GameLogic.Players;
+using RawDeal.GameLogic.Plays;
 using RawDealView;
 using RawDealView.Options;
 
@@ -17,10 +20,28 @@ public static class EffectAssigner
     private static Game _game;
     private static Play _currentPlay;
     private static View _view;
-    
-    public static List<Effect> AssignManeuverEffect(Game game)
+
+    public static List<Effect> AssignEffect(Game game, Card card)
     {
         SetObjects(game);
+        List<Effect> assignedEffects = new List<Effect>();
+        switch (card.PlayedType) 
+        { 
+            case "Maneuver": 
+                assignedEffects = AssignManeuverEffect(); 
+                break; 
+            case "Action": 
+                assignedEffects = AssignActionEffect(); 
+                break;
+            case "Reversal":
+                assignedEffects = AssignReversalEffect();
+                break;
+        }
+        return assignedEffects;
+    }
+
+    private static List<Effect> AssignManeuverEffect()
+    {
         Card attackingCard = _currentPlay.AttackingCard; 
         List<Effect> effectsAssigned = new List<Effect> { new ManeuverInitialEffect(_view) };
         switch (attackingCard.Title)
@@ -41,14 +62,17 @@ public static class EffectAssigner
             case "Figure Four Leg Lock":
             case "Lionsault":
             case "Leaping Knee to the Face":
-                effectsAssigned.Add(new MakePlayerDiscardCard(_game, playerThatMustDiscard: _notCurrentPlayer, numberOfCardToDiscard: 1));
+                effectsAssigned.Add(new MakePlayerDiscardCard(_game, playerThatMustDiscard: _notCurrentPlayer,
+                    numberOfCardToDiscard: 1));
                 break;
             case "Pump Handle Slam":
             case "Tree of Woe":
-                effectsAssigned.Add(new MakePlayerDiscardCard(_game, playerThatMustDiscard: _notCurrentPlayer, numberOfCardToDiscard: 2));
+                effectsAssigned.Add(new MakePlayerDiscardCard(_game, playerThatMustDiscard: _notCurrentPlayer,
+                    numberOfCardToDiscard: 2));
                 break;
             case "Bulldog":
-                effectsAssigned.Add(new MakePlayerDiscardCard(_game, playerThatMustDiscard: _currentPlayer, numberOfCardToDiscard: 1));
+                effectsAssigned.Add(new MakePlayerDiscardCard(_game, playerThatMustDiscard: _currentPlayer,
+                    numberOfCardToDiscard: 1));
                 effectsAssigned.Add( new DiscardCardFromOpponentsHand(view: _view));
                 break;
             case "Kick":
@@ -57,7 +81,8 @@ public static class EffectAssigner
                 break;
             case "Double Leg Takedown":
             case "Reverse DDT":
-                effectsAssigned.Add(new DrawCardsAskingNumber(_view, playerThatMustDraw: _currentPlayer, numberOfCardsToDraw: 1));
+                effectsAssigned.Add(new DrawCardsAskingNumber(_view, playerThatMustDraw: _currentPlayer,
+                    numberOfCardsToDraw: 1));
                 break;
             case "Headlock Takedown":
             case "Standing Side Headlock":
@@ -66,7 +91,8 @@ public static class EffectAssigner
                 break;
             case "Fisherman's Suplex":
                 effectsAssigned.Add(new TopCardOfArsenalToRingsidePile(_game));
-                effectsAssigned.Add(new DrawCardsAskingNumber(_view, playerThatMustDraw: _currentPlayer, numberOfCardsToDraw: 1));
+                effectsAssigned.Add(new DrawCardsAskingNumber(_view, playerThatMustDraw: _currentPlayer,
+                    numberOfCardsToDraw: 1));
                 break;
             case "Press Slam":
             case "DDT":
@@ -74,8 +100,10 @@ public static class EffectAssigner
                 effectsAssigned.Add(new MakePlayerDiscardCard(_game, _notCurrentPlayer,  numberOfCardToDiscard: 2));
                 break;
             case "Guillotine Stretch":
-                effectsAssigned.Add(new MakePlayerDiscardCard(_game, playerThatMustDiscard: _notCurrentPlayer, numberOfCardToDiscard: 1));
-                effectsAssigned.Add( new DrawCardsAskingNumber(_view, playerThatMustDraw: _currentPlayer, numberOfCardsToDraw: 1));
+                effectsAssigned.Add(new MakePlayerDiscardCard(_game, playerThatMustDiscard: _notCurrentPlayer,
+                    numberOfCardToDiscard: 1));
+                effectsAssigned.Add(new DrawCardsAskingNumber(_view, playerThatMustDraw: _currentPlayer,
+                    numberOfCardsToDraw: 1));
                 break;
             case "Chicken Wing":
                 effectsAssigned.Add(new ShuffleFromRingsideToArsenal(_view, pretendedNumberCardsToShuffle: 2));
@@ -91,7 +119,8 @@ public static class EffectAssigner
                 effectsAssigned.Add(new EffectForTheRestOfTheTurn(_view, _currentPlay, haymakerEffect));
                 break;
             case "Superkick":
-                effectsAssigned.Add(new DamageBonusIfPlayedAfterSpecificDamageAndType(_view, damageBonus: 5, minimumDamage: 5, typeOfPreviousCardThatAppliesBonus: "Maneuver"));
+                effectsAssigned.Add(new DamageBonusIfPlayedAfterSpecificDamageAndType(_view, damageBonus: 5,
+                    minimumDamage: 5, typeOfPreviousCardThatAppliesBonus: "Maneuver"));
                 break;
             case "Clothesline":
             case "Atomic Drop":
@@ -110,9 +139,8 @@ public static class EffectAssigner
         return effectsAssigned;
     }
 
-    public static List<Effect> AssignActionEffect(Game game)
+    private static List<Effect> AssignActionEffect()
     {
-        SetObjects(game);
         Card card = _currentPlay.AttackingCard;
         List<Effect> effectsAssigned = new List<Effect>();
         _view.SayThatPlayerSuccessfullyPlayedACard();
@@ -188,9 +216,8 @@ public static class EffectAssigner
         return effectsAssigned;
     }
 
-    public static List<Effect> AssignReversalEffect(Game game)
+    private static List<Effect> AssignReversalEffect()
     {
-        SetObjects(game);
         Card selectedCard = _currentPlay.ReversalCard;
         List<Effect> effectsAssigned = new List<Effect>();
         switch (selectedCard.Title)

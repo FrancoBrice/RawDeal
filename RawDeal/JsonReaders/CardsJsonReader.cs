@@ -1,7 +1,7 @@
 using Newtonsoft.Json;
 using RawDeal.Cards;
 
-namespace RawDeal.JsonReader;
+namespace RawDeal.JsonReaders;
 
 public static class CardsJsonReader
 {

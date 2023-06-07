@@ -1,6 +1,8 @@
 using RawDeal.Cards;
 using RawDeal.Cards.CardPreConditions;
 using RawDeal.GameLogic;
+using RawDeal.GameLogic.Players;
+using RawDeal.GameLogic.Plays;
 
 namespace RawDeal.CardCollections;
 
@@ -14,7 +16,7 @@ public class Hand : CardCollection
         for (int indexInHand = 0; indexInHand < CardList.Count; indexInHand++)
         {
             Card card = CardList[indexInHand];
-            if (card.GetCurrentFortitude("") <= fortitude && card.TypeIsPlayable() && CardPreConditionChecker.IsPlayableCard(card, playManager))
+            if (card.GetCurrentFortitude("") <= fortitude && card.TypeIsPlayable() && PreConditionChecker.IsPlayableCard(card, playManager))
             {
                 tuplesWithPositionInHandAndPlayableCards.Add((indexInHand, card));
             }
@@ -29,7 +31,8 @@ public class Hand : CardCollection
         for (int indexInHand = 0; indexInHand < CardList.Count; indexInHand++)
         {
             Card reversalCard = CardList[indexInHand];
-            if (ReversalsChecker.IsCorrectReversalCard(playManager, reversalCard, "Hand"))
+            reversalCard.PlayedFrom = "Hand";
+            if (ReversalsChecker.IsCorrectReversalCard(playManager, reversalCard))
             {
                 tuplesWithPositionInHandAndReversalCards.Add((indexInHand, reversalCard));
             }

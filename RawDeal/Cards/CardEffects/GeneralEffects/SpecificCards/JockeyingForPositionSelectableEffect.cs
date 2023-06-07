@@ -1,10 +1,8 @@
-using RawDeal.Cards.CardEffects.ActionEffects;
-using RawDeal.Cards.CardEffects.GeneralEffects;
-using RawDeal.GameLogic;
+using RawDeal.GameLogic.Plays;
 using RawDealView;
 using RawDealView.Options;
 
-namespace RawDeal.Cards.CardEffects.SpecificCardEffects;
+namespace RawDeal.Cards.CardEffects.GeneralEffects.SpecificCards;
 
 public class JockeyingForPositionSelectableEffect : Effect
 {

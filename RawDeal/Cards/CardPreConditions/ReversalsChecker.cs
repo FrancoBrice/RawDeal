@@ -1,154 +1,115 @@
+using RawDeal.CardCollections;
 using RawDeal.GameLogic;
+using RawDeal.GameLogic.Players;
+using RawDeal.GameLogic.Plays;
 
 namespace RawDeal.Cards.CardPreConditions;
 
 public static class ReversalsChecker
 {
-    public static bool IsCorrectReversalCard(PlayManager playManager, Card reversalCard, string playedFrom)
+    public static bool IsCorrectReversalCard(PlayManager playManager, Card reversalCard)
     {
         Play currentPlay = playManager.CurrentPlay;
         Card attackingCard = currentPlay.AttackingCard;
-        Player playerThatCanReverse = currentPlay.NotCurrentPlayer;
-        if (reversalCard.GetCurrentFortitude(reversalCard.PlayedType) > playerThatCanReverse.Fortitude)
+        Player damagedPlayer = currentPlay.NotCurrentPlayer;
+        if (!attackingCard.CanBeReversed) return false;
+        if (reversalCard.GetCurrentFortitude(reversalCard.PlayedType) > damagedPlayer.Fortitude)
         {
             return false;
         }
         if (reversalCard.Subtypes.Contains("ReversalStrike"))
         {
-            if (attackingCard.PlayedType.Contains("Maneuver") && attackingCard.Subtypes.Contains("Strike"))
+            if (attackingCard.PlayedType == "Maneuver" && 
+                attackingCard.Subtypes.Contains("Strike"))
             {
                 return true;
             }
         }
-        if (reversalCard.Subtypes.Contains("ReversalGrapple"))
+        else if (reversalCard.Subtypes.Contains("ReversalGrapple") && 
+                 attackingCard.PlayedType =="Maneuver" && 
+                attackingCard.Subtypes.Contains("Grapple"))
+        { 
+            return true;
+        }
+        else if (reversalCard.Subtypes.Contains("ReversalSubmission") && 
+                 attackingCard.PlayedType == "Maneuver" && 
+                 attackingCard.Subtypes.Contains("Submission"))
         {
-            if (attackingCard.PlayedType.Contains("Maneuver") && attackingCard.Subtypes.Contains("Grapple"))
-            {
+            return true;
+        }
+        else if (reversalCard.Subtypes.Contains("ReversalAction") &&
+                 attackingCard.PlayedType == "Action")
+        {
+            return true;
+        }
+        else if (reversalCard.Subtypes.Contains("ReversalGrappleSpecial"))
+        {
+            const int maximumDamageThatCanReverse = 7;
+            if (attackingCard.PlayedType == "Maneuver" && 
+                attackingCard.Subtypes.Contains("Grapple") && 
+                attackingCard.GetCurrentDamage() <= maximumDamageThatCanReverse)
+            { 
                 return true;
             }
-        } 
-        if (reversalCard.Subtypes.Contains("ReversalSubmission"))
+        }
+        else if (reversalCard.Subtypes.Contains("ReversalStrikeSpecial"))
         {
-            if (attackingCard.PlayedType.Contains("Maneuver") && attackingCard.Subtypes.Contains("Submission"))
-            {
+            const int maximumDamageThatCanReverse = 7;
+            if (attackingCard.PlayedType == "Maneuver" && 
+                attackingCard.Subtypes.Contains("Strike") && 
+                attackingCard.GetCurrentDamage() <= maximumDamageThatCanReverse) 
+            { 
                 return true;
             }
         }
-        if (reversalCard.Subtypes.Contains("ReversalAction"))
+        else if (reversalCard.Subtypes.Contains("ReversalSpecial"))
         {
-            if (attackingCard.PlayedType.Contains("Action"))
-            {
-                return true;
-            }
+            return IsValidTheConditionOfReversalSpecial(playManager, reversalCard);
         }
-        
-        if (reversalCard.Subtypes.Contains("ReversalGrappleSpecial"))
-        {
-            if (attackingCard.PlayedType.Contains("Maneuver") && attackingCard.Subtypes.Contains("Grapple"))
-            {
-                const int maximumDamageThatCanReverse = 7;
-                if (attackingCard.GetCurrentDamage(attackingCard.PlayedType) <= maximumDamageThatCanReverse)
-                {
-                    return true;
-                }
-            }
-        }
-        
-        if (reversalCard.Subtypes.Contains("ReversalStrikeSpecial"))
-        {
-            if (attackingCard.PlayedType.Contains("Maneuver") && attackingCard.Subtypes.Contains("Strike"))
-            {
-                const int maximumDamageThatCanReverse = 7;
-                if (attackingCard.GetCurrentDamage(attackingCard.PlayedType) <= maximumDamageThatCanReverse)
-                {
-                    return true;
-                }
-            }
-        }
-        
-        if (reversalCard.Subtypes.Contains("ReversalSpecial"))
-        {
-            return IsValidTheConditionOfReversalSpecial(playManager, reversalCard, playedFrom);
-        }
-
         return false;
 
     }
 
-    private static bool IsValidTheConditionOfReversalSpecial(PlayManager playManager, Card reversalCard, string playedFrom)
+    private static bool IsValidTheConditionOfReversalSpecial(PlayManager playManager, Card reversalCard)
     {
         Play currentPlay = playManager.CurrentPlay;
         Card attackingCard = currentPlay.AttackingCard;
         Player playerThatCanReverse = currentPlay.NotCurrentPlayer;
+        CardCollection allPlayedCards = playManager.PlayedCards;
         switch (reversalCard.Title)
         {
             case "Elbow to the Face":
-                if (attackingCard.PlayedType.Contains("Maneuver") && playerThatCanReverse.CalculateDamage(attackingCard) <= 7)
+                if (attackingCard.PlayedType == "Maneuver" && 
+                    playerThatCanReverse.CalculateDamage(attackingCard) <= 7)
                 {
                     return true;
                 }
                 break;
-            case "Manager Interferes":
-                if (attackingCard.PlayedType.Contains("Maneuver"))
-                {
-                    return true;
-                }
-                break;
-            case "Chyna Interferes":
-                if (attackingCard.PlayedType.Contains("Maneuver"))
-                {
-                    return true;
-                }
-                break;
-            case "Clean Break" when attackingCard.Title == "Jockeying for Position":
+            case "Manager Interferes" when attackingCard.PlayedType == "Maneuver":
+            case "Chyna Interferes" when attackingCard.PlayedType == "Maneuver":
                 return true;
+            case "Clean Break" when attackingCard.Title == "Jockeying for Position":
             case "Jockeying for Position" when attackingCard.Title == "Jockeying for Position":
                 return true;
             case "Irish Whip" when attackingCard.Title == "Irish Whip":
                 return true;
             case "Shoulder Block":
-                if (playManager.PlayedCards.CardListSize >= 2 && attackingCard.PlayedType == "Maneuver")
-                {
-                    if (playManager.PlayedCards.GetPenultimateCard.Title == "Irish Whip")
-                    {
-                        return true;
-                    }
-                }
-                break;
             case "Spear":
-                if (playManager.PlayedCards.CardListSize >= 2 && attackingCard.PlayedType == "Maneuver")
+            case "Cross Body Block":
+                if (allPlayedCards.CardListSize >= 2 &&
+                    attackingCard.PlayedType == "Maneuver" &&
+                    allPlayedCards.GetPenultimateCard.Title == "Irish Whip")
                 {
-                    if (playManager.PlayedCards.GetPenultimateCard.Title == "Irish Whip")
-                    {
-                        return true;
-                    }
+                    return true;
                 }
                 break;
             case "Facebuster":
-                if (playManager.PlayedCards.CardListSize >= 2 && attackingCard.PlayedType == "Maneuver" && playedFrom == "Hand")
-                {
-                    if (playManager.PlayedCards.GetPenultimateCard.Title == "Irish Whip")
-                    {
-                        return true;
-                    }
-                }
-                break;
             case "Lou Thesz Press":
-                if (playManager.PlayedCards.CardListSize >= 2 && attackingCard.PlayedType == "Maneuver" && playedFrom == "Hand")
+                if (playManager.PlayedCards.CardListSize >= 2 && 
+                    attackingCard.PlayedType == "Maneuver" && reversalCard.PlayedFrom == "Hand" && 
+                    allPlayedCards.GetPenultimateCard.Title == "Irish Whip") 
                 {
-                    if (playManager.PlayedCards.GetPenultimateCard.Title == "Irish Whip")
-                    {
-                        return true;
-                    }
-                }
-                break;
-            case "Cross Body Block":
-                if (playManager.PlayedCards.CardListSize >= 2 && attackingCard.PlayedType == "Maneuver")
-                {
-                    if (playManager.PlayedCards.GetPenultimateCard.Title == "Irish Whip")
-                    {
-                        return true;
-                    }
+                    return true;
                 }
                 break;
             case "Belly to Belly Suplex" when attackingCard.Title == "Belly to Belly Suplex":

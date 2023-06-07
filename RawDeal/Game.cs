@@ -1,6 +1,9 @@
 using RawDeal.Cards;
 using RawDeal.GameLogic;
-using RawDeal.JsonReader;
+using RawDeal.GameLogic.DecksLogic;
+using RawDeal.GameLogic.Players;
+using RawDeal.GameLogic.Plays;
+using RawDeal.JsonReaders;
 using RawDeal.SuperStars;
 using RawDeal.Tools;
 using RawDealView;
@@ -41,14 +44,12 @@ public class Game
     {
         DeckSelector deckSelector= new DeckSelector(this, ViewObject);
         deckSelector.AskUsersToSelectDecks(_deckFolder);
-        if (deckSelector.AreDecksValid())
-        {
-            PlayersCreator playersCreator = new PlayersCreator(this, ViewObject);
-            playersCreator.CreatePlayers(SelectedDecks);
-            OrderPlayersBySuperStarValue();
-            ApplyInitialAbilities();
-            RunGameLoop();
-        }
+        if (!deckSelector.AreDecksValid()) return;
+        PlayersCreator playersCreator = new PlayersCreator(this, ViewObject);
+        playersCreator.CreatePlayers(SelectedDecks);
+        OrderPlayersBySuperStarValue();
+        ApplyInitialAbilities();
+        RunGameLoop();
     }
     
     private void RunGameLoop()
@@ -99,7 +100,7 @@ public class Game
 
     private void OrderPlayersBySuperStarValue()
     {
-        if (PlayersList[1].SuperStar.SuperstarValue > PlayersList[0].SuperStar.SuperstarValue)
+        if (PlayersList[1].GetSuperStarValue() > PlayersList[0].GetSuperStarValue())
         {
             ExchangePlayersPositions(PlayersList);
         }
@@ -117,7 +118,6 @@ public class Game
             { "CurrentPlayer", CurrentPlayer },
             { "NotCurrentPlayer", NotCurrentPlayer }
         };
-
         return players;
     }
 }
