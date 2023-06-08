@@ -1,4 +1,3 @@
-using RawDeal.GameLogic;
 using RawDeal.GameLogic.Players;
 using RawDeal.GameLogic.Plays;
 using RawDealView;
@@ -7,13 +6,13 @@ namespace RawDeal.Cards.CardEffects;
 
 public abstract class Effect
 {
+    private protected readonly View _view;
     private Play _currentPlay;
+    private protected Card AttackingCard;
+    private protected (int, Card) AttackingCardTuple;
     private protected Player CurrentPlayer;
     private protected Player NotCurrentPlayer;
-    private protected Card AttackingCard;
     private protected Card ReversalCard;
-    private protected readonly View _view;
-    private protected (int, Card) AttackingCardTuple;
     private protected (int, Card) ReversalCardTuple;
 
     protected Effect(View view)

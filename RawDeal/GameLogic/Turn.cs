@@ -8,12 +8,12 @@ namespace RawDeal.GameLogic;
 
 public class Turn
 {
-    private View _view;
-    private Play _currentPlay;
+    private readonly Play _currentPlay;
     private Player _currentPlayer;
-    private Player _notCurrentPlayer;
     private Game _game;
-    
+    private Player _notCurrentPlayer;
+    private readonly View _view;
+
 
     public Turn(Play currentPlay, View view)
     {
@@ -21,7 +21,7 @@ public class Turn
         _currentPlay = currentPlay;
         SetPlayers();
     }
-    
+
     public void PlayTurn(Game game)
     {
         _game = game;
@@ -29,20 +29,19 @@ public class Turn
         ResetPlayerStatusInTurn();
         RunDrawSegment();
         RunTurnLoop();
-
     }
-    
+
     private void ResetPlayerStatusInTurn()
     {
         _currentPlayer.HasUsedHisAbilityInTheTurn = false;
         _currentPlayer.HasEndsHisTurn = false;
     }
-    
+
     private void RunDrawSegment()
     {
         _currentPlayer.MoveCardFromArsenalToHand();
     }
-    
+
     private void RunTurnLoop()
     {
         while (!_currentPlayer.HasEndsHisTurn && !_game.GameIsOver)
@@ -53,18 +52,14 @@ public class Turn
             ExecuteNextPlay(nextPlay);
             UpdatePlayersFortitude();
             GameEndChecker.CheckForGameOver(_game);
-
         }
     }
-    
+
     private void ExecuteAutomaticAbilities()
     {
         if (_currentPlayer.CanUseHisAbility() && _currentPlayer.IsAbilityAutomatic())
-        {
             _currentPlayer.UseSuperStarAbility(_notCurrentPlayer);
-        }
         if (_currentPlayer.IsAbilityAutomatic()) _currentPlayer.HasUsedHisAbilityInTheTurn = true;
-        
     }
 
     private void ExecuteNextPlay(NextPlay nextPlay)
@@ -76,7 +71,7 @@ public class Turn
                 break;
             case NextPlay.PlayCard:
                 _game.MakePlayManagerApplyPendingEffects();
-                CardPlayer cardPlayer = new CardPlayer(_game, _view);
+                CardPlayer cardPlayer = new(_game, _view);
                 cardPlayer.PlayCard(_game.PlayManager);
                 break;
             case NextPlay.UseAbility:
@@ -86,22 +81,20 @@ public class Turn
                 _currentPlayer.HasEndsHisTurn = true;
                 break;
             case NextPlay.GiveUp:
-                _game.EndGame(winnerPlayer: _notCurrentPlayer);
+                _game.EndGame(_notCurrentPlayer);
                 break;
         }
     }
-    
+
     private void UpdatePlayersFortitude()
     {
         _currentPlayer.UpdateFortitude();
         _notCurrentPlayer.UpdateFortitude();
-        
     }
-    
+
     private void SetPlayers()
     {
         _currentPlayer = _currentPlay.CurrentPlayer;
         _notCurrentPlayer = _currentPlay.NotCurrentPlayer;
     }
-    
 }

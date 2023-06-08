@@ -1,40 +1,15 @@
 using Newtonsoft.Json;
-using RawDeal.GameLogic;
 using RawDealView.Formatters;
-using RawDealView;
 
 namespace RawDeal.Cards;
+
 public class Card : IViewableCardInfo
 {
-    [JsonProperty("Title")]
-    public string Title { get; set; }
-
-    [JsonProperty("Types")]
-    public List<string> Types { get; set; }
-
-    [JsonProperty("Subtypes")]
-    public List<string> Subtypes { get; set; }
-
-    [JsonProperty("Fortitude")]
-    public string Fortitude { get; set; }
-
-    [JsonProperty("Damage")]
-    public string Damage { get; set; }
-
-    [JsonProperty("StunValue")]
-    public string StunValue { get; set; }
-
-    [JsonProperty("CardEffect")]
-    public string CardEffect { get; set; }
-    public string PlayedType { get; set; }
-    public string PlayedFrom { get; set; }
-
     private int? _currentDamage;
     private int? _currentFortitude;
 
     public Card()
     {
-        
     }
 
     public Card(IViewableCardInfo cardInfo)
@@ -48,34 +23,52 @@ public class Card : IViewableCardInfo
         CardEffect = cardInfo.CardEffect;
     }
 
-    public string GetCardFormattedInfo()
-    
-    {   
-        return Formatter.CardToString(this);
-    }
+    public string PlayedType { get; set; }
+    public string PlayedFrom { get; set; }
 
-    public string GetCardInPlayFormat(string typeOfCardPlayedAs)
-    {
-        PlayInfo playInfo = new PlayInfo(this, typeOfCardPlayedAs.ToUpper());
-        return playInfo.GetCardInPlayFormat();
-    }
-    
     public bool ItsTypeManeuver => Types.Contains("Maneuver");
 
     public bool IsTypeAction => Types.Contains("Action");
-    
-    
+
+
     public bool IsHybrid => Types.Count > 1;
-    
+
     public bool IsTypeReversal => Types.Contains("Reversal");
 
     public bool CanBeReversed
     {
         get
         {
-            string[] titlesThatCannotReverse = { "Tree of Woe", "Austin Elbow Smash", "Leaping Knee to the Face" };
+            string[] titlesThatCannotReverse =
+                { "Tree of Woe", "Austin Elbow Smash", "Leaping Knee to the Face" };
             return !titlesThatCannotReverse.Contains(Title);
         }
+    }
+
+    [JsonProperty("Title")] public string Title { get; set; }
+
+    [JsonProperty("Types")] public List<string> Types { get; set; }
+
+    [JsonProperty("Subtypes")] public List<string> Subtypes { get; set; }
+
+    [JsonProperty("Fortitude")] public string Fortitude { get; set; }
+
+    [JsonProperty("Damage")] public string Damage { get; set; }
+
+    [JsonProperty("StunValue")] public string StunValue { get; set; }
+
+    [JsonProperty("CardEffect")] public string CardEffect { get; set; }
+
+    public string GetCardFormattedInfo()
+
+    {
+        return Formatter.CardToString(this);
+    }
+
+    public string GetCardInPlayFormat(string typeOfCardPlayedAs)
+    {
+        PlayInfo playInfo = new(this, typeOfCardPlayedAs.ToUpper());
+        return playInfo.GetCardInPlayFormat();
     }
 
     public int? GetCurrentDamage()
@@ -91,7 +84,7 @@ public class Card : IViewableCardInfo
                 return _currentDamage;
         }
     }
-    
+
     public int? GetCurrentFortitude(string playedType)
     {
         if (Title == "Undertaker's Tombstone Piledriver")
@@ -99,6 +92,7 @@ public class Card : IViewableCardInfo
             if (playedType == "Maneuver") return _currentFortitude;
             return 0;
         }
+
         return _currentFortitude;
     }
 
@@ -110,6 +104,7 @@ public class Card : IViewableCardInfo
             _currentDamage = 0;
             return;
         }
+
         _currentDamage = Convert.ToInt32(cardDamageString);
     }
 
@@ -123,12 +118,12 @@ public class Card : IViewableCardInfo
     {
         _currentDamage = currentDamage;
     }
-    
+
     public void SetCurrentFortitude(int? currentFortitude)
     {
         _currentFortitude = currentFortitude;
     }
-    
+
     public int GetStunValue()
     {
         return Convert.ToInt32(StunValue);
@@ -148,16 +143,17 @@ public class Card : IViewableCardInfo
     {
         return Subtypes.Contains("Heel");
     }
+
     public bool HasSubtypeFace()
     {
         return Subtypes.Contains("Face");
     }
-    
+
     public bool TypeIsPlayable()
     {
         return ItsTypeManeuver || IsTypeAction;
     }
-    
+
     public bool CurrentPlayedTypeIsPlayable()
     {
         return PlayedType is "Maneuver" or "Action";

@@ -5,13 +5,12 @@ using RawDealView;
 
 namespace RawDeal.Cards.CardEffects.GeneralEffects.DrawCards;
 
-public class DrawCardsAskingNumber : Effect
+public class PlayerDrawCards : Effect
 {
     private readonly int _numberOfCardsToDraw;
     private readonly Player _playerThatMustDraw;
 
-    public DrawCardsAskingNumber(View view, Player playerThatMustDraw, int numberOfCardsToDraw) :
-        base(view)
+    public PlayerDrawCards(View view, Player playerThatMustDraw, int numberOfCardsToDraw) : base(view)
     {
         _playerThatMustDraw = playerThatMustDraw;
         _numberOfCardsToDraw = numberOfCardsToDraw;
@@ -19,12 +18,9 @@ public class DrawCardsAskingNumber : Effect
 
     protected override void ApplyCustomEffect(Play currentPlay)
     {
-        int actualNumberOfCardToDraw =
-            _view.AskHowManyCardsToDrawBecauseOfACardEffect(_playerThatMustDraw.GetSuperStarName(),
-                _numberOfCardsToDraw);
         if (_playerThatMustDraw.GetArsenalSize() < _numberOfCardsToDraw) return;
         _view.SayThatPlayerDrawCards(_playerThatMustDraw.GetSuperStarName(),
-            actualNumberOfCardToDraw);
-        CardMobilizer.MoveCardsFromArsenalToHand(_playerThatMustDraw, actualNumberOfCardToDraw);
+            _numberOfCardsToDraw);
+        CardMobilizer.MoveCardsFromArsenalToHand(_playerThatMustDraw, _numberOfCardsToDraw);
     }
 }

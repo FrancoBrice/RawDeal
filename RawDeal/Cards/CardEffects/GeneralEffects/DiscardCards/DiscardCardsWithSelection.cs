@@ -7,8 +7,10 @@ namespace RawDeal.Cards.CardEffects.GeneralEffects.DiscardCards;
 public class DiscardCardsWithSelection : Effect
 {
     private readonly int _numberOfCardsToDiscard;
-    private Player _playerThatMustDiscard;
-    public DiscardCardsWithSelection(View view, Player player, int numberOfCardsToDiscard) : base(view)
+    private readonly Player _playerThatMustDiscard;
+
+    public DiscardCardsWithSelection(View view, Player player, int numberOfCardsToDiscard) :
+        base(view)
     {
         _numberOfCardsToDiscard = numberOfCardsToDiscard;
         _playerThatMustDiscard = player;
@@ -19,9 +21,11 @@ public class DiscardCardsWithSelection : Effect
         int remainingCardToDiscard = _numberOfCardsToDiscard;
         for (int i = 0; i < _numberOfCardsToDiscard; i++)
         {
-            
-            int indexCardFromHand = _view.AskPlayerToSelectACardToDiscard(_playerThatMustDiscard.GetCardsInStringFormatFromHand(), _playerThatMustDiscard.GetSuperStarName(),
-                _playerThatMustDiscard.GetSuperStarName(), remainingCardToDiscard);
+            int indexCardFromHand = _view.AskPlayerToSelectACardToDiscard(
+                _playerThatMustDiscard.GetCardsInStringFormatFromHand(),
+                _playerThatMustDiscard.GetSuperStarName(),
+                _playerThatMustDiscard.GetSuperStarName(), 
+                remainingCardToDiscard);
             _playerThatMustDiscard.MoveCardFromHandToRingsideByIndex(indexCardFromHand);
             remainingCardToDiscard--;
         }

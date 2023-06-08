@@ -1,5 +1,4 @@
 using RawDeal.CardCollections;
-using RawDeal.GameLogic;
 using RawDeal.GameLogic.Players;
 using RawDeal.GameLogic.Plays;
 
@@ -14,25 +13,21 @@ public static class ReversalsChecker
         Player damagedPlayer = currentPlay.NotCurrentPlayer;
         if (!attackingCard.CanBeReversed) return false;
         if (reversalCard.GetCurrentFortitude(reversalCard.PlayedType) > damagedPlayer.Fortitude)
-        {
             return false;
-        }
         if (reversalCard.Subtypes.Contains("ReversalStrike"))
         {
-            if (attackingCard.PlayedType == "Maneuver" && 
+            if (attackingCard.PlayedType == "Maneuver" &&
                 attackingCard.Subtypes.Contains("Strike"))
-            {
                 return true;
-            }
         }
-        else if (reversalCard.Subtypes.Contains("ReversalGrapple") && 
-                 attackingCard.PlayedType =="Maneuver" && 
-                attackingCard.Subtypes.Contains("Grapple"))
-        { 
+        else if (reversalCard.Subtypes.Contains("ReversalGrapple") &&
+                 attackingCard.PlayedType == "Maneuver" &&
+                 attackingCard.Subtypes.Contains("Grapple"))
+        {
             return true;
         }
-        else if (reversalCard.Subtypes.Contains("ReversalSubmission") && 
-                 attackingCard.PlayedType == "Maneuver" && 
+        else if (reversalCard.Subtypes.Contains("ReversalSubmission") &&
+                 attackingCard.PlayedType == "Maneuver" &&
                  attackingCard.Subtypes.Contains("Submission"))
         {
             return true;
@@ -45,32 +40,29 @@ public static class ReversalsChecker
         else if (reversalCard.Subtypes.Contains("ReversalGrappleSpecial"))
         {
             const int maximumDamageThatCanReverse = 7;
-            if (attackingCard.PlayedType == "Maneuver" && 
-                attackingCard.Subtypes.Contains("Grapple") && 
+            if (attackingCard.PlayedType == "Maneuver" &&
+                attackingCard.Subtypes.Contains("Grapple") &&
                 attackingCard.GetCurrentDamage() <= maximumDamageThatCanReverse)
-            { 
                 return true;
-            }
         }
         else if (reversalCard.Subtypes.Contains("ReversalStrikeSpecial"))
         {
             const int maximumDamageThatCanReverse = 7;
-            if (attackingCard.PlayedType == "Maneuver" && 
-                attackingCard.Subtypes.Contains("Strike") && 
-                attackingCard.GetCurrentDamage() <= maximumDamageThatCanReverse) 
-            { 
+            if (attackingCard.PlayedType == "Maneuver" &&
+                attackingCard.Subtypes.Contains("Strike") &&
+                attackingCard.GetCurrentDamage() <= maximumDamageThatCanReverse)
                 return true;
-            }
         }
         else if (reversalCard.Subtypes.Contains("ReversalSpecial"))
         {
             return IsValidTheConditionOfReversalSpecial(playManager, reversalCard);
         }
-        return false;
 
+        return false;
     }
 
-    private static bool IsValidTheConditionOfReversalSpecial(PlayManager playManager, Card reversalCard)
+    private static bool IsValidTheConditionOfReversalSpecial(PlayManager playManager,
+        Card reversalCard)
     {
         Play currentPlay = playManager.CurrentPlay;
         Card attackingCard = currentPlay.AttackingCard;
@@ -79,11 +71,9 @@ public static class ReversalsChecker
         switch (reversalCard.Title)
         {
             case "Elbow to the Face":
-                if (attackingCard.PlayedType == "Maneuver" && 
+                if (attackingCard.PlayedType == "Maneuver" &&
                     playerThatCanReverse.CalculateDamage(attackingCard) <= 7)
-                {
                     return true;
-                }
                 break;
             case "Manager Interferes" when attackingCard.PlayedType == "Maneuver":
             case "Chyna Interferes" when attackingCard.PlayedType == "Maneuver":
@@ -99,18 +89,14 @@ public static class ReversalsChecker
                 if (allPlayedCards.CardListSize >= 2 &&
                     attackingCard.PlayedType == "Maneuver" &&
                     allPlayedCards.GetPenultimateCard.Title == "Irish Whip")
-                {
                     return true;
-                }
                 break;
             case "Facebuster":
             case "Lou Thesz Press":
-                if (playManager.PlayedCards.CardListSize >= 2 && 
-                    attackingCard.PlayedType == "Maneuver" && reversalCard.PlayedFrom == "Hand" && 
-                    allPlayedCards.GetPenultimateCard.Title == "Irish Whip") 
-                {
+                if (playManager.PlayedCards.CardListSize >= 2 &&
+                    attackingCard.PlayedType == "Maneuver" && reversalCard.PlayedFrom == "Hand" &&
+                    allPlayedCards.GetPenultimateCard.Title == "Irish Whip")
                     return true;
-                }
                 break;
             case "Belly to Belly Suplex" when attackingCard.Title == "Belly to Belly Suplex":
                 return true;
@@ -125,6 +111,7 @@ public static class ReversalsChecker
             case "Double Arm DDT" when attackingCard.Title == "Back Body Drop":
                 return true;
         }
+
         return false;
     }
 }

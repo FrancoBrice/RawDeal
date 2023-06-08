@@ -10,10 +10,7 @@ public static class CardsJsonReader
         string pathCardsJson = Path.Combine("data", "cards.json");
         string allCardsJson = File.ReadAllText(pathCardsJson);
         List<Card> allCardsList = JsonConvert.DeserializeObject<List<Card>>(allCardsJson);
-        foreach (var card in allCardsList)
-        {
-            card.SetDefaultValues();
-        }
+        foreach (Card card in allCardsList) card.SetDefaultValues();
         return allCardsList;
     }
 }

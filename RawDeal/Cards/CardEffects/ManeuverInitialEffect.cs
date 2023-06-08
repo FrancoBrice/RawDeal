@@ -1,4 +1,3 @@
-using RawDeal.GameLogic;
 using RawDeal.GameLogic.Plays;
 using RawDeal.Tools;
 using RawDealView;
@@ -13,7 +12,7 @@ public class ManeuverInitialEffect : Effect
 
     protected override void ApplyCustomEffect(Play currentPlay)
     {
-        CardMobilizer.MoveCardFromHandToRingArea(currentPlay.CurrentPlayer, currentPlay.AttackingCardTuple);
+        CardMobilizer.MoveCardFromHandToRingArea(CurrentPlayer, AttackingCardTuple);
         _view.SayThatPlayerSuccessfullyPlayedACard();
     }
 }

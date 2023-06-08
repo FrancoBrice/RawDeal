@@ -5,27 +5,22 @@ using RawDeal.GameLogic.Players;
 using RawDeal.GameLogic.Plays;
 using RawDeal.JsonReaders;
 using RawDeal.SuperStars;
-using RawDeal.Tools;
 using RawDealView;
 
 namespace RawDeal;
 
-public class Game 
+public class Game
 {
-    public List<Card> AllCardsList { get; }
-    public List<SuperStar> AllSuperStarList { get; }
+    private readonly string _deckFolder;
     public readonly List<Player> PlayersList;
-    public bool GameIsOver;
+    public readonly PlayManager PlayManager;
+    public readonly List<DeckValidator> SelectedDecks;
+    public readonly View ViewObject;
     private int _indexCurrentPlayer;
     private int _indexNotCurrentPlayer;
-    public Player CurrentPlayer => PlayersList[_indexCurrentPlayer];
-    public Player NotCurrentPlayer => PlayersList[_indexNotCurrentPlayer];
-    public readonly List<DeckValidator> SelectedDecks;
     public Play CurrentPlay;
-    public readonly PlayManager PlayManager;
-    public readonly View ViewObject;
-    private readonly string _deckFolder;
-    
+    public bool GameIsOver;
+
     public Game(View viewObject, string deckFolder)
     {
         PlayersList = new List<Player>();
@@ -40,30 +35,36 @@ public class Game
         PlayManager = new PlayManager(ViewObject);
     }
 
+    public List<Card> AllCardsList { get; }
+    public List<SuperStar> AllSuperStarList { get; }
+    public Player CurrentPlayer => PlayersList[_indexCurrentPlayer];
+    public Player NotCurrentPlayer => PlayersList[_indexNotCurrentPlayer];
+
     public void Play()
     {
-        DeckSelector deckSelector= new DeckSelector(this, ViewObject);
+        DeckSelector deckSelector = new(this, ViewObject);
         deckSelector.AskUsersToSelectDecks(_deckFolder);
         if (!deckSelector.AreDecksValid()) return;
-        PlayersCreator playersCreator = new PlayersCreator(this, ViewObject);
+        PlayersCreator playersCreator = new(this, ViewObject);
         playersCreator.CreatePlayers(SelectedDecks);
         OrderPlayersBySuperStarValue();
         ApplyInitialAbilities();
         RunGameLoop();
     }
-    
+
     private void RunGameLoop()
     {
         while (!GameIsOver)
         {
-            if (NotCurrentPlayer.HasZeroCardsInArsenal()) EndGame(winnerPlayer: CurrentPlayer);
+            if (NotCurrentPlayer.HasZeroCardsInArsenal()) EndGame(CurrentPlayer);
             CurrentPlay = new Play(GetDictionaryOfCurrentAndNotCurrentPlayer(), ViewObject);
             PlayManager.AddPlay(CurrentPlay);
             if (!GameIsOver)
             {
-                Turn currentTurn = new Turn(CurrentPlay, ViewObject);
-                currentTurn.PlayTurn(game: this);
+                Turn currentTurn = new(CurrentPlay, ViewObject);
+                currentTurn.PlayTurn(this);
             }
+
             UpdatePlayersIndex();
         }
     }
@@ -73,20 +74,17 @@ public class Game
         GameIsOver = true;
         ViewObject.CongratulateWinner(winnerPlayer.GetSuperStarName());
     }
-    
+
     private void ApplyInitialAbilities()
     {
-        foreach (Player player in PlayersList)
-        {
-            player.ExecuteInitialAbility();
-        }
+        foreach (Player player in PlayersList) player.ExecuteInitialAbility();
     }
 
     public void MakePlayManagerApplyPendingEffects()
     {
         PlayManager.ApplyPendingEffectsIfPossible();
     }
-    
+
     public void MakePlayManagerRemoveEffectsOnCards()
     {
         PlayManager.RemoveEffectsOnCards();
@@ -101,9 +99,7 @@ public class Game
     private void OrderPlayersBySuperStarValue()
     {
         if (PlayersList[1].GetSuperStarValue() > PlayersList[0].GetSuperStarValue())
-        {
             ExchangePlayersPositions(PlayersList);
-        }
     }
 
     private static void ExchangePlayersPositions<TPlayer>(List<TPlayer> playersList)
@@ -113,7 +109,7 @@ public class Game
 
     public Dictionary<string, Player> GetDictionaryOfCurrentAndNotCurrentPlayer()
     {
-        Dictionary<string, Player> players = new Dictionary<string, Player>
+        Dictionary<string, Player> players = new()
         {
             { "CurrentPlayer", CurrentPlayer },
             { "NotCurrentPlayer", NotCurrentPlayer }

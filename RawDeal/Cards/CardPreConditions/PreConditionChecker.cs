@@ -11,7 +11,7 @@ public static class PreConditionChecker
         Play currentPlay = playManager.CurrentPlay;
         Player currentPlayer = currentPlay.CurrentPlayer;
         Player notCurrentPlayer = currentPlay.NotCurrentPlayer;
-        Card lastCardPlayed = new Card();
+        Card lastCardPlayed = new();
         if (currentPlay.PlayedCards.CardListSize >= 1) lastCardPlayed = currentPlay.GetLastCard();
         switch (cardToCheck.Title)
         {
@@ -21,7 +21,7 @@ public static class PreConditionChecker
                 bool hasNotPlayedMoreThanOneCard =
                     currentPlayer.TuplesWithPlayIdAndPlayedCards.Count < 1;
                 if (hasNotPlayedMoreThanOneCard) return false;
-                var lastCardPlayedTuple = currentPlayer.TuplesWithPlayIdAndPlayedCards[^1];
+                (int, Card) lastCardPlayedTuple = currentPlayer.TuplesWithPlayIdAndPlayedCards[^1];
                 string titleOfLastCardPlayed = TupleManager.ExtractCard(lastCardPlayedTuple).Title;
                 int playId = TupleManager.ExtractIndex(lastCardPlayedTuple);
                 bool cardWasPlayedInCurrenOrPreviousPlay = playId > currentPlay.Id - 2;

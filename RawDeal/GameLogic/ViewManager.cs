@@ -9,6 +9,7 @@ namespace RawDeal.GameLogic;
 public static class ViewManager
 {
     private static View _view;
+
     public static void ShowDamagedCards(View view, List<Card> damagedCards, int actualDamage)
     {
         _view = view;
@@ -19,24 +20,26 @@ public static class ViewManager
             indexShowedCard++;
         }
     }
-    
+
     public static void ShowPlayersInfo(View view, Play currentPlay)
     {
-        view.ShowGameInfo(GeneratePlayerInfo(currentPlay.CurrentPlayer), GeneratePlayerInfo(currentPlay.NotCurrentPlayer));
+        view.ShowGameInfo(GeneratePlayerInfo(currentPlay.CurrentPlayer),
+            GeneratePlayerInfo(currentPlay.NotCurrentPlayer));
     }
-    
+
     public static void ShowCardsBasedOnSelection(View view, Play currentPlay)
     {
-
         CardSet setOfCardsSelected = view.AskUserWhatSetOfCardsHeWantsToSee();
-        List<string> cardStringsList = GetCardsAsStringListFromSelectedSet(currentPlay, setOfCardsSelected);
+        List<string> cardStringsList =
+            GetCardsAsStringListFromSelectedSet(currentPlay, setOfCardsSelected);
         view.ShowCards(cardStringsList);
     }
-    
-    private static List<string> GetCardsAsStringListFromSelectedSet(Play currentPlay, CardSet setOfCardsSelected)
+
+    private static List<string> GetCardsAsStringListFromSelectedSet(Play currentPlay,
+        CardSet setOfCardsSelected)
     {
-        List<string> cardStrings = new List<string>();
-        
+        List<string> cardStrings = new();
+
         switch (setOfCardsSelected)
         {
             case CardSet.RingArea:
@@ -55,12 +58,13 @@ public static class ViewManager
                 cardStrings = currentPlay.NotCurrentPlayer.GetCardsInStringFormatFromRingside();
                 break;
         }
+
         return cardStrings;
     }
 
     private static PlayerInfo GeneratePlayerInfo(Player player)
     {
-        return new PlayerInfo(player.GetSuperStarName(), (int)player.Fortitude, player.GetHandSize(),
+        return new PlayerInfo(player.GetSuperStarName(), player.Fortitude, player.GetHandSize(),
             player.GetArsenalSize());
     }
 

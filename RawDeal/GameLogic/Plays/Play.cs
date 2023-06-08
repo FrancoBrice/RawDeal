@@ -9,20 +9,18 @@ namespace RawDeal.GameLogic.Plays;
 
 public class Play
 {
-    public int Id;
-    public Player CurrentPlayer;
-    public Player NotCurrentPlayer;
-    public List<Player> Players;
-    public CardCollection PlayedCards; 
-    public (int,Card) AttackingCardTuple ;
-    public Card AttackingCard; 
-    public (int,Card) ReversalCardTuple;
-    public Card ReversalCard; 
-    public bool IsAPendingEffect;
-    public List<Effect> PendingEffects;
     private View _view;
-    public int PlayedCardsCount => PlayedCards.CardList.Count;
-    public event EventHandler<Card> CardAddedToPlayedCards;
+    public Card AttackingCard;
+    public (int, Card) AttackingCardTuple;
+    public Player CurrentPlayer;
+    public int Id;
+    public bool IsAPendingEffect;
+    public Player NotCurrentPlayer;
+    public List<Effect> PendingEffects;
+    public CardCollection PlayedCards;
+    public List<Player> Players;
+    public Card ReversalCard;
+    public (int, Card) ReversalCardTuple;
 
     public Play(Dictionary<string, Player> playersDictionary, View view)
     {
@@ -36,6 +34,9 @@ public class Play
         _view = view;
     }
 
+    public int PlayedCardsCount => PlayedCards.CardList.Count;
+    public event EventHandler<Card> CardAddedToPlayedCards;
+
     public void SetAttackingCardTuple((int, Card) attackingCardTuple)
     {
         AttackingCardTuple = attackingCardTuple;
@@ -43,6 +44,7 @@ public class Play
         AddCardToPlayedCardsWithPendingEffectsApplied(AttackingCard);
         CurrentPlayer.TuplesWithPlayIdAndPlayedCards.Add((Id, AttackingCard));
     }
+
     public void SetReversalCardTuple((int, Card) reversalCardTuple)
     {
         ReversalCardTuple = reversalCardTuple;
@@ -57,7 +59,6 @@ public class Play
         PlayedCards.AddCard(card);
         if (IsAPendingEffect) ApplyPendingEffects();
         CardAddedToPlayedCards?.Invoke(this, card);
-
     }
 
     public void ApplyPendingEffects()
@@ -66,7 +67,7 @@ public class Play
         for (int i = 0; i < pendingEffectsCount; i++)
         {
             Effect effect = PendingEffects[i];
-            effect.ApplyEffect(currentPlay: this);
+            effect.ApplyEffect(this);
             i--;
             pendingEffectsCount--;
         }
@@ -79,10 +80,7 @@ public class Play
 
     public void EndPlay()
     {
-        foreach (Card card in PlayedCards.CardList)
-        {
-            card.SetDefaultValues();
-        }
+        foreach (Card card in PlayedCards.CardList) card.SetDefaultValues();
         SwapCurrentAndNotCurrentPlayer();
     }
 
@@ -96,6 +94,4 @@ public class Play
         PendingEffects.Add(pendingEffect);
         IsAPendingEffect = true;
     }
-    
-    
 }

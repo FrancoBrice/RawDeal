@@ -8,6 +8,7 @@ public static class TupleManager
     {
         return tuple.Item2;
     }
+
     public static int ExtractIndex((int, Card) tuple)
     {
         return tuple.Item1;

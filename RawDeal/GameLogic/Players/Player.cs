@@ -13,18 +13,17 @@ public class Player
     public readonly List<int> DamagesReceived;
     public readonly List<(int, Card)> TuplesWithPlayIdAndPlayedCards;
     public int Fortitude;
-    public bool HasUsedHisAbilityInTheTurn;
     public bool HasEndsHisTurn;
-    private SuperStar SuperStar { get; }
-    private Arsenal Arsenal { get; }
-    private Ringside Ringside  { get; }
-    private Hand Hand { get; }
-    private RingArea RingArea { get; }
+    public bool HasUsedHisAbilityInTheTurn;
+    private int _damageReducedByShield;
     private readonly List<Card> _allCardsList;
     private readonly View _view;
-    private int _damageReducedByShield;
+    private SuperStar SuperStar { get; }
+    private Arsenal Arsenal { get; }
+    private Ringside Ringside { get; }
+    private Hand Hand { get; }
+    private RingArea RingArea { get; }
     
-
     public Player(SuperStar superstar, List<Card> cardList, View view)
     {
         _view = view;
@@ -54,7 +53,7 @@ public class Player
             Arsenal.RemoveLastCard();
         }
     }
-    
+
     public void MoveCardFromArsenalToHand()
     {
         if (Arsenal.CardListSize < 1) return;
@@ -63,27 +62,28 @@ public class Player
         Hand.AddCard(drawnCard);
         Arsenal.RemoveLastCard();
     }
-    
+
     public void MoveCardFromHandToRingAreaByIndex(int index)
     {
         Card card = Hand.GetCardByIndex(index);
         Hand.RemoveCardByIndex(index);
         AddCardToRingArea(card);
     }
+
     public void MoveCardByIndexFromRingsideToArsenalBeginning(int index)
     {
         Card card = Ringside.GetCardByIndex(index);
         Ringside.RemoveCardByIndex(index);
         AddCardToArsenalAtTheBeginning(card);
     }
-    
+
     public void MoveCardFromHandToRingsideByIndex(int indexCardFromHand)
     {
         Card card = Hand.GetCardByIndex(indexCardFromHand);
         Hand.RemoveCardByIndex(indexCardFromHand);
         AddCardToRingside(card);
     }
-    
+
     public void MoveCardFromRingsideToHandByIndex(int indexCardFromRingside)
     {
         Card card = Ringside.GetCardByIndex(indexCardFromRingside);
@@ -102,24 +102,24 @@ public class Player
     {
         return Hand.GetFormattedCards();
     }
-    
+
     public List<string> GetCardsInStringFormatFromRingside()
     {
         return Ringside.GetFormattedCards();
     }
-    
+
     public List<string> GetCardsInStringFormatFromRingArea()
     {
         return RingArea.GetFormattedCards();
     }
-    
+
     public List<Card> GetCardsFromArsenal(int damage)
     {
         if (damage > Arsenal.CardListSize) damage = Arsenal.CardListSize;
         List<Card> topCardsOfArsenal = Arsenal.GetLastCardsReversed(damage);
-        return topCardsOfArsenal; 
+        return topCardsOfArsenal;
     }
-    
+
     public int GetHandSize()
     {
         return Hand.CardListSize;
@@ -129,7 +129,7 @@ public class Player
     {
         return Arsenal.CardListSize;
     }
-    
+
     public string GetSuperStarName()
     {
         return SuperStar.Name;
@@ -142,10 +142,7 @@ public class Player
 
     public void SetDefaultValuesInCards()
     {
-        foreach (Card card in _allCardsList)
-        {
-            card.SetDefaultValues();
-        }
+        foreach (Card card in _allCardsList) card.SetDefaultValues();
     }
 
     public List<(int, Card)> GetPlayableCardsFromPlayer(PlayManager playManager)
@@ -157,18 +154,16 @@ public class Player
     {
         return Hand.GetTuplesWithPositionInHandAndReversalCards(this, playManager);
     }
-    
+
     public List<Card> GetReversalsFromArsenal(PlayManager playManager)
     {
-        List<Card> validReversals = new List<Card>();
+        List<Card> validReversals = new();
         foreach (Card card in Arsenal.CardList)
-        {
             if (ReversalsChecker.IsCorrectReversalCard(playManager, card))
             {
                 validReversals.Add(card);
                 card.SetDefaultValues();
             }
-        }
         return validReversals;
     }
 
@@ -183,7 +178,7 @@ public class Player
         int actualDamage = Math.Max((int)(card.GetCurrentDamage() - _damageReducedByShield), 0);
         return actualDamage;
     }
-    
+
     public void UseSuperStarAbility(Player opponentPlayer)
     {
         SuperStar.UseAbility(this, opponentPlayer);
@@ -199,7 +194,7 @@ public class Player
     {
         Arsenal.AddCardAtTheBeginning(card);
     }
-    
+
     public void AddCardToHand(Card card)
     {
         Hand.AddCard(card);
@@ -219,12 +214,12 @@ public class Player
     {
         return Arsenal.CardListSize == 0;
     }
-    
+
     public bool CanUseHisAbility()
     {
         return SuperStar.CanUseAbility(this);
     }
-    
+
     public bool IsAbilityAutomatic()
     {
         return SuperStar.IsAbilityAutomatic();
@@ -239,7 +234,7 @@ public class Player
     {
         return SuperStar.SuperstarAbility;
     }
-    
+
     public void SetShieldOfDamage(int amountOfDamageShield)
     {
         _damageReducedByShield = amountOfDamageShield;
@@ -247,23 +242,17 @@ public class Player
 
     public void ExecuteInitialAbility()
     {
-        if (SuperStar.HasInitialAbility)
-        {
-            SuperStar.UseInitialAbility(this);
-        }
+        if (SuperStar.HasInitialAbility) SuperStar.UseInitialAbility(this);
     }
 
     private void InitializeArsenal(List<Card> deck)
     {
-        foreach (Card card in deck)
-        {
-            Arsenal.AddCard(card);
-        }
+        foreach (Card card in deck) Arsenal.AddCard(card);
     }
-    
+
     public void RemoveLastCardFromArsenal()
     {
-        Arsenal.RemoveLastCard(); 
+        Arsenal.RemoveLastCard();
     }
 
     public List<Card> GetLastCardsFromArsenalReversed(int? numberOfCards)
@@ -278,14 +267,6 @@ public class Player
 
     public List<Card> GetAllReversalCards()
     {
-        List<Card> reversalCards = new List<Card>(); 
-        foreach (Card card in _allCardsList)
-        {
-            if (card.IsTypeReversal)
-            {
-                reversalCards.Add(card);
-            }
-        }
-        return reversalCards;
+        return _allCardsList.Where(card => card.IsTypeReversal).ToList();
     }
 }

@@ -1,3 +1,4 @@
+using RawDeal.Cards.CardEffects.GeneralEffects.EffectsForNextCards;
 using RawDeal.GameLogic.Plays;
 using RawDealView;
 using RawDealView.Options;
@@ -12,17 +13,20 @@ public class JockeyingForPositionSelectableEffect : Effect
 
     protected override void ApplyCustomEffect(Play currentPlay)
     {
-        SelectedEffect selectedEffect = _view.AskUserToSelectAnEffectForJockeyForPosition(CurrentPlayer.GetSuperStarName());
+        SelectedEffect selectedEffect =
+            _view.AskUserToSelectAnEffectForJockeyForPosition(CurrentPlayer.GetSuperStarName());
         if (selectedEffect == SelectedEffect.NextGrappleIsPlus4D)
         {
-            var effect = new NextCardDamageBonusByTypeAndSubtype(_view);
+            NextCardDamageBonusByTypeAndSubtype effect =
+                new NextCardDamageBonusByTypeAndSubtype(_view);
             effect.SetTypeAndSubtypeThatAppliesBonus(type: "Maneuver", subtype: "Grapple");
-            effect.SetDamageBonus(bonus: 4);
+            effect.SetDamageBonus(4);
             currentPlay.AddPendingEffect(effect);
         }
         else if (selectedEffect == SelectedEffect.NextGrapplesReversalIsPlus8F)
         {
-            var effect = new NextReversalRequiresMoreFortitudeByTypeAndSubtype(_view);
+            NextReversalRequiresMoreFortitudeByTypeAndSubtype effect =
+                new NextReversalRequiresMoreFortitudeByTypeAndSubtype(_view);
             effect.SetPlayedTypeThatAppliesExtraFortitude("Maneuver");
             effect.SetSubtypeThatAppliesExtraFortitude("Grapple");
             effect.SetExtraFortitude(8);

@@ -1,5 +1,4 @@
 using RawDeal.Cards.CardEffects;
-using RawDeal.Cards.CardEffects.GeneralEffects;
 using RawDeal.GameLogic;
 using RawDeal.GameLogic.Players;
 using RawDeal.GameLogic.Plays;
@@ -10,15 +9,14 @@ namespace RawDeal.Cards;
 
 public class CardPlayer
 {
-    private Game _game;
+    private readonly CardDamager _cardDamager;
+    private readonly Play _currentPlay;
     private Player _currentPlayer;
-    private Player _notCurrentPlayer;
-    private Play _currentPlay;
-    private List<string> _typesOfPlayableCards;
+    private readonly Game _game;
     private List<(int, Card)> _listOfTuplesOfPlayableCards;
-    private View _view;
-    private UserAsker _userAsker;
-    private CardDamager _cardDamager;
+    private readonly Player _notCurrentPlayer;
+    private readonly UserAsker _userAsker;
+    private readonly View _view;
 
     public CardPlayer(Game game, View view)
     {
@@ -30,8 +28,8 @@ public class CardPlayer
         _userAsker = new UserAsker(_view);
         _cardDamager = new CardDamager(_game, _view);
     }
-    
-    public void PlayCard(PlayManager gamePlayManager) 
+
+    public void PlayCard(PlayManager gamePlayManager)
     {
         int selectedCardIndex = _userAsker.SelectACard(gamePlayManager);
         if (selectedCardIndex == -1) return;
@@ -43,7 +41,8 @@ public class CardPlayer
 
     private Card SetAttackingCardWithPlayedType(int selectedCardIndex)
     {
-        (int, Card) tupleWithIndexInHandAndAttackingCard = _userAsker.ListOfTuplesOfPlayableCards[selectedCardIndex];
+        (int, Card) tupleWithIndexInHandAndAttackingCard =
+            _userAsker.ListOfTuplesOfPlayableCards[selectedCardIndex];
         Card attackingCard = TupleManager.ExtractCard(tupleWithIndexInHandAndAttackingCard);
         attackingCard.PlayedType = _userAsker.TypesOfPlayableCards[selectedCardIndex];
         _currentPlay.SetAttackingCardTuple(tupleWithIndexInHandAndAttackingCard);
@@ -52,35 +51,38 @@ public class CardPlayer
 
     private void HandleReversalsIfPosible(Card attackingCard)
     {
-        List<(int, Card)> validReversals = _notCurrentPlayer.GetReversalTuplesFromHand(_game.PlayManager);
+        List<(int, Card)> validReversals =
+            _notCurrentPlayer.GetReversalTuplesFromHand(_game.PlayManager);
         if (validReversals.Count > 0 && attackingCard.CanBeReversed)
-        {
             BeginReversalPlay(validReversals, attackingCard);
-        }
     }
 
     private void PlayManeuverOrActionCard(Card attackingCard)
     {
         if (attackingCard.PlayedType is not ("Maneuver" or "Action")) return;
-        HandleEffects(attackingCard);
+        HandleEffects(_game, attackingCard);
         if (!_game.GameIsOver) _cardDamager.ApplyCardDamage();
     }
-    
-    private void BeginReversalPlay(List<(int, Card)> validReversals, Card attackingCard) 
+
+    private void BeginReversalPlay(List<(int, Card)> validReversals, Card attackingCard)
     {
-        List<string> validReversalsInString = PlayableCardsFormatter.GetReversalCards(validReversals);
-        int selectedReversalIndex = _view.AskUserToSelectAReversal(_notCurrentPlayer.GetSuperStarName(), validReversalsInString);
+        List<string> validReversalsInString =
+            PlayableCardsFormatter.GetReversalCards(validReversals);
+        int selectedReversalIndex =
+            _view.AskUserToSelectAReversal(_notCurrentPlayer.GetSuperStarName(),
+                validReversalsInString);
         if (selectedReversalIndex == -1) return;
         HandleSelectedReversal(validReversals, attackingCard, selectedReversalIndex);
     }
 
-    private void HandleSelectedReversal(List<(int, Card)> validReversals, Card attackingCard, int selectedReversalIndex)
+    private void HandleSelectedReversal(List<(int, Card)> validReversals, Card attackingCard,
+        int selectedReversalIndex)
     {
         (int, Card) tupleWithIndexInHandAndReverseCard = validReversals[selectedReversalIndex];
         _currentPlay.SetReversalCardTuple(tupleWithIndexInHandAndReverseCard);
         Card selectedReversalCard = TupleManager.ExtractCard(tupleWithIndexInHandAndReverseCard);
         SetPlayedTypesAndPlayedFrom(attackingCard, selectedReversalCard);
-        HandleEffects(selectedReversalCard);
+        HandleEffects(_game, selectedReversalCard);
         _currentPlay.SwapCurrentAndNotCurrentPlayer();
         _cardDamager.ApplyCardDamage();
     }
@@ -92,18 +94,9 @@ public class CardPlayer
         reversalCard.PlayedType = "Reversal";
     }
 
-    private void HandleEffects(Card card)
+    public static void HandleEffects(Game game, Card card)
     {
-        List<Effect> assignedEffects = EffectAssigner.AssignEffect(_game, card);
-        ApplyAssignedEffects(assignedEffects);
-    }
-    
-    private void ApplyAssignedEffects(List<Effect> assignedEffects)
-    {
-        foreach (Effect effect in assignedEffects)
-        {
-            if (_game.GameIsOver) return;
-            effect.ApplyEffect(_currentPlay);
-        }
+        List<Effect> assignedEffects = EffectAssigner.AssignEffect(game, card);
+        EffectsApplier.ApplyAssignedEffects(game, assignedEffects);
     }
 }

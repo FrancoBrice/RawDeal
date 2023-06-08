@@ -1,5 +1,6 @@
 using RawDeal.CardCollections;
 using RawDeal.Cards;
+using RawDeal.Cards.CardEffects;
 using RawDeal.GameLogic.Players;
 using RawDealView;
 
@@ -7,13 +8,11 @@ namespace RawDeal.GameLogic.Plays;
 
 public class PlayManager
 {
-    public Play CurrentPlay => (_plays.Count > 0 ? _plays[^1] : null)!;
-    private Play PreviousPlay => (_plays.Count > 1 ? _plays[^2] : null)!;
     private int _nextPlayId;
-    private List<Play> _plays;
-    public CardCollection PlayedCards;
+    private readonly List<Play> _plays;
     private View _view;
-    
+    public CardCollection PlayedCards;
+
     public PlayManager(View view)
     {
         _view = view;
@@ -21,6 +20,9 @@ public class PlayManager
         _nextPlayId = 1;
         PlayedCards = new CardCollection();
     }
+
+    public Play CurrentPlay => (_plays.Count > 0 ? _plays[^1] : null)!;
+    private Play PreviousPlay => (_plays.Count > 1 ? _plays[^2] : null)!;
 
     public void AddPlay(Play play)
     {
@@ -30,12 +32,8 @@ public class PlayManager
         ApplyPendingEffectsIfPossible();
         play.CardAddedToPlayedCards += HandleCardAddedToPlayedCards;
         if (play.PlayedCards.CardListSize > 0)
-        {
-            foreach (var card in play.PlayedCards.CardList)
-            {
+            foreach (Card card in play.PlayedCards.CardList)
                 PlayedCards.AddCard(card);
-            }
-        }
     }
 
     public void ApplyPendingEffectsIfPossible()
@@ -43,26 +41,22 @@ public class PlayManager
         if (_plays.Count < 2) return;
         if (PreviousPlay.PendingEffects.Count < 1) return;
         if (PreviousPlay.ReversalCard == null) return;
-        var pendingEffect = PreviousPlay.PendingEffects[^1]; 
+        Effect pendingEffect = PreviousPlay.PendingEffects[^1];
         CurrentPlay.AddPendingEffect(pendingEffect);
         pendingEffect.ApplyEffect(PreviousPlay);
-        
     }
-    
+
     public void HandleCardAddedToPlayedCards(object sender, Card card)
     {
         PlayedCards.AddCard(card);
     }
 
-    
+
     public void RemoveEffectsOnCards()
     {
-        foreach (Player player in CurrentPlay.Players)
-        {
-            player.SetDefaultValuesInCards();
-        }
+        foreach (Player player in CurrentPlay.Players) player.SetDefaultValuesInCards();
     }
-    
+
     public Card GetLastCard()
     {
         return PlayedCards.GetLastCard();

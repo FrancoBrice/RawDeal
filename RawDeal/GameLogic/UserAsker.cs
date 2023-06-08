@@ -9,10 +9,10 @@ namespace RawDeal.GameLogic;
 
 public class UserAsker
 {
-    public List<string> TypesOfPlayableCards;
-    public List<(int, Card)> ListOfTuplesOfPlayableCards;
     private readonly PlayableCardsFormatter _playableCardsFormatter;
     private readonly View _view;
+    public List<(int, Card)> ListOfTuplesOfPlayableCards;
+    public List<string> TypesOfPlayableCards;
 
     public UserAsker(View view)
     {
@@ -24,9 +24,7 @@ public class UserAsker
     {
         bool canUserUseHisAbility = player.CanUseHisAbility();
         if (canUserUseHisAbility && !player.IsAbilityAutomatic())
-        {
             return view.AskUserWhatToDoWhenUsingHisAbilityIsPossible();
-        }
         return view.AskUserWhatToDoWhenHeCannotUseHisAbility();
     }
 
@@ -34,7 +32,8 @@ public class UserAsker
     {
         Player currentPlayer = playManager.CurrentPlay.CurrentPlayer;
         List<(int, Card)> playableCards = currentPlayer.GetPlayableCardsFromPlayer(playManager);
-        List<string> playableCardsFormatted = _playableCardsFormatter.GetPlayableCards(playableCards, currentPlayer.Fortitude);
+        List<string> playableCardsFormatted =
+            _playableCardsFormatter.GetPlayableCards(playableCards, currentPlayer.Fortitude);
         TypesOfPlayableCards = _playableCardsFormatter.TypesOfPlayableCards;
         ListOfTuplesOfPlayableCards = _playableCardsFormatter.ListOfTuplesOfPlayableCards;
         return _view.AskUserToSelectAPlay(playableCardsFormatted);

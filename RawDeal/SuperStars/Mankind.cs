@@ -4,7 +4,8 @@ namespace RawDeal.SuperStars;
 
 public class Mankind : SuperStar
 {
-    public Mankind(string name, string logo, int handSize, int superstarValue, string superstarAbility) : base(name, logo, handSize, superstarValue, superstarAbility)
+    public Mankind(string name, string logo, int handSize, int superstarValue,
+        string superstarAbility) : base(name, logo, handSize, superstarValue, superstarAbility)
     {
         HasInitialAbility = true;
     }
@@ -18,15 +19,11 @@ public class Mankind : SuperStar
     public override void UseAbility(Player player, Player opponentPlayer)
     {
         player.MoveCardFromArsenalToHand();
-
     }
-    
+
     public override bool CanUseAbility(Player player)
     {
-        if (player.HasUsedHisAbilityInTheTurn)
-        {
-            return false;
-        }
+        if (player.HasUsedHisAbilityInTheTurn) return false;
         return true;
     }
 
@@ -34,5 +31,4 @@ public class Mankind : SuperStar
     {
         return true;
     }
-
 }

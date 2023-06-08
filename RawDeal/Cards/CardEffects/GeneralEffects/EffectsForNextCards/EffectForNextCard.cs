@@ -1,4 +1,3 @@
-using RawDeal.GameLogic;
 using RawDeal.GameLogic.Plays;
 using RawDealView;
 
@@ -6,7 +5,8 @@ namespace RawDeal.Cards.CardEffects.GeneralEffects;
 
 public class EffectForNextCard : Effect
 {
-    private Effect _effect;
+    private readonly Effect _effect;
+
     public EffectForNextCard(View view, Effect effect) : base(view)
     {
         _effect = effect;

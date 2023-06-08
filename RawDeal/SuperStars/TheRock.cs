@@ -4,9 +4,9 @@ namespace RawDeal.SuperStars;
 
 public class TheRock : SuperStar
 {
-    public TheRock(string name, string logo, int handSize, int superstarValue, string superstarAbility) : base(name, logo, handSize, superstarValue, superstarAbility)
+    public TheRock(string name, string logo, int handSize, int superstarValue,
+        string superstarAbility) : base(name, logo, handSize, superstarValue, superstarAbility)
     {
-        
     }
 
     public override void UseAbility(Player player, Player opponentPlayer)
@@ -16,8 +16,10 @@ public class TheRock : SuperStar
             player.HasUsedHisAbilityInTheTurn = true;
             return;
         }
-        int numberOfCards = 1; 
-        int indexInputByUser = _view.AskPlayerToSelectCardsToRecover(Name, numberOfCards, player.GetCardsInStringFormatFromRingside());
+
+        int numberOfCards = 1;
+        int indexInputByUser = _view.AskPlayerToSelectCardsToRecover(Name, numberOfCards,
+            player.GetCardsInStringFormatFromRingside());
         player.MoveCardByIndexFromRingsideToArsenalBeginning(indexInputByUser);
     }
 
@@ -30,5 +32,4 @@ public class TheRock : SuperStar
     {
         return true;
     }
-    
 }
