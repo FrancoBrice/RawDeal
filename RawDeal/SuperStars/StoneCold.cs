@@ -1,4 +1,5 @@
 using RawDeal.GameLogic.Players;
+using RawDeal.Tools;
 
 namespace RawDeal.SuperStars;
 
@@ -14,11 +15,11 @@ public class StoneCold : SuperStar
         _view.SayThatPlayerIsGoingToUseHisAbility(player.GetSuperStarName(),
             player.GetSuperStarAbility());
         _view.SayThatPlayerDrawCards(player.GetSuperStarName(), 1);
-        player.MoveCardFromArsenalToHand();
+        CardMobilizer.FromArsenalToHand(player);
         int indexCardFromHand =
             _view.AskPlayerToReturnOneCardFromHisHandToHisArsenal(player.GetSuperStarName(),
                 player.GetCardsInStringFormatFromHand());
-        player.MoveCardFromHandToArsenalBeginningByIndex(indexCardFromHand);
+        CardMobilizer.FromHandToArsenalBeginningByIndex(player, indexCardFromHand);
     }
 
     public override bool CanUseAbility(Player player)

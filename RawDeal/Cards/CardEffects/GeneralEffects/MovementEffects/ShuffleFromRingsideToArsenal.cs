@@ -1,4 +1,5 @@
 using RawDeal.GameLogic.Plays;
+using RawDeal.Tools;
 using RawDealView;
 
 namespace RawDeal.Cards.CardEffects.GeneralEffects.MovementEffects;
@@ -19,7 +20,7 @@ public class ShuffleFromRingsideToArsenal : ShuffleFromRingsideEffect
             int indexInputByUser = _view.AskPlayerToSelectCardsToRecover(
                 _currentPlayer.GetSuperStarName(), remainingCardsToShuffle,
                 _currentPlayer.GetCardsInStringFormatFromRingside());
-            _currentPlayer.MoveCardByIndexFromRingsideToArsenalBeginning(indexInputByUser);
+            CardMobilizer.FromRingsideToArsenalBeginningByIndex(_currentPlayer, indexInputByUser);
             remainingCardsToShuffle--;
         }
     }

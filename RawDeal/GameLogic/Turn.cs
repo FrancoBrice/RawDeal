@@ -1,6 +1,7 @@
 using RawDeal.Cards;
 using RawDeal.GameLogic.Players;
 using RawDeal.GameLogic.Plays;
+using RawDeal.Tools;
 using RawDealView;
 using RawDealView.Options;
 
@@ -27,14 +28,14 @@ public class Turn
     {
         _game = game;
         _view.SayThatATurnBegins(_currentPlayer.GetSuperStarName());
-        _currentPlayer.ResetPlayerStatusInTurn();
+        ResetPlayerStatusInTurn(_currentPlayer);
         RunDrawSegment();
         RunTurnLoop();
     }
     
     private void RunDrawSegment()
     {
-        _currentPlayer.MoveCardFromArsenalToHand();
+        CardMobilizer.FromArsenalToHand(_currentPlayer);
     }
 
     private void RunTurnLoop()
@@ -91,5 +92,11 @@ public class Turn
     {
         _currentPlayer = _currentPlay.CurrentPlayer;
         _notCurrentPlayer = _currentPlay.NotCurrentPlayer;
+    }
+    
+    public void ResetPlayerStatusInTurn(Player player)
+    {
+        player.HasUsedHisAbilityInTheTurn = false;
+        player.HasEndsHisTurn = false;
     }
 }

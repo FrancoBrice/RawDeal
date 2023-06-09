@@ -23,7 +23,7 @@ public class CollateralDamageController : CardDamageController
 
     private void ApplyCollateralDamage(int damageAmount, List<Card> cardsToBeDamaged)
     {
-        _currentPlayer.ReceiveDamage(cardsToBeDamaged.Count - 1);
+        PlayerReceiveDamage(_currentPlayer, cardsToBeDamaged.Count - 1);
         _opponentRanOutOfCards =
             GameEndChecker.PlayerRanOutOfCardsDuringDamage(_currentPlayer, damageAmount);
         if (_opponentRanOutOfCards)
@@ -39,6 +39,4 @@ public class CollateralDamageController : CardDamageController
             cardsToBeDamaged.Add(damagedCard);
         }
     }
-
-
 }

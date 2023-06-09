@@ -88,7 +88,7 @@ public static class EffectAssigner
             case "Headlock Takedown":
             case "Standing Side Headlock":
                 effectsAssigned.Add(new PlayerDrawCards(_view,
-                    playerThatMustDraw: _notCurrentPlayer, numberOfCardsToDraw: 1));
+                    player: _notCurrentPlayer, numberOfCardsToDraw: 1));
                 break;
             case "Fisherman's Suplex":
                 effectsAssigned.Add(new TopCardOfArsenalToRingsidePile(_view, _game));

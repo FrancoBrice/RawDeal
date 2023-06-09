@@ -62,7 +62,7 @@ public class CardCollection
         return formattedCards;
     }
 
-    public List<Card> GetLastCardsReversed(int? numberOfCards)
+    public List<Card> GetLastCards(int? numberOfCards)
     {
         List<Card> lastCards = new List<Card>();
         int index = CardListSize - 1;
@@ -71,7 +71,12 @@ public class CardCollection
             lastCards.Add(CardList[index]);
             index += -1;
         }
-
+        return lastCards;
+    }
+    
+    public List<Card> GetLastCardsReversed(int? numberOfCards)
+    {
+        List<Card> lastCards = GetLastCards(numberOfCards);
         lastCards.Reverse();
         return lastCards;
     }

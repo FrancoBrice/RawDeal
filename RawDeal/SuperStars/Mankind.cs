@@ -1,4 +1,5 @@
 using RawDeal.GameLogic.Players;
+using RawDeal.Tools;
 
 namespace RawDeal.SuperStars;
 
@@ -18,7 +19,7 @@ public class Mankind : SuperStar
 
     public override void UseAbility(Player player, Player opponentPlayer)
     {
-        player.MoveCardFromArsenalToHand();
+        CardMobilizer.FromArsenalToHand(player);
     }
 
     public override bool CanUseAbility(Player player)

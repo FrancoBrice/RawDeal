@@ -40,7 +40,7 @@ public class CardDamageController
         HandleReversalsByDeck(_currentPlayer, _notCurrentPlayer);
         _opponentRanOutOfCards =
             GameEndChecker.PlayerRanOutOfCardsDuringDamage(_notCurrentPlayer, _pretendedDamage);
-        _notCurrentPlayer.ReceiveDamage(_actualDamage);
+        PlayerReceiveDamage(_notCurrentPlayer, _actualDamage);
         FinishCardDamage(_currentPlayer);
     }
     
@@ -97,6 +97,11 @@ public class CardDamageController
         _view.SayThatPlayerDrawCards(attackingPlayer.GetSuperStarName(), numberOfCardsToDraw);
     }
 
+    public static void PlayerReceiveDamage(Player player, int damage)
+    {
+        CardMobilizer.FromArsenalToRingSideByDamageAmount(player, damage);
+        player.DamagesReceived.Add(damage);
+    }
     private void FinishCardDamage(Player attackingPlayer)
     {
         EndGameIfPlayerRanOutOfCardsAndNotReverse(attackingPlayer);

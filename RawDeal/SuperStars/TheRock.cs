@@ -1,4 +1,6 @@
+using RawDeal.Cards;
 using RawDeal.GameLogic.Players;
+using RawDeal.Tools;
 
 namespace RawDeal.SuperStars;
 
@@ -19,7 +21,7 @@ public class TheRock : SuperStar
         const int numberOfCards = 1;
         int indexInputByUser = _view.AskPlayerToSelectCardsToRecover(Name, numberOfCards,
             player.GetCardsInStringFormatFromRingside());
-        player.MoveCardByIndexFromRingsideToArsenalBeginning(indexInputByUser);
+        CardMobilizer.FromRingsideToArsenalBeginningByIndex(player, indexInputByUser);
     }
 
     public override bool CanUseAbility(Player player)

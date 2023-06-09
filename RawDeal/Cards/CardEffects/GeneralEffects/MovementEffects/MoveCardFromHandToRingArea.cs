@@ -12,6 +12,6 @@ public class MoveCardFromHandToRingArea : Effect
 
     protected override void ApplyCustomEffect(Play currentPlay)
     {
-        CardMobilizer.MoveCardFromHandToRingArea(_currentPlayer, _attackingCardTuple);
+        CardMobilizer.FromHandToRingArea(_currentPlayer, _attackingCardTuple);
     }
 }

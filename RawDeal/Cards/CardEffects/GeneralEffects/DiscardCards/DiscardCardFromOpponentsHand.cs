@@ -1,4 +1,5 @@
 using RawDeal.GameLogic.Plays;
+using RawDeal.Tools;
 using RawDealView;
 
 namespace RawDeal.Cards.CardEffects.GeneralEffects.DiscardCards;
@@ -15,6 +16,6 @@ public class DiscardCardFromOpponentsHand : Effect
         int indexInHand = _view.AskPlayerToSelectACardToDiscard(opponentsHand,
             _notCurrentPlayer.GetSuperStarName(),
             _currentPlayer.GetSuperStarName(), totalCardsToDiscard: 1);
-        _notCurrentPlayer.MoveCardFromHandToRingsideByIndex(indexInHand);
+        CardMobilizer.FromHandToRingsideByIndex(_notCurrentPlayer, indexInHand);
     }
 }

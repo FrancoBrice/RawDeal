@@ -1,6 +1,7 @@
 using Newtonsoft.Json;
 using RawDeal.Cards;
 using RawDeal.GameLogic.Players;
+using RawDeal.Tools;
 using RawDealView;
 
 namespace RawDeal.SuperStars;
@@ -52,15 +53,15 @@ public abstract class SuperStar
         int indexCardFromPlayerHand = _view.AskPlayerToSelectACardToDiscard(
             player.GetCardsInStringFormatFromHand(), player.GetSuperStarName(),
             player.GetSuperStarName(), 1);
-        player.MoveCardFromHandToRingsideByIndex(indexCardFromPlayerHand);
+        CardMobilizer.FromHandToRingsideByIndex(player, indexCardFromPlayerHand);
     }
 
     protected Card ApplyDamageToOpponent(Player opponentPlayer, int damage)
     {
-        Card discartedCard = opponentPlayer.GetCardsFromArsenal(damage)[0];
+        Card discardedCard = opponentPlayer.GetCardsFromArsenal(damage)[0];
         _view.SayThatSuperstarWillTakeSomeDamage(opponentPlayer.GetSuperStarName(), damage);
-        opponentPlayer.ReceiveDamage(1);
-        return discartedCard;
+        CardDamageController.PlayerReceiveDamage(opponentPlayer, damage: 1);
+        return discardedCard;
     }
 
     protected bool DoesPlayerWantToUseAbility(Player player)
@@ -76,7 +77,7 @@ public abstract class SuperStar
         int indexCardFromRingside =
             _view.AskPlayerToSelectCardsToPutInHisHand(player.GetSuperStarName(), 1,
                 player.GetCardsInStringFormatFromRingside());
-        player.MoveCardFromRingsideToHandByIndex(indexCardFromRingside);
+        CardMobilizer.FromRingsideToHandByIndex(player, indexCardFromRingside);
     }
 
     protected void MakePlayerDiscardCardsWithSelection(Player player, int numberOfCardsToDiscard)
@@ -86,7 +87,7 @@ public abstract class SuperStar
             int indexCardFromHand = _view.AskPlayerToSelectACardToDiscard(
                 player.GetCardsInStringFormatFromHand(), player.GetSuperStarName(),
                 player.GetSuperStarName(), numberOfCardsToDiscard);
-            player.MoveCardFromHandToRingsideByIndex(indexCardFromHand);
+            CardMobilizer.FromHandToRingsideByIndex(player, indexCardFromHand);
             numberOfCardsToDiscard--;
         }
     }

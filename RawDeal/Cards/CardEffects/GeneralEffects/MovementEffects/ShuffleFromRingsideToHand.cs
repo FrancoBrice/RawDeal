@@ -1,3 +1,4 @@
+using RawDeal.Tools;
 using RawDealView;
 
 namespace RawDeal.Cards.CardEffects.GeneralEffects.MovementEffects;
@@ -17,7 +18,7 @@ public class ShuffleFromRingsideToHand : ShuffleFromRingsideEffect
             int indexInputByUser = _view.AskPlayerToSelectCardsToPutInHisHand(
                 _currentPlayer.GetSuperStarName(), remainingCardsToShuffle,
                 _currentPlayer.GetCardsInStringFormatFromRingside());
-            _currentPlayer.MoveCardFromRingsideToHandByIndex(indexInputByUser);
+            CardMobilizer.FromRingsideToHandByIndex(_currentPlayer, indexInputByUser);
             remainingCardsToShuffle--;
         }
     }

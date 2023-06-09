@@ -1,5 +1,6 @@
 using RawDeal.GameLogic.Players;
 using RawDeal.GameLogic.Plays;
+using RawDeal.Tools;
 using RawDealView;
 
 namespace RawDeal.Cards.CardEffects.GeneralEffects.DiscardCards;
@@ -23,7 +24,7 @@ public class MakePlayerDiscardCard : Effect
         {
             if (_playerThatMustDiscard.GetHandSize() == 0) return;
             int indexCardFromHand = GetIndexCardFromHand(remainingCardsToDiscard);
-            _playerThatMustDiscard.MoveCardFromHandToRingsideByIndex(indexCardFromHand);
+            CardMobilizer.FromHandToRingsideByIndex(_playerThatMustDiscard, indexCardFromHand);
             remainingCardsToDiscard--;
         }
     }
