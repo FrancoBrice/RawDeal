@@ -10,19 +10,16 @@ public class PlayManager
 {
     private int _nextPlayId;
     private readonly List<Play> _plays;
-    private View _view;
-    public CardCollection PlayedCards;
-
-    public PlayManager(View view)
+    private CardCollection _playedCards;
+    private Play CurrentPlay => (_plays.Count > 0 ? _plays[^1] : null)!;
+    private Play PreviousPlay => (_plays.Count > 1 ? _plays[^2] : null)!;
+    
+    public PlayManager()
     {
-        _view = view;
         _plays = new List<Play>();
         _nextPlayId = 1;
-        PlayedCards = new CardCollection();
+        _playedCards = new CardCollection();
     }
-
-    public Play CurrentPlay => (_plays.Count > 0 ? _plays[^1] : null)!;
-    private Play PreviousPlay => (_plays.Count > 1 ? _plays[^2] : null)!;
 
     public void AddPlay(Play play)
     {
@@ -31,9 +28,8 @@ public class PlayManager
         _plays.Add(play);
         ApplyPendingEffectsIfPossible();
         play.CardAddedToPlayedCards += HandleCardAddedToPlayedCards;
-        if (play.PlayedCards.CardListSize > 0)
-            foreach (Card card in play.PlayedCards.CardList)
-                PlayedCards.AddCard(card);
+        if (play.PlayedCards.CardListSize <= 0) return;
+        foreach (Card card in play.PlayedCards.CardList) _playedCards.AddCard(card);
     }
 
     public void ApplyPendingEffectsIfPossible()
@@ -46,19 +42,28 @@ public class PlayManager
         pendingEffect.ApplyEffect(PreviousPlay);
     }
 
-    public void HandleCardAddedToPlayedCards(object sender, Card card)
+    private void HandleCardAddedToPlayedCards(object sender, Card card)
     {
-        PlayedCards.AddCard(card);
+        _playedCards.AddCard(card);
     }
-
-
+    
     public void RemoveEffectsOnCards()
     {
         foreach (Player player in CurrentPlay.Players) player.SetDefaultValuesInCards();
     }
 
-    public Card GetLastCard()
+    public Card GetPenultimateCardPlayed()
     {
-        return PlayedCards.GetLastCard();
+        return _playedCards.GetPenultimateCard;
+    }
+
+    public int NumberOfPlayedCards()
+    {
+        return _playedCards.CardListSize;
+    }
+
+    public Play GetCurrentPlay()
+    {
+        return CurrentPlay;
     }
 }

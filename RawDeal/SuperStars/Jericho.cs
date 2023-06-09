@@ -19,8 +19,7 @@ public class Jericho : SuperStar
 
     public override bool CanUseAbility(Player player)
     {
-        if (player.GetHandSize() >= 1 && !player.HasUsedHisAbilityInTheTurn) return true;
-        return false;
+        return player.GetHandSize() >= 1 && !player.HasUsedHisAbilityInTheTurn;
     }
 
     public override bool IsAbilityAutomatic()

@@ -23,9 +23,7 @@ public class StoneCold : SuperStar
 
     public override bool CanUseAbility(Player player)
     {
-        if (player.GetArsenalSize() >= 1 && !player.HasUsedHisAbilityInTheTurn) return true;
-
-        return false;
+        return player.GetArsenalSize() >= 1 && !player.HasUsedHisAbilityInTheTurn;
     }
 
     public override bool IsAbilityAutomatic()

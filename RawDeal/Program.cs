@@ -14,5 +14,5 @@ View view = View.BuildManualTestingView(pathToTest);
 // View view = View.BuildConsoleView();  
 
 string deckFolder = Path.Combine("data", folder);
-Game game = new(view, deckFolder);
+Game game = new Game(view, deckFolder);
 game.Play();

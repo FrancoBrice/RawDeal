@@ -1,7 +1,7 @@
 using RawDeal.GameLogic.Plays;
 using RawDealView;
 
-namespace RawDeal.Cards.CardEffects.GeneralEffects;
+namespace RawDeal.Cards.CardEffects.GeneralEffects.EffectsForNextCards;
 
 public class EffectForNextCard : Effect
 {

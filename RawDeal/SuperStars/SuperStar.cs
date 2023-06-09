@@ -7,10 +7,10 @@ namespace RawDeal.SuperStars;
 
 public abstract class SuperStar
 {
-    protected View _view;
-    public bool HasInitialAbility;
+    private protected View _view;
+    private protected bool _hasInitialAbility;
 
-    public SuperStar(string name, string logo, int handSize, int superstarValue,
+    protected SuperStar(string name, string logo, int handSize, int superstarValue,
         string superstarAbility)
     {
         Name = name;
@@ -18,7 +18,7 @@ public abstract class SuperStar
         HandSize = handSize;
         SuperstarValue = superstarValue;
         SuperstarAbility = superstarAbility;
-        HasInitialAbility = false;
+        _hasInitialAbility = false;
     }
 
     public string Name { get; }
@@ -32,6 +32,11 @@ public abstract class SuperStar
     public void AddView(View view)
     {
         _view = view;
+    }
+
+    public bool HasInitialAbility()
+    {
+        return _hasInitialAbility;
     }
 
     public abstract bool CanUseAbility(Player player);

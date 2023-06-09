@@ -11,7 +11,7 @@ public static class SuperstarsJsonReader
         string pathSuperStarJson = Path.Combine("data", "superstar.json");
         string allSuperStarJson = File.ReadAllText(pathSuperStarJson);
         JArray jsonArrayAllSuperStar = JArray.Parse(allSuperStarJson);
-        List<SuperStar> allSuperStarList = new();
+        List<SuperStar> allSuperStarList = new List<SuperStar>();
 
         foreach (JObject jObjectSuperStar in jsonArrayAllSuperStar)
         {
@@ -50,14 +50,13 @@ public static class SuperstarsJsonReader
                 superstar = JsonConvert.DeserializeObject<StoneCold>(jObject.ToString());
                 break;
         }
-
         return superstar;
     }
 
     public static List<string> GenerateSuperStarLogosList()
     {
         List<SuperStar> allSuperStarsList = GenerateAllSuperStarsListFromJson();
-        List<string> superStarLogosList = new();
+        List<string> superStarLogosList = new List<string>();
         foreach (SuperStar superstar in allSuperStarsList) superStarLogosList.Add(superstar.Logo);
         return superStarLogosList;
     }

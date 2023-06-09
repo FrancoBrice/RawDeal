@@ -12,13 +12,12 @@ public class Kane : SuperStar
 
     public override void UseAbility(Player player, Player opponentPlayer)
     {
-        if (!player.HasUsedHisAbilityInTheTurn)
-        {
-            _view.SayThatPlayerIsGoingToUseHisAbility(player.GetSuperStarName(),
-                player.GetSuperStarAbility());
-            Card discartedCard = ApplyDamageToOpponent(opponentPlayer, 1);
-            _view.ShowCardOverturnByTakingDamage(discartedCard.GetCardFormattedInfo(), 1, 1);
-        }
+        if (player.HasUsedHisAbilityInTheTurn) return;
+        _view.SayThatPlayerIsGoingToUseHisAbility(player.GetSuperStarName(),
+            player.GetSuperStarAbility());
+        Card discardedCard = ApplyDamageToOpponent(opponentPlayer, 1);
+        _view.ShowCardOverturnByTakingDamage(discardedCard.GetCardFormattedInfo(), 
+            1, 1);
     }
 
     public override bool CanUseAbility(Player player)

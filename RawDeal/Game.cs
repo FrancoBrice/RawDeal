@@ -11,42 +11,42 @@ namespace RawDeal;
 
 public class Game
 {
+    private readonly PlayManager _playManager;
+    private readonly List<DeckValidator> _selectedDecks;
+    private Play _currentPlay;
+    private readonly View _view;
     private readonly string _deckFolder;
-    public readonly List<Player> PlayersList;
-    public readonly PlayManager PlayManager;
-    public readonly List<DeckValidator> SelectedDecks;
-    public readonly View ViewObject;
+    private readonly List<Player> _playersList;
     private int _indexCurrentPlayer;
     private int _indexNotCurrentPlayer;
-    public Play CurrentPlay;
-    public bool GameIsOver;
+    private bool _gameIsOver;
 
-    public Game(View viewObject, string deckFolder)
+    public Game(View view, string deckFolder)
     {
-        PlayersList = new List<Player>();
-        ViewObject = viewObject;
+        _playersList = new List<Player>();
+        _view = view;
         AllCardsList = CardsJsonReader.GenerateAllCardsListFromCardsFromJson();
         AllSuperStarList = SuperstarsJsonReader.GenerateAllSuperStarsListFromJson();
         _deckFolder = deckFolder;
-        GameIsOver = false;
+        _gameIsOver = false;
         _indexCurrentPlayer = 0;
         _indexNotCurrentPlayer = 1;
-        SelectedDecks = new List<DeckValidator>();
-        PlayManager = new PlayManager(ViewObject);
+        _selectedDecks = new List<DeckValidator>();
+        _playManager = new PlayManager();
     }
 
     public List<Card> AllCardsList { get; }
     public List<SuperStar> AllSuperStarList { get; }
-    public Player CurrentPlayer => PlayersList[_indexCurrentPlayer];
-    public Player NotCurrentPlayer => PlayersList[_indexNotCurrentPlayer];
+    public Player CurrentPlayer => _playersList[_indexCurrentPlayer];
+    public Player NotCurrentPlayer => _playersList[_indexNotCurrentPlayer];
 
     public void Play()
     {
-        DeckSelector deckSelector = new(this, ViewObject);
+        DeckSelector deckSelector = new DeckSelector(this, _view);
         deckSelector.AskUsersToSelectDecks(_deckFolder);
         if (!deckSelector.AreDecksValid()) return;
-        PlayersCreator playersCreator = new(this, ViewObject);
-        playersCreator.CreatePlayers(SelectedDecks);
+        PlayersCreator playersCreator = new PlayersCreator(this, _view);
+        playersCreator.CreatePlayers(_selectedDecks);
         OrderPlayersBySuperStarValue();
         ApplyInitialAbilities();
         RunGameLoop();
@@ -54,14 +54,14 @@ public class Game
 
     private void RunGameLoop()
     {
-        while (!GameIsOver)
+        while (!_gameIsOver)
         {
             if (NotCurrentPlayer.HasZeroCardsInArsenal()) EndGame(CurrentPlayer);
-            CurrentPlay = new Play(GetDictionaryOfCurrentAndNotCurrentPlayer(), ViewObject);
-            PlayManager.AddPlay(CurrentPlay);
-            if (!GameIsOver)
+            _currentPlay = new Play(GetDictionaryOfCurrentAndNotCurrentPlayer());
+            _playManager.AddPlay(_currentPlay);
+            if (!_gameIsOver)
             {
-                Turn currentTurn = new(CurrentPlay, ViewObject);
+                Turn currentTurn = new Turn(_playManager, _view);
                 currentTurn.PlayTurn(this);
             }
 
@@ -71,35 +71,35 @@ public class Game
 
     public void EndGame(Player winnerPlayer)
     {
-        GameIsOver = true;
-        ViewObject.CongratulateWinner(winnerPlayer.GetSuperStarName());
+        _gameIsOver = true;
+        _view.CongratulateWinner(winnerPlayer.GetSuperStarName());
     }
 
     private void ApplyInitialAbilities()
     {
-        foreach (Player player in PlayersList) player.ExecuteInitialAbility();
+        foreach (Player player in _playersList) player.ExecuteInitialAbility();
     }
 
     public void MakePlayManagerApplyPendingEffects()
     {
-        PlayManager.ApplyPendingEffectsIfPossible();
+        _playManager.ApplyPendingEffectsIfPossible();
     }
 
     public void MakePlayManagerRemoveEffectsOnCards()
     {
-        PlayManager.RemoveEffectsOnCards();
+        _playManager.RemoveEffectsOnCards();
     }
 
     private void UpdatePlayersIndex()
     {
-        _indexCurrentPlayer = (_indexCurrentPlayer + 1) % PlayersList.Count;
-        _indexNotCurrentPlayer = (_indexNotCurrentPlayer + 1) % PlayersList.Count;
+        _indexCurrentPlayer = (_indexCurrentPlayer + 1) % _playersList.Count;
+        _indexNotCurrentPlayer = (_indexNotCurrentPlayer + 1) % _playersList.Count;
     }
 
     private void OrderPlayersBySuperStarValue()
     {
-        if (PlayersList[1].GetSuperStarValue() > PlayersList[0].GetSuperStarValue())
-            ExchangePlayersPositions(PlayersList);
+        if (_playersList[1].GetSuperStarValue() > _playersList[0].GetSuperStarValue())
+            ExchangePlayersPositions(_playersList);
     }
 
     private static void ExchangePlayersPositions<TPlayer>(List<TPlayer> playersList)
@@ -109,11 +109,36 @@ public class Game
 
     public Dictionary<string, Player> GetDictionaryOfCurrentAndNotCurrentPlayer()
     {
-        Dictionary<string, Player> players = new()
+        Dictionary<string, Player> players = new Dictionary<string, Player>
         {
             { "CurrentPlayer", CurrentPlayer },
             { "NotCurrentPlayer", NotCurrentPlayer }
         };
         return players;
+    }
+
+    public void AddPlayerToPlayersList(Player player)
+    {
+        _playersList.Add(player);
+    }
+
+    public Play GetCurrentPlay()
+    {
+        return _currentPlay;
+    }
+
+    public void AddDeckValidator(DeckValidator deck)
+    {
+        _selectedDecks.Add(deck);
+    }
+
+    public int GetSelectedDecksSize()
+    {
+        return _selectedDecks.Count;
+    }
+
+    public bool IsGameOver()
+    {
+        return _gameIsOver;
     }
 }

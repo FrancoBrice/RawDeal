@@ -9,8 +9,10 @@ public static class SelectedEffectOptions
     private const string ForceOpponentToDiscard = "Forzar al oponente a descartar cartas.";
     
 
-    private static readonly Dictionary<SelectedEffect, string> Effect2String = new ();
-    private static readonly Dictionary<string, SelectedEffect> String2Effect = new ();
+    private static readonly Dictionary<SelectedEffect, string> Effect2String =
+        new Dictionary<SelectedEffect, string>();
+    private static readonly Dictionary<string, SelectedEffect> String2Effect =
+        new Dictionary<string, SelectedEffect>();
     
     static SelectedEffectOptions()
     {

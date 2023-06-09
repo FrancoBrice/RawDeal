@@ -6,8 +6,8 @@ public static class EffectsApplier
     {
         foreach (Effect effect in assignedEffects)
         {
-            if (game.GameIsOver) return;
-            effect.ApplyEffect(game.CurrentPlay);
+            if (game.IsGameOver()) return;
+            effect.ApplyEffect(game.GetCurrentPlay());
         }
     }
 }

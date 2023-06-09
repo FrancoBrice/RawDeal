@@ -1,20 +1,19 @@
 using RawDeal.GameLogic.Players;
 using RawDeal.GameLogic.Plays;
+using RawDealView;
 
-namespace RawDeal.Cards.CardEffects.GeneralEffects;
+namespace RawDeal.Cards.CardEffects.GeneralEffects.DiscardCards;
 
 public class MakePlayerDiscardCard : Effect
 {
-    private Game _game;
     private readonly int _numberOfCardsToDiscard;
     private readonly Player _playerThatMustDiscard;
 
-    public MakePlayerDiscardCard(Game game, Player playerThatMustDiscard, int numberOfCardToDiscard)
-        : base(game.ViewObject)
+    public MakePlayerDiscardCard(View view, Player playerThatMustDiscard, 
+        int numberOfCardToDiscard) : base(view)
     {
         _playerThatMustDiscard = playerThatMustDiscard;
         _numberOfCardsToDiscard = numberOfCardToDiscard;
-        _game = game;
     }
 
     protected override void ApplyCustomEffect(Play currentPlay)
@@ -23,13 +22,18 @@ public class MakePlayerDiscardCard : Effect
         for (int i = 0; i < _numberOfCardsToDiscard; i++)
         {
             if (_playerThatMustDiscard.GetHandSize() == 0) return;
-            int indexCardFromHand = _view.AskPlayerToSelectACardToDiscard(
-                _playerThatMustDiscard.GetCardsInStringFormatFromHand(),
-                _playerThatMustDiscard.GetSuperStarName(),
-                _playerThatMustDiscard.GetSuperStarName(), 
-                remainingCardsToDiscard);
+            int indexCardFromHand = GetIndexCardFromHand(remainingCardsToDiscard);
             _playerThatMustDiscard.MoveCardFromHandToRingsideByIndex(indexCardFromHand);
             remainingCardsToDiscard--;
         }
+    }
+
+    private int GetIndexCardFromHand(int remainingCardsToDiscard)
+    {
+        return _view.AskPlayerToSelectACardToDiscard(
+            _playerThatMustDiscard.GetCardsInStringFormatFromHand(),
+            _playerThatMustDiscard.GetSuperStarName(),
+            _playerThatMustDiscard.GetSuperStarName(), 
+            remainingCardsToDiscard);
     }
 }

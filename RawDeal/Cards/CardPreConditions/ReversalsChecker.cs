@@ -1,4 +1,3 @@
-using RawDeal.CardCollections;
 using RawDeal.GameLogic.Players;
 using RawDeal.GameLogic.Plays;
 
@@ -8,7 +7,7 @@ public static class ReversalsChecker
 {
     public static bool IsCorrectReversalCard(PlayManager playManager, Card reversalCard)
     {
-        Play currentPlay = playManager.CurrentPlay;
+        Play currentPlay = playManager.GetCurrentPlay();
         Card attackingCard = currentPlay.AttackingCard;
         Player damagedPlayer = currentPlay.NotCurrentPlayer;
         if (!attackingCard.CanBeReversed) return false;
@@ -64,10 +63,9 @@ public static class ReversalsChecker
     private static bool IsValidTheConditionOfReversalSpecial(PlayManager playManager,
         Card reversalCard)
     {
-        Play currentPlay = playManager.CurrentPlay;
+        Play currentPlay = playManager.GetCurrentPlay();
         Card attackingCard = currentPlay.AttackingCard;
         Player playerThatCanReverse = currentPlay.NotCurrentPlayer;
-        CardCollection allPlayedCards = playManager.PlayedCards;
         switch (reversalCard.Title)
         {
             case "Elbow to the Face":
@@ -86,16 +84,16 @@ public static class ReversalsChecker
             case "Shoulder Block":
             case "Spear":
             case "Cross Body Block":
-                if (allPlayedCards.CardListSize >= 2 &&
+                if (playManager.NumberOfPlayedCards() >= 2 &&
                     attackingCard.PlayedType == "Maneuver" &&
-                    allPlayedCards.GetPenultimateCard.Title == "Irish Whip")
+                    playManager.GetPenultimateCardPlayed().Title == "Irish Whip")
                     return true;
                 break;
             case "Facebuster":
             case "Lou Thesz Press":
-                if (playManager.PlayedCards.CardListSize >= 2 &&
+                if (playManager.NumberOfPlayedCards() >= 2 &&
                     attackingCard.PlayedType == "Maneuver" && reversalCard.PlayedFrom == "Hand" &&
-                    allPlayedCards.GetPenultimateCard.Title == "Irish Whip")
+                    playManager.GetPenultimateCardPlayed().Title == "Irish Whip")
                     return true;
                 break;
             case "Belly to Belly Suplex" when attackingCard.Title == "Belly to Belly Suplex":

@@ -3,26 +3,26 @@ using RawDeal.Cards;
 using RawDeal.Cards.CardEffects;
 using RawDeal.GameLogic.Players;
 using RawDeal.Tools;
-using RawDealView;
 
 namespace RawDeal.GameLogic.Plays;
 
 public class Play
 {
-    private View _view;
     public Card AttackingCard;
     public (int, Card) AttackingCardTuple;
     public Player CurrentPlayer;
     public int Id;
     public bool IsAPendingEffect;
     public Player NotCurrentPlayer;
-    public List<Effect> PendingEffects;
-    public CardCollection PlayedCards;
-    public List<Player> Players;
+    public readonly List<Effect> PendingEffects;
+    public readonly CardCollection PlayedCards;
+    public readonly List<Player> Players;
     public Card ReversalCard;
     public (int, Card) ReversalCardTuple;
+    public int PlayedCardsCount => PlayedCards.CardList.Count;
+    public event EventHandler<Card> CardAddedToPlayedCards;
 
-    public Play(Dictionary<string, Player> playersDictionary, View view)
+    public Play(Dictionary<string, Player> playersDictionary)
     {
         CurrentPlayer = playersDictionary["CurrentPlayer"];
         NotCurrentPlayer = playersDictionary["NotCurrentPlayer"];
@@ -31,11 +31,7 @@ public class Play
         PlayedCards = new CardCollection();
         IsAPendingEffect = false;
         PendingEffects = new List<Effect>();
-        _view = view;
     }
-
-    public int PlayedCardsCount => PlayedCards.CardList.Count;
-    public event EventHandler<Card> CardAddedToPlayedCards;
 
     public void SetAttackingCardTuple((int, Card) attackingCardTuple)
     {
@@ -61,7 +57,7 @@ public class Play
         CardAddedToPlayedCards?.Invoke(this, card);
     }
 
-    public void ApplyPendingEffects()
+    private void ApplyPendingEffects()
     {
         int pendingEffectsCount = PendingEffects.Count;
         for (int i = 0; i < pendingEffectsCount; i++)
@@ -93,5 +89,10 @@ public class Play
     {
         PendingEffects.Add(pendingEffect);
         IsAPendingEffect = true;
+    }
+
+    public void RemoveAPendingEffect(Effect pendingEffectToRemove)
+    {
+        PendingEffects.Remove(pendingEffectToRemove);
     }
 }

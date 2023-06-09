@@ -1,19 +1,20 @@
 using RawDeal.GameLogic.Plays;
+using RawDealView;
 
 namespace RawDeal.Cards.CardEffects.GeneralEffects.DiscardCards;
 
 public class TopCardOfArsenalToRingsidePile : Effect
 {
-    private readonly CardCollateralDamage _cardDamager;
+    private readonly CollateralDamageController _damageController;
 
-    public TopCardOfArsenalToRingsidePile(Game game) : base(game.ViewObject)
+    public TopCardOfArsenalToRingsidePile(View view, Game game) : base(view)
     {
-        _cardDamager = new CardCollateralDamage(game, game.ViewObject);
+        _damageController = new CollateralDamageController(game, view);
     }
 
     protected override void ApplyCustomEffect(Play currentPlay)
     {
-        _view.SayThatPlayerDamagedHimself(CurrentPlayer.GetSuperStarName(), damage: 1);
-        _cardDamager.BeginCollateralDamage(1);
+        _view.SayThatPlayerDamagedHimself(_currentPlayer.GetSuperStarName(), damage: 1);
+        _damageController.BeginCollateralDamage(1);
     }
 }

@@ -13,12 +13,13 @@ public class Turn
     private Game _game;
     private Player _notCurrentPlayer;
     private readonly View _view;
-
-
-    public Turn(Play currentPlay, View view)
+    private readonly PlayManager _playManager;
+    
+    public Turn(PlayManager playManager, View view)
     {
+        _playManager = playManager;
         _view = view;
-        _currentPlay = currentPlay;
+        _currentPlay = playManager.GetCurrentPlay();
         SetPlayers();
     }
 
@@ -26,17 +27,11 @@ public class Turn
     {
         _game = game;
         _view.SayThatATurnBegins(_currentPlayer.GetSuperStarName());
-        ResetPlayerStatusInTurn();
+        _currentPlayer.ResetPlayerStatusInTurn();
         RunDrawSegment();
         RunTurnLoop();
     }
-
-    private void ResetPlayerStatusInTurn()
-    {
-        _currentPlayer.HasUsedHisAbilityInTheTurn = false;
-        _currentPlayer.HasEndsHisTurn = false;
-    }
-
+    
     private void RunDrawSegment()
     {
         _currentPlayer.MoveCardFromArsenalToHand();
@@ -44,7 +39,7 @@ public class Turn
 
     private void RunTurnLoop()
     {
-        while (!_currentPlayer.HasEndsHisTurn && !_game.GameIsOver)
+        while (!_currentPlayer.HasEndsHisTurn && !_game.IsGameOver())
         {
             ExecuteAutomaticAbilities();
             ViewManager.ShowPlayersInfo(_view, _currentPlay);
@@ -71,8 +66,8 @@ public class Turn
                 break;
             case NextPlay.PlayCard:
                 _game.MakePlayManagerApplyPendingEffects();
-                CardPlayer cardPlayer = new(_game, _view);
-                cardPlayer.PlayCard(_game.PlayManager);
+                CardPlayer cardPlayer = new CardPlayer(_game, _view);
+                cardPlayer.PlayCard(_playManager);
                 break;
             case NextPlay.UseAbility:
                 _currentPlayer.UseSuperStarAbility(_notCurrentPlayer);

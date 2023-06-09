@@ -55,7 +55,7 @@ public class CardCollection
 
     public List<string> GetFormattedCards()
     {
-        List<string> formattedCards = new();
+        List<string> formattedCards = new List<string>();
 
         foreach (Card card in CardList) formattedCards.Add(card.GetCardFormattedInfo());
 
@@ -64,7 +64,7 @@ public class CardCollection
 
     public List<Card> GetLastCardsReversed(int? numberOfCards)
     {
-        List<Card> lastCards = new();
+        List<Card> lastCards = new List<Card>();
         int index = CardListSize - 1;
         while (index >= 0 && lastCards.Count < numberOfCards)
         {

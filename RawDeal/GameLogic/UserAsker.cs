@@ -30,7 +30,7 @@ public class UserAsker
 
     public int SelectACard(PlayManager playManager)
     {
-        Player currentPlayer = playManager.CurrentPlay.CurrentPlayer;
+        Player currentPlayer = playManager.GetCurrentPlay().CurrentPlayer;
         List<(int, Card)> playableCards = currentPlayer.GetPlayableCardsFromPlayer(playManager);
         List<string> playableCardsFormatted =
             _playableCardsFormatter.GetPlayableCards(playableCards, currentPlayer.Fortitude);

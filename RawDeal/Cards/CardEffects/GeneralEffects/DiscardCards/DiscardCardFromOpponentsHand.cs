@@ -11,10 +11,10 @@ public class DiscardCardFromOpponentsHand : Effect
 
     protected override void ApplyCustomEffect(Play currentPlay)
     {
-        List<string> opponentsHand = NotCurrentPlayer.GetCardsInStringFormatFromHand();
+        List<string> opponentsHand = _notCurrentPlayer.GetCardsInStringFormatFromHand();
         int indexInHand = _view.AskPlayerToSelectACardToDiscard(opponentsHand,
-            NotCurrentPlayer.GetSuperStarName(),
-            CurrentPlayer.GetSuperStarName(), 1);
-        NotCurrentPlayer.MoveCardFromHandToRingsideByIndex(indexInHand);
+            _notCurrentPlayer.GetSuperStarName(),
+            _currentPlayer.GetSuperStarName(), totalCardsToDiscard: 1);
+        _notCurrentPlayer.MoveCardFromHandToRingsideByIndex(indexInHand);
     }
 }

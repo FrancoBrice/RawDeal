@@ -13,14 +13,14 @@ public class Undertaker : SuperStar
     {
         _view.SayThatPlayerIsGoingToUseHisAbility(player.GetSuperStarName(),
             player.GetSuperStarAbility());
-        int numberOfCardsToDiscard = 2;
+        const int numberOfCardsToDiscard = 2;
         MakePlayerDiscardCardsWithSelection(player, numberOfCardsToDiscard);
         RecoverCardFromRingide(player);
     }
 
     public override bool CanUseAbility(Player player)
     {
-        int minimumCardsInHand = 2;
+        const int minimumCardsInHand = 2;
         return player.GetHandSize() >= minimumCardsInHand && !player.HasUsedHisAbilityInTheTurn;
     }
 

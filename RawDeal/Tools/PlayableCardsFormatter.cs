@@ -20,7 +20,7 @@ public class PlayableCardsFormatter
 
     public static List<string> GetReversalCards(List<(int, Card)> reversalCardsTuples)
     {
-        List<string> formattedReversalCards = new();
+        List<string> formattedReversalCards = new List<string>();
         foreach ((int, Card) tupleIndexInHandAndCard in reversalCardsTuples)
             formattedReversalCards.Add(GetCardInPlayFormat(tupleIndexInHandAndCard, "Reversal"));
 

@@ -11,6 +11,6 @@ public class SetDamageFromAttackingCardToReversal : Effect
 
     protected override void ApplyCustomEffect(Play currentPlay)
     {
-        ReversalCard.SetCurrentDamage(NotCurrentPlayer.CalculateDamage(AttackingCard));
+        _reversalCard.SetCurrentDamage(_notCurrentPlayer.CalculateDamage(_attackingCard));
     }
 }

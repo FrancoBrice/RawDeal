@@ -8,10 +8,10 @@ public static class PreConditionChecker
 {
     public static bool IsPlayableCard(Card cardToCheck, PlayManager playManager)
     {
-        Play currentPlay = playManager.CurrentPlay;
+        Play currentPlay = playManager.GetCurrentPlay();
         Player currentPlayer = currentPlay.CurrentPlayer;
         Player notCurrentPlayer = currentPlay.NotCurrentPlayer;
-        Card lastCardPlayed = new();
+        Card lastCardPlayed = new Card();
         if (currentPlay.PlayedCards.CardListSize >= 1) lastCardPlayed = currentPlay.GetLastCard();
         switch (cardToCheck.Title)
         {
@@ -33,12 +33,12 @@ public static class PreConditionChecker
             case "Lionsault":
                 int minimumDamageOfPreviousCard = 4;
                 if (currentPlay.PlayedCards.CardListSize < 1) break;
-                return notCurrentPlayer.DamagesReceived[^1] >= minimumDamageOfPreviousCard &&
+                return notCurrentPlayer.LastDamageReceived() >= minimumDamageOfPreviousCard &&
                        lastCardPlayed.PlayedType == "Maneuver";
             case "Austin Elbow Smash":
                 minimumDamageOfPreviousCard = 5;
                 if (currentPlay.PlayedCards.CardListSize < 1) break;
-                return notCurrentPlayer.DamagesReceived[^1] >= minimumDamageOfPreviousCard &&
+                return notCurrentPlayer.LastDamageReceived() >= minimumDamageOfPreviousCard &&
                        lastCardPlayed.PlayedType == "Maneuver";
             default:
                 return true;

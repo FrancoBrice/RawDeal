@@ -67,7 +67,7 @@ public class Card : IViewableCardInfo
 
     public string GetCardInPlayFormat(string typeOfCardPlayedAs)
     {
-        PlayInfo playInfo = new(this, typeOfCardPlayedAs.ToUpper());
+        PlayInfo playInfo = new PlayInfo(this, typeOfCardPlayedAs.ToUpper());
         return playInfo.GetCardInPlayFormat();
     }
 

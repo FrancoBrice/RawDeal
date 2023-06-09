@@ -3,10 +3,10 @@ using RawDealView;
 
 namespace RawDeal.Cards;
 
-public class CardCollateralDamage : CardDamager
+public class CollateralDamageController : CardDamageController
 {
     
-    public CardCollateralDamage(Game game, View view) : base(game, view)
+    public CollateralDamageController(Game game, View view) : base(game, view)
     {
     }
     

@@ -4,7 +4,7 @@ class TestingView: AbstractView
 {
     private const string InputKeyword = "INPUT: ";
     private readonly string[] _expectedScript;
-    private readonly Queue<string> _inputsFromUser = new();
+    private readonly Queue<string> _inputsFromUser = new Queue<string>();
 
     public TestingView(string pathTestScript)
     {

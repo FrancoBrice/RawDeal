@@ -7,17 +7,16 @@ namespace RawDealView;
 public class View
 {
     private readonly AbstractView _view;
-    private readonly PlayFormatter _playFormatter = new();
-    private readonly CardFormatter _cardFormatter = new();
+    private readonly PlayFormatter _playFormatter = new PlayFormatter();
+    private readonly CardFormatter _cardFormatter = new CardFormatter();
 
-    public static View BuildConsoleView()
-        => new (new ConsoleView());
+    public static View BuildConsoleView() => new View(new ConsoleView());
     
-    public static View BuildTestingView(string pathTestScript)
-        => new (new TestingView(pathTestScript));
+    public static View BuildTestingView(string pathTestScript) =>
+        new View(new TestingView(pathTestScript));
 
-    public static View BuildManualTestingView(string pathTestScript)
-        => new (new ManualTestingView(pathTestScript));
+    public static View BuildManualTestingView(string pathTestScript) =>
+        new View(new ManualTestingView(pathTestScript));
 
     private View(AbstractView newView)
         => _view = newView;

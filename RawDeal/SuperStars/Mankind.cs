@@ -7,7 +7,7 @@ public class Mankind : SuperStar
     public Mankind(string name, string logo, int handSize, int superstarValue,
         string superstarAbility) : base(name, logo, handSize, superstarValue, superstarAbility)
     {
-        HasInitialAbility = true;
+        _hasInitialAbility = true;
     }
 
     public override void UseInitialAbility(Player player)

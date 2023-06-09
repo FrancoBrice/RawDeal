@@ -22,14 +22,14 @@ public class DeckSelector
             string deckPath = _view.AskUserToSelectDeck(deckFolder);
             DeckValidator deck = GetDeckFromPath(deckPath);
             if (IsInvalidDeck(deck)) return;
-            _game.SelectedDecks.Add(deck);
+            _game.AddDeckValidator(deck);
         }
     }
 
     public bool AreDecksValid()
     {
         const int correctNumberOfDecks = 2;
-        return _game.SelectedDecks.Count == correctNumberOfDecks;
+        return _game.GetSelectedDecksSize() == correctNumberOfDecks;
     }
 
     private DeckValidator GetDeckFromPath(string path)
@@ -50,7 +50,7 @@ public class DeckSelector
     {
         IEnumerable<string> cardStrings =
             File.ReadAllLines(path).Where(line => !line.Contains("(Superstar Card)"));
-        List<Card> cardsList = new();
+        List<Card> cardsList = new List<Card>();
         foreach (string cardString in cardStrings)
         {
             Card? card = _game.AllCardsList.FirstOrDefault(card => card.Title == cardString);
@@ -64,7 +64,7 @@ public class DeckSelector
     {
         IEnumerable<string> superStarStringsList =
             File.ReadAllLines(path).Where(line => line.Contains("(Superstar Card)"));
-        List<SuperStar> superStarsList = new();
+        List<SuperStar> superStarsList = new List<SuperStar>();
 
         foreach (string superstarString in superStarStringsList)
         {

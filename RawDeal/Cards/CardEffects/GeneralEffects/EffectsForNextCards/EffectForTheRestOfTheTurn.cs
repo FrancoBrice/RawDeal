@@ -16,14 +16,9 @@ public class EffectForTheRestOfTheTurn : Effect
 
     protected override void ApplyCustomEffect(Play currentPlay)
     {
-        if (_playIdThatAppliesBonus != currentPlay.Id)
-        {
-            currentPlay.PendingEffects.Remove(this);
-            return;
-        }
-
+        currentPlay.RemoveAPendingEffect(this);
+        if (_playIdThatAppliesBonus != currentPlay.Id) return;
         _effect.ApplyEffect(currentPlay);
-        currentPlay.PendingEffects.Remove(this);
         currentPlay.AddPendingEffect(this);
     }
 }

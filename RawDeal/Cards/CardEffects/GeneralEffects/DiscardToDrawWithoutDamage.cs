@@ -12,10 +12,10 @@ public class DiscardToDrawWithoutDamage : Effect
 
     protected override void ApplyCustomEffect(Play currentPlay)
     {
-        _view.SayThatPlayerMustDiscardThisCard(CurrentPlayer.GetSuperStarName(),
-            AttackingCard.Title);
-        CardMobilizer.MoveSpecificCardFromHandToRingside(CurrentPlayer, AttackingCardTuple);
-        CurrentPlayer.MoveCardFromArsenalToHand();
-        _view.SayThatPlayerDrawCards(CurrentPlayer.GetSuperStarName(), 1);
+        _view.SayThatPlayerMustDiscardThisCard(_currentPlayer.GetSuperStarName(),
+            _attackingCard.Title);
+        CardMobilizer.MoveSpecificCardFromHandToRingside(_currentPlayer, _attackingCardTuple);
+        _currentPlayer.MoveCardFromArsenalToHand();
+        _view.SayThatPlayerDrawCards(_currentPlayer.GetSuperStarName(), numberOfCardsToDraw: 1);
     }
 }

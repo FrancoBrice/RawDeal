@@ -12,7 +12,7 @@ public class Hand : CardCollection
     public List<(int, Card)> GetTuplesWithPositionInHandAndPlayableCards(PlayManager playManager,
         int? fortitude)
     {
-        List<(int, Card)> tuplesWithPositionInHandAndPlayableCards = new();
+        List<(int, Card)> tuplesWithPositionInHandAndPlayableCards = new List<(int, Card)>();
         TypesOfPlayableCards = new List<string>();
         for (int indexInHand = 0; indexInHand < CardList.Count; indexInHand++)
         {
@@ -28,7 +28,7 @@ public class Hand : CardCollection
     public List<(int, Card)> GetTuplesWithPositionInHandAndReversalCards(Player player,
         PlayManager playManager)
     {
-        List<(int, Card)> tuplesWithPositionInHandAndReversalCards = new();
+        List<(int, Card)> tuplesWithPositionInHandAndReversalCards = new List<(int, Card)>();
         TypesOfPlayableCards = new List<string>();
         for (int indexInHand = 0; indexInHand < CardList.Count; indexInHand++)
         {

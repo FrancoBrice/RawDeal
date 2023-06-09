@@ -10,11 +10,11 @@ namespace RawDeal.GameLogic.Players;
 
 public class Player
 {
-    public readonly List<int> DamagesReceived;
     public readonly List<(int, Card)> TuplesWithPlayIdAndPlayedCards;
     public int Fortitude;
     public bool HasEndsHisTurn;
     public bool HasUsedHisAbilityInTheTurn;
+    private readonly List<int> _damagesReceived;
     private int _damageReducedByShield;
     private readonly List<Card> _allCardsList;
     private readonly View _view;
@@ -23,6 +23,7 @@ public class Player
     private Ringside Ringside { get; }
     private Hand Hand { get; }
     private RingArea RingArea { get; }
+
     
     public Player(SuperStar superstar, List<Card> cardList, View view)
     {
@@ -40,10 +41,10 @@ public class Player
         HasUsedHisAbilityInTheTurn = false;
         HasEndsHisTurn = false;
         _damageReducedByShield = 0;
-        DamagesReceived = new List<int>();
+        _damagesReceived = new List<int>();
         TuplesWithPlayIdAndPlayedCards = new List<(int, Card)>();
     }
-
+    
     private void DistributeOpeningHand()
     {
         List<Card> drawnCards = Arsenal.GetLastCardsReversed(SuperStar.HandSize);
@@ -157,7 +158,7 @@ public class Player
 
     public List<Card> GetReversalsFromArsenal(PlayManager playManager)
     {
-        List<Card> validReversals = new();
+        List<Card> validReversals = new List<Card>();
         foreach (Card card in Arsenal.CardList)
             if (ReversalsChecker.IsCorrectReversalCard(playManager, card))
             {
@@ -170,7 +171,7 @@ public class Player
     public void ReceiveDamage(int damage)
     {
         CardMobilizer.MoveCardsFromArsenalToRingSideByDamageAmount(this, damage);
-        DamagesReceived.Add(damage);
+        _damagesReceived.Add(damage);
     }
 
     public int CalculateDamage(Card card)
@@ -242,7 +243,7 @@ public class Player
 
     public void ExecuteInitialAbility()
     {
-        if (SuperStar.HasInitialAbility) SuperStar.UseInitialAbility(this);
+        if (SuperStar.HasInitialAbility()) SuperStar.UseInitialAbility(this);
     }
 
     private void InitializeArsenal(List<Card> deck)
@@ -269,4 +270,21 @@ public class Player
     {
         return _allCardsList.Where(card => card.IsTypeReversal).ToList();
     }
+
+    public int AmountOfDamagesReceived()
+    {
+        return _damagesReceived.Count;
+    }
+
+    public int LastDamageReceived()
+    {
+        return _damagesReceived[^1];
+    }
+    
+    public void ResetPlayerStatusInTurn()
+    {
+        HasUsedHisAbilityInTheTurn = false;
+        HasEndsHisTurn = false;
+    }
+    
 }

@@ -8,12 +8,12 @@ public abstract class Effect
 {
     private protected readonly View _view;
     private Play _currentPlay;
-    private protected Card AttackingCard;
-    private protected (int, Card) AttackingCardTuple;
-    private protected Player CurrentPlayer;
-    private protected Player NotCurrentPlayer;
-    private protected Card ReversalCard;
-    private protected (int, Card) ReversalCardTuple;
+    private protected Card _attackingCard;
+    private protected (int, Card) _attackingCardTuple;
+    private protected Player _currentPlayer;
+    private protected Player _notCurrentPlayer;
+    private protected Card _reversalCard;
+    private protected (int, Card) _reversalCardTuple;
 
     protected Effect(View view)
     {
@@ -32,15 +32,15 @@ public abstract class Effect
 
     private void SetPlayers()
     {
-        CurrentPlayer = _currentPlay.CurrentPlayer;
-        NotCurrentPlayer = _currentPlay.NotCurrentPlayer;
+        _currentPlayer = _currentPlay.CurrentPlayer;
+        _notCurrentPlayer = _currentPlay.NotCurrentPlayer;
     }
 
     private void SetCards()
     {
-        AttackingCard = _currentPlay.AttackingCard;
-        AttackingCardTuple = _currentPlay.AttackingCardTuple;
-        ReversalCard = _currentPlay.ReversalCard;
-        ReversalCardTuple = _currentPlay.ReversalCardTuple;
+        _attackingCard = _currentPlay.AttackingCard;
+        _attackingCardTuple = _currentPlay.AttackingCardTuple;
+        _reversalCard = _currentPlay.ReversalCard;
+        _reversalCardTuple = _currentPlay.ReversalCardTuple;
     }
 }

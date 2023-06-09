@@ -21,7 +21,7 @@ public class PlayersCreator
         foreach (DeckValidator deck in selectedDecks)
         {
             Player player = CreatePlayerFromDeck(deck);
-            _game.PlayersList.Add(player);
+            _game.AddPlayerToPlayersList(player);
         }
     }
 
@@ -29,7 +29,7 @@ public class PlayersCreator
     {
         SuperStar superstar = deckValidator.SuperStarsList.First();
         List<Card> cardsList = deckValidator.CardList;
-        Player player = new(superstar, cardsList, _view);
+        Player player = new Player(superstar, cardsList, _view);
         return player;
     }
 }

@@ -1,7 +1,7 @@
 using RawDeal.GameLogic.Plays;
 using RawDealView;
 
-namespace RawDeal.Cards.CardEffects.GeneralEffects;
+namespace RawDeal.Cards.CardEffects.GeneralEffects.EffectsForNextCards;
 
 public class DamageBonusIfPlayedAfterSpecificDamageAndType : Effect
 {
@@ -19,12 +19,11 @@ public class DamageBonusIfPlayedAfterSpecificDamageAndType : Effect
 
     protected override void ApplyCustomEffect(Play currentPlay)
     {
-        if (currentPlay.PlayedCardsCount < 2 || NotCurrentPlayer.DamagesReceived.Count == 0) return;
-        Card attackingCard = AttackingCard;
-        Card previousCardPlayed = currentPlay.PlayedCards.GetPenultimateCard;
-        int lastDamage = NotCurrentPlayer.DamagesReceived[^1];
+        if (currentPlay.PlayedCardsCount < 2 || _notCurrentPlayer.AmountOfDamagesReceived() == 0) return;
+        Card attackingCard = _attackingCard;
+        Card previousCardPlayed = currentPlay.PlayedCards.GetPenultimateCard; ;
         if (previousCardPlayed.PlayedType == _typeOfPreviousCardThatAppliesBonus &&
-            lastDamage >= _minimumDamage)
+            _notCurrentPlayer.LastDamageReceived() >= _minimumDamage)
             attackingCard.SetCurrentDamage(attackingCard.GetCurrentDamage() + _damageBonus);
     }
 }

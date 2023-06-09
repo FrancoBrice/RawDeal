@@ -1,4 +1,3 @@
-using RawDeal.Cards.CardEffects;
 using RawDeal.Cards.CardPreConditions;
 using RawDeal.GameLogic;
 using RawDeal.GameLogic.Players;
@@ -8,7 +7,7 @@ using RawDealView;
 
 namespace RawDeal.Cards;
 
-public class CardDamager
+public class CardDamageController
 {
     private protected readonly Play _currentPlay;
     private readonly Game _game;
@@ -22,16 +21,18 @@ public class CardDamager
     private protected Player _notCurrentPlayer;
     private protected bool _opponentRanOutOfCards;
     private int _pretendedDamage;
+    private PlayManager _playManager;
 
-    public CardDamager(Game game, View view)
+    public CardDamageController(Game game, View view)
     {
         _game = game;
         _view = view;
-        _currentPlay = _game.CurrentPlay;
+        _currentPlay = _game.GetCurrentPlay();
     }
 
-    public void ApplyCardDamage()
+    public void ApplyCardDamage(PlayManager playManager)
     {
+        _playManager = playManager;
         SetPlayers(_currentPlay);
         SetAttackingCardAndPretendedDamage();
         if (_pretendedDamage == 0) return;
@@ -75,14 +76,14 @@ public class CardDamager
 
     private void CheckAndApplyReversalByDeck(Card possibleReversal, int index)
     {
-        List<Card> possibleReversals = _notCurrentPlayer.GetReversalsFromArsenal(_game.PlayManager);
+        List<Card> possibleReversals = _notCurrentPlayer.GetReversalsFromArsenal(_playManager);
         possibleReversal.PlayedFrom = "Arsenal";
         if (!possibleReversals.Contains(possibleReversal) ||
-            !ReversalsChecker.IsCorrectReversalCard(_game.PlayManager, possibleReversal)) return;
+            !ReversalsChecker.IsCorrectReversalCard(_playManager, possibleReversal)) return;
         _cardWasReversedByDeck = true;
         _currentPlayer.HasEndsHisTurn = true;
         _currentPlay.SetReversalCardTuple((index, possibleReversal));
-        CardPlayer.HandleEffects(_game, possibleReversal);
+        CardPlayer.HandleEffects(_view, _game, possibleReversal);
         if (_actualDamage == _pretendedDamage) _cardWasReversedInLastCardOfDeck = true;
     }
 

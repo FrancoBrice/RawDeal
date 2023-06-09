@@ -17,9 +17,9 @@ public class ShuffleFromRingsideToArsenal : ShuffleFromRingsideEffect
         for (int i = 0; i < _actualNumberCardsToShuffle; i++)
         {
             int indexInputByUser = _view.AskPlayerToSelectCardsToRecover(
-                CurrentPlayer.GetSuperStarName(), remainingCardsToShuffle,
-                CurrentPlayer.GetCardsInStringFormatFromRingside());
-            CurrentPlayer.MoveCardByIndexFromRingsideToArsenalBeginning(indexInputByUser);
+                _currentPlayer.GetSuperStarName(), remainingCardsToShuffle,
+                _currentPlayer.GetCardsInStringFormatFromRingside());
+            _currentPlayer.MoveCardByIndexFromRingsideToArsenalBeginning(indexInputByUser);
             remainingCardsToShuffle--;
         }
     }

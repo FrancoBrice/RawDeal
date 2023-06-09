@@ -38,7 +38,7 @@ public static class ViewManager
     private static List<string> GetCardsAsStringListFromSelectedSet(Play currentPlay,
         CardSet setOfCardsSelected)
     {
-        List<string> cardStrings = new();
+        List<string> cardStrings = new List<string>();
 
         switch (setOfCardsSelected)
         {
@@ -72,7 +72,8 @@ public static class ViewManager
         int actualDamage)
     {
         string cardFormattedInfo = damagedCard.GetCardFormattedInfo();
-        _view.ShowCardOverturnByTakingDamage(cardFormattedInfo, indexShowedCard, actualDamage);
+        _view.ShowCardOverturnByTakingDamage(cardFormattedInfo, 
+            indexShowedCard, actualDamage);
     }
 
     public static void SayPlayerIsTryingToPlayCard(View view, Play currentPlay)
