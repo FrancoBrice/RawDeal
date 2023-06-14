@@ -99,7 +99,7 @@ public class CardDamageController
 
     public static void PlayerReceiveDamage(Player player, int damage)
     {
-        CardMobilizer.FromArsenalToRingSideByDamageAmount(player, damage);
+        CardMobilizer.MoveFromArsenalToRingsideByDamageAmount(player, damage);
         player.DamagesReceived.Add(damage);
     }
     private void FinishCardDamage(Player attackingPlayer)

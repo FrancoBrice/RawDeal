@@ -84,14 +84,14 @@ public static class ReversalsChecker
             case "Shoulder Block":
             case "Spear":
             case "Cross Body Block":
-                if (playManager.NumberOfPlayedCards() >= 2 &&
+                if (playManager.GetNumberOfPlayedCards() >= 2 &&
                     attackingCard.PlayedType == "Maneuver" &&
                     playManager.GetPenultimateCardPlayed().Title == "Irish Whip")
                     return true;
                 break;
             case "Facebuster":
             case "Lou Thesz Press":
-                if (playManager.NumberOfPlayedCards() >= 2 &&
+                if (playManager.GetNumberOfPlayedCards() >= 2 &&
                     attackingCard.PlayedType == "Maneuver" && reversalCard.PlayedFrom == "Hand" &&
                     playManager.GetPenultimateCardPlayed().Title == "Irish Whip")
                     return true;

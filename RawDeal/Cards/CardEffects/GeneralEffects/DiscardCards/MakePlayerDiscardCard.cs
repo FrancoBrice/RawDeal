@@ -24,7 +24,7 @@ public class MakePlayerDiscardCard : Effect
         {
             if (_playerThatMustDiscard.GetHandSize() == 0) return;
             int indexCardFromHand = GetIndexCardFromHand(remainingCardsToDiscard);
-            CardMobilizer.FromHandToRingsideByIndex(_playerThatMustDiscard, indexCardFromHand);
+            CardMobilizer.MoveFromHandToRingsideByIndex(_playerThatMustDiscard, indexCardFromHand);
             remainingCardsToDiscard--;
         }
     }

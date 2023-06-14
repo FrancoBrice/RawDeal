@@ -14,8 +14,8 @@ public class DiscardToDrawWithoutDamage : Effect
     {
         _view.SayThatPlayerMustDiscardThisCard(_currentPlayer.GetSuperStarName(),
             _attackingCard.Title);
-        CardMobilizer.SpecificCardFromHandToRingside(_currentPlayer, _attackingCardTuple);
-        CardMobilizer.FromArsenalToHand(_currentPlayer);
-        _view.SayThatPlayerDrawCards(_currentPlayer.GetSuperStarName(), numberOfCardsToDraw: 1);
+        CardMobilizer.MoveSpecificCardFromHandToRingside(_currentPlayer, _attackingCardTuple);
+        CardMobilizer.MoveFromArsenalToHand(_currentPlayer);
+        _view.SayThatPlayerDrawCards(_currentPlayer.GetSuperStarName(), numOfCardsToDraw: 1);
     }
 }

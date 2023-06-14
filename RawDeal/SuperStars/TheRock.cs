@@ -21,7 +21,7 @@ public class TheRock : SuperStar
         const int numberOfCards = 1;
         int indexInputByUser = _view.AskPlayerToSelectCardsToRecover(Name, numberOfCards,
             player.GetCardsInStringFormatFromRingside());
-        CardMobilizer.FromRingsideToArsenalBeginningByIndex(player, indexInputByUser);
+        CardMobilizer.MoveFromRingsideToArsenalBeginningByIndex(player, indexInputByUser);
     }
 
     public override bool CanUseAbility(Player player)

@@ -19,7 +19,7 @@ public class Mankind : SuperStar
 
     public override void UseAbility(Player player, Player opponentPlayer)
     {
-        CardMobilizer.FromArsenalToHand(player);
+        CardMobilizer.MoveFromArsenalToHand(player);
     }
 
     public override bool CanUseAbility(Player player)

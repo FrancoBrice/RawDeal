@@ -19,7 +19,7 @@ public static class CardMobilizer
         }
     }
 
-    private static void FromHandToRingAreaByIndex(Player player, int index)
+    private static void MoveFromHandToRingAreaByIndex(Player player, int index)
     {
         Hand hand = player.Hand;
         RingArea ringArea = player.RingArea;
@@ -28,7 +28,7 @@ public static class CardMobilizer
         ringArea.AddCard(card);
     }
 
-    public static void FromRingsideToArsenalBeginningByIndex(Player player, int index)
+    public static void MoveFromRingsideToArsenalBeginningByIndex(Player player, int index)
     {
         Ringside ringside = player.Ringside;
         Arsenal arsenal = player.Arsenal;
@@ -37,7 +37,7 @@ public static class CardMobilizer
         arsenal.AddCardAtTheBeginning(card);
     }
 
-    public static void FromHandToRingsideByIndex(Player player, int indexCardFromHand)
+    public static void MoveFromHandToRingsideByIndex(Player player, int indexCardFromHand)
     {
         Hand hand = player.Hand;
         Ringside ringside = player.Ringside;
@@ -46,7 +46,7 @@ public static class CardMobilizer
         ringside.AddCard(card);
     }
 
-    public static void FromRingsideToHandByIndex(Player player, int indexCardFromRingside)
+    public static void MoveFromRingsideToHandByIndex(Player player, int indexCardFromRingside)
     {
         Hand hand = player.Hand;
         Ringside ringside = player.Ringside;
@@ -55,7 +55,7 @@ public static class CardMobilizer
         hand.AddCard(card);
     }
 
-    public static void FromHandToArsenalBeginningByIndex(Player player, int indexFromHand)
+    public static void MoveFromHandToArsenalBeginningByIndex(Player player, int indexFromHand)
     {
         Hand hand = player.Hand;
         Arsenal arsenal = player.Arsenal;
@@ -63,21 +63,21 @@ public static class CardMobilizer
         hand.RemoveCardByIndex(indexFromHand);
         arsenal.AddCardAtTheBeginning(card);
     }
-    public static void FromHandToRingArea(Player player,
+    public static void MoveFromHandToRingArea(Player player,
         (int, Card) tupleWithIndexInHandAndSelectedCard)
     {
         int indexInHand = TupleManager.ExtractIndex(tupleWithIndexInHandAndSelectedCard);
-        FromHandToRingAreaByIndex(player, indexInHand);
+        MoveFromHandToRingAreaByIndex(player, indexInHand);
     }
 
-    public static void SpecificCardFromHandToRingside(Player player,
+    public static void MoveSpecificCardFromHandToRingside(Player player,
         (int, Card) tupleWithIndexInHandAndSelectedCard)
     {
         int indexInHand = TupleManager.ExtractIndex(tupleWithIndexInHandAndSelectedCard);
-        FromHandToRingsideByIndex(player, indexInHand);
+        MoveFromHandToRingsideByIndex(player, indexInHand);
     }
 
-    public static void FromArsenalToHand(Player player, int numberOfCards)
+    public static void MoveFromArsenalToHandByAmount(Player player, int numberOfCards)
     {
         Arsenal arsenal  = player.Arsenal;
         Hand hand = player.Hand;
@@ -90,7 +90,7 @@ public static class CardMobilizer
         }
     }
     
-    public static void FromArsenalToHand(Player player)
+    public static void MoveFromArsenalToHand(Player player)
     {
         Arsenal arsenal = player.Arsenal;
         Hand hand = player.Hand;
@@ -101,7 +101,7 @@ public static class CardMobilizer
         arsenal.RemoveLastCard();
     }
 
-    public static void FromArsenalToRingSideByDamageAmount(Player player,
+    public static void MoveFromArsenalToRingsideByDamageAmount(Player player,
         int? damageAmount)
     {
         Arsenal arsenal = player.Arsenal;
@@ -118,7 +118,7 @@ public static class CardMobilizer
 
     public static void DrawStunValueCards(Player attackingPlayer, int numberOfCardsToDraw)
     {
-        for (int i = 0; i < numberOfCardsToDraw; i++) FromArsenalToHand(attackingPlayer);
+        for (int i = 0; i < numberOfCardsToDraw; i++) MoveFromArsenalToHand(attackingPlayer);
     }
     
 }

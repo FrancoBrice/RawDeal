@@ -21,6 +21,6 @@ public class PlayerDrawCards : Effect
         if (_player.GetArsenalSize() < _numberOfCardsToDraw) return;
         _view.SayThatPlayerDrawCards(_player.GetSuperStarName(),
             _numberOfCardsToDraw);
-        CardMobilizer.FromArsenalToHand(_player, _numberOfCardsToDraw);
+        CardMobilizer.MoveFromArsenalToHandByAmount(_player, _numberOfCardsToDraw);
     }
 }

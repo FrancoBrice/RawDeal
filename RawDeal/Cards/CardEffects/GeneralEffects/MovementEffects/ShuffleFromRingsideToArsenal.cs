@@ -20,7 +20,7 @@ public class ShuffleFromRingsideToArsenal : ShuffleFromRingsideEffect
             int indexInputByUser = _view.AskPlayerToSelectCardsToRecover(
                 _currentPlayer.GetSuperStarName(), remainingCardsToShuffle,
                 _currentPlayer.GetCardsInStringFormatFromRingside());
-            CardMobilizer.FromRingsideToArsenalBeginningByIndex(_currentPlayer, indexInputByUser);
+            CardMobilizer.MoveFromRingsideToArsenalBeginningByIndex(_currentPlayer, indexInputByUser);
             remainingCardsToShuffle--;
         }
     }

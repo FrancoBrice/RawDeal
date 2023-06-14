@@ -2,7 +2,7 @@
 
 abstract class AbstractView
 {
-    private readonly Script _script = new Script();
+    private readonly Script _script = new();
     
     public void WriteLine(object text)
         => Write($"{text}\n");

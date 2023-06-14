@@ -15,11 +15,11 @@ public class StoneCold : SuperStar
         _view.SayThatPlayerIsGoingToUseHisAbility(player.GetSuperStarName(),
             player.GetSuperStarAbility());
         _view.SayThatPlayerDrawCards(player.GetSuperStarName(), 1);
-        CardMobilizer.FromArsenalToHand(player);
+        CardMobilizer.MoveFromArsenalToHand(player);
         int indexCardFromHand =
             _view.AskPlayerToReturnOneCardFromHisHandToHisArsenal(player.GetSuperStarName(),
                 player.GetCardsInStringFormatFromHand());
-        CardMobilizer.FromHandToArsenalBeginningByIndex(player, indexCardFromHand);
+        CardMobilizer.MoveFromHandToArsenalBeginningByIndex(player, indexCardFromHand);
     }
 
     public override bool CanUseAbility(Player player)

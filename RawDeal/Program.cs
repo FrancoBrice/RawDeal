@@ -1,16 +1,16 @@
 ﻿using RawDeal;
 using RawDealView;
 
-string folder = "09-SimpleEffects";
-int idTest = 14;
-string pathToTest = Path.Combine("data", $"{folder}-Tests", $"{idTest}.txt");
+string folder = "10-ComplexEffects";
 
 // Esta vista permite verificar el comportamiento de un test particular.
-// Intenté que el texto en consola salga azúl si el output es el esperado y rojo si no lo es
-//                                  ... pero no testié suficiente este nuevo feature así que no prometo nada :P
-View view = View.BuildManualTestingView(pathToTest);
+// El texto en consola saldrá azúl cuando el output sea el esperado y rojo cuando no lo sea. 
+// Cuando aparezca texto rojo el programa entrará en "modo manual"
+int idTest = 1;
+string pathToTest = Path.Combine("data", $"{folder}-Tests", $"{idTest}.txt");
+View view = View.BuildManualTestingView(pathToTest); 
 
-// También puedes usar la vista antigua si quieres.
+// esta vista permite jugar el juego de manera manual
 // View view = View.BuildConsoleView();  
 
 string deckFolder = Path.Combine("data", folder);

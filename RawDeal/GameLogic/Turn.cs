@@ -35,7 +35,7 @@ public class Turn
     
     private void RunDrawSegment()
     {
-        CardMobilizer.FromArsenalToHand(_currentPlayer);
+        CardMobilizer.MoveFromArsenalToHand(_currentPlayer);
     }
 
     private void RunTurnLoop()

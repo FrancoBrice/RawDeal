@@ -53,7 +53,7 @@ public abstract class SuperStar
         int indexCardFromPlayerHand = _view.AskPlayerToSelectACardToDiscard(
             player.GetCardsInStringFormatFromHand(), player.GetSuperStarName(),
             player.GetSuperStarName(), 1);
-        CardMobilizer.FromHandToRingsideByIndex(player, indexCardFromPlayerHand);
+        CardMobilizer.MoveFromHandToRingsideByIndex(player, indexCardFromPlayerHand);
     }
 
     protected Card ApplyDamageToOpponent(Player opponentPlayer, int damage)
@@ -77,7 +77,7 @@ public abstract class SuperStar
         int indexCardFromRingside =
             _view.AskPlayerToSelectCardsToPutInHisHand(player.GetSuperStarName(), 1,
                 player.GetCardsInStringFormatFromRingside());
-        CardMobilizer.FromRingsideToHandByIndex(player, indexCardFromRingside);
+        CardMobilizer.MoveFromRingsideToHandByIndex(player, indexCardFromRingside);
     }
 
     protected void MakePlayerDiscardCardsWithSelection(Player player, int numberOfCardsToDiscard)
@@ -87,7 +87,7 @@ public abstract class SuperStar
             int indexCardFromHand = _view.AskPlayerToSelectACardToDiscard(
                 player.GetCardsInStringFormatFromHand(), player.GetSuperStarName(),
                 player.GetSuperStarName(), numberOfCardsToDiscard);
-            CardMobilizer.FromHandToRingsideByIndex(player, indexCardFromHand);
+            CardMobilizer.MoveFromHandToRingsideByIndex(player, indexCardFromHand);
             numberOfCardsToDiscard--;
         }
     }

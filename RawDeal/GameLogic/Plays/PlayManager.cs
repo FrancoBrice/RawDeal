@@ -57,7 +57,7 @@ public class PlayManager
         return _playedCards.GetPenultimateCard;
     }
 
-    public int NumberOfPlayedCards()
+    public int GetNumberOfPlayedCards()
     {
         return _playedCards.CardListSize;
     }

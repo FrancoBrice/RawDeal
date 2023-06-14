@@ -16,6 +16,6 @@ public class DiscardCardFromOpponentsHand : Effect
         int indexInHand = _view.AskPlayerToSelectACardToDiscard(opponentsHand,
             _notCurrentPlayer.GetSuperStarName(),
             _currentPlayer.GetSuperStarName(), totalCardsToDiscard: 1);
-        CardMobilizer.FromHandToRingsideByIndex(_notCurrentPlayer, indexInHand);
+        CardMobilizer.MoveFromHandToRingsideByIndex(_notCurrentPlayer, indexInHand);
     }
 }

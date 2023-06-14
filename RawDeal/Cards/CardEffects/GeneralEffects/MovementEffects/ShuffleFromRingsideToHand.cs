@@ -18,7 +18,7 @@ public class ShuffleFromRingsideToHand : ShuffleFromRingsideEffect
             int indexInputByUser = _view.AskPlayerToSelectCardsToPutInHisHand(
                 _currentPlayer.GetSuperStarName(), remainingCardsToShuffle,
                 _currentPlayer.GetCardsInStringFormatFromRingside());
-            CardMobilizer.FromRingsideToHandByIndex(_currentPlayer, indexInputByUser);
+            CardMobilizer.MoveFromRingsideToHandByIndex(_currentPlayer, indexInputByUser);
             remainingCardsToShuffle--;
         }
     }
