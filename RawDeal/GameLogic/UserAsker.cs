@@ -1,4 +1,3 @@
-using RawDeal.Cards;
 using RawDeal.GameLogic.Players;
 using RawDeal.GameLogic.Plays;
 using RawDeal.Tools;
@@ -11,7 +10,7 @@ public class UserAsker
 {
     private readonly PlayableCardsFormatter _playableCardsFormatter;
     private readonly View _view;
-    public List<(int, Card)> ListOfTuplesOfPlayableCards;
+    public List<IndexedCard> ListOfIndexedCardsOfPlayableCards;
     public List<string> TypesOfPlayableCards;
 
     public UserAsker(View view)
@@ -31,11 +30,12 @@ public class UserAsker
     public int SelectACard(PlayManager playManager)
     {
         Player currentPlayer = playManager.GetCurrentPlay().CurrentPlayer;
-        List<(int, Card)> playableCards = currentPlayer.GetPlayableCardsFromPlayer(playManager);
+        List<IndexedCard> playableCards = currentPlayer.GetPlayableCardsFromPlayer(playManager);
         List<string> playableCardsFormatted =
-            _playableCardsFormatter.GetPlayableCards(playableCards, currentPlayer.Fortitude);
+            _playableCardsFormatter.GetPlayableCards(playManager, playableCards, 
+                currentPlayer.Fortitude);
         TypesOfPlayableCards = _playableCardsFormatter.TypesOfPlayableCards;
-        ListOfTuplesOfPlayableCards = _playableCardsFormatter.ListOfTuplesOfPlayableCards;
+        ListOfIndexedCardsOfPlayableCards = _playableCardsFormatter.ListOfIndexedCardsOfPlayableCards;
         return _view.AskUserToSelectAPlay(playableCardsFormatted);
     }
 }

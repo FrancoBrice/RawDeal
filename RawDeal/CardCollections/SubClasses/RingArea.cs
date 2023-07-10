@@ -1,6 +1,5 @@
 using RawDeal.Cards;
-
-namespace RawDeal.CardCollections;
+namespace RawDeal.CardCollections.SubClasses;
 
 public class RingArea : CardCollection
 {

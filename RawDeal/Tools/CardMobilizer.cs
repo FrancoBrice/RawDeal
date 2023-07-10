@@ -1,5 +1,7 @@
 using RawDeal.CardCollections;
+using RawDeal.CardCollections.SubClasses;
 using RawDeal.Cards;
+using RawDeal.GameLogic;
 using RawDeal.GameLogic.Players;
 
 namespace RawDeal.Tools;
@@ -11,10 +13,10 @@ public static class CardMobilizer
     {
         Hand hand = player.Hand;
         Arsenal arsenal = player.Arsenal;
-        List<Card> drawnCards = player.Arsenal.GetLastCardsReversed(superstarHandSize);
+        CardCollection drawnCards = arsenal.GetLastCardsReversed(superstarHandSize);
         for (int index = drawnCards.Count - 1; index >= 0; index--)
         {
-            hand.AddCard(drawnCards[index]);
+            hand.Add(drawnCards.CardList[index]);
             arsenal.RemoveLastCard();
         }
     }
@@ -25,8 +27,27 @@ public static class CardMobilizer
         RingArea ringArea = player.RingArea;
         Card card = hand.GetCardByIndex(index);
         hand.RemoveCardByIndex(index);
-        ringArea.AddCard(card);
+        ringArea.Add(card);
     }
+
+    public static void MoveFromRingAreaToRingSideByIndex(Player player, int index)
+    {
+        RingArea ringArea = player.RingArea;
+        Ringside ringside = player.Ringside;
+        Card card = ringArea.GetCardByIndex(index);
+        ringArea.RemoveCardByIndex(index);
+        ringside.Add(card);
+    }
+
+    public static void MoveFromHandToArsenalByIndex(Player player, int index)
+    {
+        Hand hand = player.Hand;
+        Arsenal arsenal = player.Arsenal;
+        Card card = hand.GetCardByIndex(index);
+        hand.RemoveCardByIndex(index);
+        arsenal.Add(card);
+    }
+    
 
     public static void MoveFromRingsideToArsenalBeginningByIndex(Player player, int index)
     {
@@ -43,16 +64,25 @@ public static class CardMobilizer
         Ringside ringside = player.Ringside;
         Card card = hand.GetCardByIndex(indexCardFromHand);
         hand.RemoveCardByIndex(indexCardFromHand);
-        ringside.AddCard(card);
+        ringside.Add(card);
     }
-
+    
     public static void MoveFromRingsideToHandByIndex(Player player, int indexCardFromRingside)
     {
         Hand hand = player.Hand;
         Ringside ringside = player.Ringside;
         Card card = ringside.GetCardByIndex(indexCardFromRingside);
         ringside.RemoveCardByIndex(indexCardFromRingside);
-        hand.AddCard(card);
+        hand.Add(card);
+    }
+    
+    public static void MoveFromArsenalToHandByIndex(Player player, int indexCardFromRingside)
+    {
+        Hand hand = player.Hand;
+        Arsenal arsenal = player.Arsenal;
+        Card card = arsenal.GetCardByIndex(indexCardFromRingside);
+        arsenal.RemoveCardByIndex(indexCardFromRingside);
+        hand.Add(card);
     }
 
     public static void MoveFromHandToArsenalBeginningByIndex(Player player, int indexFromHand)
@@ -63,17 +93,18 @@ public static class CardMobilizer
         hand.RemoveCardByIndex(indexFromHand);
         arsenal.AddCardAtTheBeginning(card);
     }
+    
     public static void MoveFromHandToRingArea(Player player,
-        (int, Card) tupleWithIndexInHandAndSelectedCard)
+        IndexedCard indexedCardWithIndexInHandAndSelectedCard)
     {
-        int indexInHand = TupleManager.ExtractIndex(tupleWithIndexInHandAndSelectedCard);
+        int indexInHand = indexedCardWithIndexInHandAndSelectedCard.Index;
         MoveFromHandToRingAreaByIndex(player, indexInHand);
     }
 
     public static void MoveSpecificCardFromHandToRingside(Player player,
-        (int, Card) tupleWithIndexInHandAndSelectedCard)
+        IndexedCard indexedCardWithIndexInHandAndSelectedCard)
     {
-        int indexInHand = TupleManager.ExtractIndex(tupleWithIndexInHandAndSelectedCard);
+        int indexInHand = indexedCardWithIndexInHandAndSelectedCard.Index;
         MoveFromHandToRingsideByIndex(player, indexInHand);
     }
 
@@ -82,10 +113,10 @@ public static class CardMobilizer
         Arsenal arsenal  = player.Arsenal;
         Hand hand = player.Hand;
         if (player.GetArsenalSize() < 1) return;
-        List<Card> drawnCards = arsenal.GetLastCards(numberOfCards);
+        CardCollection drawnCards = arsenal.GetLastCards(numberOfCards);
         foreach (Card drawnCard in drawnCards)
         {
-            hand.AddCard(drawnCard);
+            hand.Add(drawnCard);
             arsenal.RemoveLastCard();
         }
     }
@@ -94,10 +125,10 @@ public static class CardMobilizer
     {
         Arsenal arsenal = player.Arsenal;
         Hand hand = player.Hand;
-        if (arsenal.CardListSize < 1) return;
-        List<Card> drawnCards = arsenal.GetLastCardsReversed(1);
-        Card drawnCard = drawnCards[0];
-        hand.AddCard(drawnCard);
+        if (arsenal.Count < 1) return;
+        CardCollection drawnCards = arsenal.GetLastCardsReversed(1);
+        Card drawnCard = drawnCards.CardList[0];
+        hand.Add(drawnCard);
         arsenal.RemoveLastCard();
     }
 
@@ -106,12 +137,12 @@ public static class CardMobilizer
     {
         Arsenal arsenal = player.Arsenal;
         Ringside ringside = player.Ringside;
-        List<Card> cardsList = arsenal.GetLastCardsReversed(damageAmount);
+        CardCollection cards = arsenal.GetLastCardsReversed(damageAmount);
         if (damageAmount >= player.GetArsenalSize()) damageAmount = player.GetArsenalSize();
         for (int? index = damageAmount - 1; index >= 0; index--)
         {
-            Card currentCard = cardsList[(int)index];
-            ringside.AddCard(currentCard);
+            Card currentCard = cards.CardList[(int)index];
+            ringside.Add(currentCard);
             arsenal.RemoveLastCard();
         }
     }

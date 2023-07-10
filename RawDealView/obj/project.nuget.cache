@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "yR4XGAXRMFB/+q5vNbCMWfvVuDRMezk6rJ+5i6IX2pHiQFQRI9X/ciMxX1NmG6nFei+VfzMYviT8MHdVHWDh5A==",
+  "dgSpecHash": "K5MxbfM3mllQhqw6mWOC51WvSlB2ZgJHLmpmSfu6CIKePvXAOK3qpy9lCjDM3+2HK1V0tzpZJ6CGNFBHTRztgw==",
   "success": true,
   "projectFilePath": "C:\\Users\\franc\\Documentos - Local\\RawDeal\\RawDealView\\RawDealView.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\franc\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512"
+  ],
   "logs": []
 }

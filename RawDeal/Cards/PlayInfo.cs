@@ -10,8 +10,8 @@ public class PlayInfo : IViewablePlayInfo
         PlayedAs = playedAs;
     }
 
-    public IViewableCardInfo CardInfo { get; set; }
-    public string PlayedAs { get; set; }
+    public IViewableCardInfo CardInfo { get; }
+    public string PlayedAs { get; }
 
     public string GetCardInPlayFormat()
     {

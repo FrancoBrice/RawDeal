@@ -2,7 +2,6 @@ using RawDeal.CardCollections;
 using RawDeal.Cards;
 using RawDeal.Cards.CardEffects;
 using RawDeal.GameLogic.Players;
-using RawDealView;
 
 namespace RawDeal.GameLogic.Plays;
 
@@ -10,7 +9,7 @@ public class PlayManager
 {
     private int _nextPlayId;
     private readonly List<Play> _plays;
-    private CardCollection _playedCards;
+    private readonly CardCollection _playedCards;
     private Play CurrentPlay => (_plays.Count > 0 ? _plays[^1] : null)!;
     private Play PreviousPlay => (_plays.Count > 1 ? _plays[^2] : null)!;
     
@@ -23,28 +22,39 @@ public class PlayManager
 
     public void AddPlay(Play play)
     {
-        play.Id = _nextPlayId;
-        _nextPlayId++;
+        AddIdToNewPlay(play);
         _plays.Add(play);
-        ApplyPendingEffectsIfPossible();
+        ImportPendingEffectsIfPossible();
         play.CardAddedToPlayedCards += HandleCardAddedToPlayedCards;
-        if (play.PlayedCards.CardListSize <= 0) return;
-        foreach (Card card in play.PlayedCards.CardList) _playedCards.AddCard(card);
+        if (play.PlayedCardsCount <= 0) return;
+        foreach (Card card in play.PlayedCards.CardList) _playedCards.Add(card);
     }
 
-    public void ApplyPendingEffectsIfPossible()
+    private void AddIdToNewPlay(Play play)
+    {
+        play.Id = _nextPlayId;
+        _nextPlayId++;
+    }
+
+    public void ImportPendingEffectsIfPossible()
     {
         if (_plays.Count < 2) return;
-        if (PreviousPlay.PendingEffects.Count < 1) return;
-        if (PreviousPlay.ReversalCard == null) return;
-        Effect pendingEffect = PreviousPlay.PendingEffects[^1];
-        CurrentPlay.AddPendingEffect(pendingEffect);
-        pendingEffect.ApplyEffect(PreviousPlay);
+        List<Effect> pendingEffectsCopy = new List<Effect>(PreviousPlay.PendingEffects);
+        if (pendingEffectsCopy.Count < 1) return;
+        for (int index = pendingEffectsCopy.Count - 1; index >= 0; index--)
+        {
+            Effect pendingEffect = pendingEffectsCopy[index];
+            if (pendingEffect.IsImportable)
+            {
+                CurrentPlay.AddPendingEffect(pendingEffect);
+                pendingEffect.ApplyEffect(PreviousPlay);
+            }
+        }
     }
 
     private void HandleCardAddedToPlayedCards(object sender, Card card)
     {
-        _playedCards.AddCard(card);
+        _playedCards.Add(card);
     }
     
     public void RemoveEffectsOnCards()
@@ -59,11 +69,16 @@ public class PlayManager
 
     public int GetNumberOfPlayedCards()
     {
-        return _playedCards.CardListSize;
+        return _playedCards.Count;
     }
 
     public Play GetCurrentPlay()
     {
         return CurrentPlay;
+    }
+
+    public Play GetPreviousPlay()
+    {
+        return PreviousPlay;
     }
 }

@@ -1,3 +1,4 @@
+using RawDeal.CardCollections;
 using RawDeal.Cards;
 using RawDeal.GameLogic.Players;
 using RawDeal.GameLogic.Plays;
@@ -10,7 +11,7 @@ public static class ViewManager
 {
     private static View _view;
 
-    public static void ShowDamagedCards(View view, List<Card> damagedCards, int actualDamage)
+    public static void ShowDamagedCards(View view, CardCollection damagedCards, int actualDamage)
     {
         _view = view;
         int indexShowedCard = 1;

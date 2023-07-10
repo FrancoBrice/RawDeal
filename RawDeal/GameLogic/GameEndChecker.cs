@@ -4,10 +4,14 @@ namespace RawDeal.GameLogic;
 
 public static class GameEndChecker
 {
-    public static void CheckForGameOver(Game game)
+    public static bool CheckForGameOver(Game game)
     {
         if (game.NotCurrentPlayer.HasZeroCardsInArsenal() && game.CurrentPlayer.HasEndsHisTurn)
+        {
             game.EndGame(game.CurrentPlayer);
+            return true;
+        }
+        return false;
     }
 
     public static bool PlayerRanOutOfCardsDuringDamage(Player player, int damage)

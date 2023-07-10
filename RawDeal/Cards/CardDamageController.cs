@@ -1,3 +1,4 @@
+using RawDeal.CardCollections;
 using RawDeal.Cards.CardPreConditions;
 using RawDeal.GameLogic;
 using RawDeal.GameLogic.Players;
@@ -10,18 +11,18 @@ namespace RawDeal.Cards;
 public class CardDamageController
 {
     private protected readonly Play _currentPlay;
-    private readonly Game _game;
+    private protected readonly Game _game;
     private protected readonly View _view;
-    private int _actualDamage;
-    private List<Card> _actualDamagedCards;
-    private Card _attackingCard;
-    private bool _cardWasReversedByDeck;
-    private bool _cardWasReversedInLastCardOfDeck;
+    private protected int _actualDamage;
+    private CardCollection _actualDamagedCards;
+    private protected Card _attackingCard;
+    private protected bool _cardWasReversedByDeck;
     private protected Player _currentPlayer;
     private protected Player _notCurrentPlayer;
     private protected bool _opponentRanOutOfCards;
-    private int _pretendedDamage;
-    private PlayManager _playManager;
+    private protected int _pretendedDamage;
+    private protected PlayManager _playManager;
+    private ReversalsByDeckController _reversalsByDeckController;
 
     public CardDamageController(Game game, View view)
     {
@@ -30,73 +31,57 @@ public class CardDamageController
         _currentPlay = _game.GetCurrentPlay();
     }
 
-    public void ApplyCardDamage(PlayManager playManager)
+    public void BeginApplicationOfCardDamage(PlayManager playManager)
     {
         _playManager = playManager;
+        _reversalsByDeckController = new ReversalsByDeckController(_game, _playManager, _view);
         SetPlayers(_currentPlay);
         SetAttackingCardAndPretendedDamage();
         if (_pretendedDamage == 0) return;
+        ApplyCardDamage();
+    }
+
+    private void ApplyCardDamage()
+    {
         HandleActualDamage(_notCurrentPlayer);
-        HandleReversalsByDeck(_currentPlayer, _notCurrentPlayer);
+        if (_cardWasReversedByDeck)
+        {
+            _reversalsByDeckController.HandleReversalsByDeck();
+        }
         _opponentRanOutOfCards =
             GameEndChecker.PlayerRanOutOfCardsDuringDamage(_notCurrentPlayer, _pretendedDamage);
         PlayerReceiveDamage(_notCurrentPlayer, _actualDamage);
         FinishCardDamage(_currentPlayer);
     }
-    
+
     private void HandleActualDamage(Player damagedPlayer)
     {
         _actualDamage = 0;
-        List<Card> cardsToBeDamaged = damagedPlayer.GetCardsFromArsenal(_pretendedDamage);
+        CardCollection cardsToBeDamaged = damagedPlayer.GetCardsFromArsenal(_pretendedDamage);
         _view.SayThatSuperstarWillTakeSomeDamage(damagedPlayer.GetSuperStarName(),
             _pretendedDamage);
         RunDamageLoop(cardsToBeDamaged);
         ViewManager.ShowDamagedCards(_view, _actualDamagedCards, _pretendedDamage);
     }
-
-    private void HandleReversalsByDeck(Player attackingPlayer, Player damagedPlayer)
+    
+    private void RunDamageLoop(CardCollection cardsToBeDamaged)
     {
-        if (!_cardWasReversedByDeck) return;
-        _view.SayThatCardWasReversedByDeck(damagedPlayer.GetSuperStarName());
-        HandleStunValue(attackingPlayer, _attackingCard);
-    }
-
-    private void RunDamageLoop(List<Card> cardsToBeDamaged)
-    {
-        _actualDamagedCards = new List<Card>();
+        _actualDamagedCards = new CardCollection();
         for (int index = cardsToBeDamaged.Count - 1; index >= 0; index--)
         {
             _actualDamage++;
-            Card damagedCard = cardsToBeDamaged[index];
+            Card damagedCard = cardsToBeDamaged.CardList[index];
             _actualDamagedCards.Add(damagedCard);
-            CheckAndApplyReversalByDeck(damagedCard, index);
-            if (_cardWasReversedByDeck) break;
+            if (_reversalsByDeckController.IsPossibleApplyReversalByDeck(damagedCard))
+            {
+                _reversalsByDeckController.SetActualDamage(_actualDamage);
+                _reversalsByDeckController.ApplyReversalByDeckIfPossible(damagedCard, index);
+                _cardWasReversedByDeck = true;
+                break;
+            }
         }
     }
-
-    private void CheckAndApplyReversalByDeck(Card possibleReversal, int index)
-    {
-        List<Card> possibleReversals = _notCurrentPlayer.GetReversalsFromArsenal(_playManager);
-        possibleReversal.PlayedFrom = "Arsenal";
-        if (!possibleReversals.Contains(possibleReversal) ||
-            !ReversalsChecker.IsCorrectReversalCard(_playManager, possibleReversal)) return;
-        _cardWasReversedByDeck = true;
-        _currentPlayer.HasEndsHisTurn = true;
-        _currentPlay.SetReversalCardTuple((index, possibleReversal));
-        CardPlayer.HandleEffects(_view, _game, possibleReversal);
-        if (_actualDamage == _pretendedDamage) _cardWasReversedInLastCardOfDeck = true;
-    }
-
-    private void HandleStunValue(Player attackingPlayer, Card attackingCard)
-    {
-        if (attackingCard.GetStunValue() <= 0 || _cardWasReversedInLastCardOfDeck) return;
-        int numberOfCardsToDraw = _view.AskHowManyCardsToDrawBecauseOfStunValue(
-            attackingPlayer.GetSuperStarName(), attackingCard.GetStunValue());
-        if (numberOfCardsToDraw == 0) return;
-        CardMobilizer.DrawStunValueCards(attackingPlayer, numberOfCardsToDraw);
-        _view.SayThatPlayerDrawCards(attackingPlayer.GetSuperStarName(), numberOfCardsToDraw);
-    }
-
+    
     public static void PlayerReceiveDamage(Player player, int damage)
     {
         CardMobilizer.MoveFromArsenalToRingsideByDamageAmount(player, damage);
@@ -119,8 +104,9 @@ public class CardDamageController
         _notCurrentPlayer = currentPlay.NotCurrentPlayer;
     }
     
-    private void SetAttackingCardAndPretendedDamage()
+    protected void SetAttackingCardAndPretendedDamage()
     {
+        if (_currentPlay.PlayedCardsCount == 0) return;
         _attackingCard = _currentPlay.GetLastCard();
         _pretendedDamage = _notCurrentPlayer.CalculateDamage(_attackingCard);
     }

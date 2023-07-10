@@ -1,10 +1,7 @@
-using RawDeal.Cards;
 using RawDeal.GameLogic;
 using RawDeal.GameLogic.DecksLogic;
 using RawDeal.GameLogic.Players;
 using RawDeal.GameLogic.Plays;
-using RawDeal.JsonReaders;
-using RawDeal.SuperStars;
 using RawDealView;
 
 namespace RawDeal;
@@ -12,7 +9,7 @@ namespace RawDeal;
 public class Game
 {
     private readonly PlayManager _playManager;
-    private readonly List<DeckValidator> _selectedDecks;
+    private DeckValidator[] _selectedDecks;
     private Play _currentPlay;
     private readonly View _view;
     private readonly string _deckFolder;
@@ -20,26 +17,21 @@ public class Game
     private int _indexCurrentPlayer;
     private int _indexNotCurrentPlayer;
     private bool _gameIsOver;
+    public Player CurrentPlayer => _playersList[_indexCurrentPlayer];
+    public Player NotCurrentPlayer => _playersList[_indexNotCurrentPlayer];
 
     public Game(View view, string deckFolder)
     {
         _playersList = new List<Player>();
         _view = view;
-        AllCardsList = CardsJsonReader.GenerateAllCardsListFromCardsFromJson();
-        AllSuperStarList = SuperstarsJsonReader.GenerateAllSuperStarsListFromJson();
         _deckFolder = deckFolder;
         _gameIsOver = false;
         _indexCurrentPlayer = 0;
         _indexNotCurrentPlayer = 1;
-        _selectedDecks = new List<DeckValidator>();
+        _selectedDecks = new DeckValidator[] { };
         _playManager = new PlayManager();
     }
-
-    public List<Card> AllCardsList { get; }
-    public List<SuperStar> AllSuperStarList { get; }
-    public Player CurrentPlayer => _playersList[_indexCurrentPlayer];
-    public Player NotCurrentPlayer => _playersList[_indexNotCurrentPlayer];
-
+    
     public void Play()
     {
         DeckSelector deckSelector = new DeckSelector(this, _view);
@@ -57,7 +49,7 @@ public class Game
         while (!_gameIsOver)
         {
             if (NotCurrentPlayer.HasZeroCardsInArsenal()) EndGame(CurrentPlayer);
-            _currentPlay = new Play(GetDictionaryOfCurrentAndNotCurrentPlayer());
+            _currentPlay = new Play(GetPlayersPackage());
             _playManager.AddPlay(_currentPlay);
             if (!_gameIsOver)
             {
@@ -82,7 +74,7 @@ public class Game
 
     public void MakePlayManagerApplyPendingEffects()
     {
-        _playManager.ApplyPendingEffectsIfPossible();
+        _playManager.ImportPendingEffectsIfPossible();
     }
 
     public void MakePlayManagerRemoveEffectsOnCards()
@@ -107,14 +99,9 @@ public class Game
         (playersList[0], playersList[1]) = (playersList[1], playersList[0]);
     }
 
-    public Dictionary<string, Player> GetDictionaryOfCurrentAndNotCurrentPlayer()
+    public PlayersPackage GetPlayersPackage()
     {
-        Dictionary<string, Player> players = new Dictionary<string, Player>
-        {
-            { "CurrentPlayer", CurrentPlayer },
-            { "NotCurrentPlayer", NotCurrentPlayer }
-        };
-        return players;
+        return new PlayersPackage(CurrentPlayer, NotCurrentPlayer);
     }
 
     public void AddPlayerToPlayersList(Player player)
@@ -129,16 +116,23 @@ public class Game
 
     public void AddDeckValidator(DeckValidator deck)
     {
-        _selectedDecks.Add(deck);
+        int currentLength = _selectedDecks.Length;
+        Array.Resize(ref _selectedDecks, currentLength + 1);
+        _selectedDecks[currentLength] = deck;
     }
 
     public int GetSelectedDecksSize()
     {
-        return _selectedDecks.Count;
+        return _selectedDecks.Length;
     }
 
     public bool IsGameOver()
     {
         return _gameIsOver;
+    }
+
+    public PlayManager GetPlayManager()
+    {
+        return _playManager;
     }
 }

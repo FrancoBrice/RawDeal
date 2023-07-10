@@ -1,4 +1,5 @@
 using RawDeal.CardCollections;
+using RawDeal.CardCollections.SubClasses;
 using RawDeal.Cards;
 using RawDeal.Cards.CardPreConditions;
 using RawDeal.GameLogic.Plays;
@@ -8,22 +9,43 @@ namespace RawDeal.GameLogic.Players;
 
 public class Player
 {
-    public List<(int, Card)> TuplesWithPlayIdAndPlayedCards;
+    public List<IndexedCard> PlayIdAndPlayedCards;
     public int Fortitude;
     public bool HasEndsHisTurn;
     public bool HasUsedHisAbilityInTheTurn;
-    public List<int> DamagesReceived;
-    public int DamageReducedByShield;
-    public List<Card> AllCardsList;
-    public SuperStar SuperStar { get; init; }
-    public Arsenal Arsenal { get; init; }
-    public Ringside Ringside { get; init; }
-    public Hand Hand { get; init; }
-    public RingArea RingArea { get; init; }
+    public readonly List<int> DamagesReceived;
+    private int _damageReducedByShield;
+    private readonly List<Card> _allCardsList;
+    private SuperStar SuperStar { get; }
+    public Arsenal Arsenal { get; }
+    public Ringside Ringside { get; }
+    public Hand Hand { get; }
+    public RingArea RingArea { get; }
+
+    public Player(SuperStar superstar, List<Card> cardList)
+    {
+        SuperStar = superstar;
+        Fortitude = 0;
+        Ringside = new Ringside();
+        RingArea = new RingArea();
+        Arsenal = new Arsenal();
+        Hand = new Hand();
+        _allCardsList = cardList;
+        DamagesReceived = new List<int>();
+        PlayIdAndPlayedCards = new List<IndexedCard>();
+        HasUsedHisAbilityInTheTurn = false;
+        HasEndsHisTurn = false;
+        _damageReducedByShield = 0;
+    }
 
     public List<string> GetCardsInStringFormatFromHand()
     {
         return Hand.GetFormattedCards();
+    }
+    
+    public List<string> GetCardsInStringFormatFromArsenal()
+    {
+        return Arsenal.GetFormattedCards();
     }
 
     public List<string> GetCardsInStringFormatFromRingside()
@@ -36,21 +58,41 @@ public class Player
         return RingArea.GetFormattedCards();
     }
 
-    public List<Card> GetCardsFromArsenal(int damage)
+    public CardCollection GetCardsFromArsenal(int damage)
     {
-        if (damage > Arsenal.CardListSize) damage = Arsenal.CardListSize;
-        List<Card> topCardsOfArsenal = Arsenal.GetLastCardsReversed(damage);
+        if (damage > Arsenal.Count) damage = Arsenal.Count;
+        CardCollection topCardsOfArsenal = Arsenal.GetLastCardsReversed(damage);
         return topCardsOfArsenal;
+    }
+    
+    public List<Card> GetAllArsenalCards()
+    {
+        return Arsenal.CardList;
+    }
+    
+    public List<Card> GetAllRingAreaCards()
+    {
+        return RingArea.CardList;
+    }
+    
+    public List<Card> GetAllRingsideCards()
+    {
+        return Ringside.CardList;
+    }
+    
+    public List<Card> GetAllHandCards()
+    {
+        return Hand.CardList;
     }
 
     public int GetHandSize()
     {
-        return Hand.CardListSize;
+        return Hand.Count;
     }
 
     public int GetArsenalSize()
     {
-        return Arsenal.CardListSize;
+        return Arsenal.Count;
     }
 
     public string GetSuperStarName()
@@ -65,17 +107,17 @@ public class Player
 
     public void SetDefaultValuesInCards()
     {
-        foreach (Card card in AllCardsList) card.SetDefaultValues();
+        foreach (Card card in _allCardsList) card.SetDefaultValues();
     }
 
-    public List<(int, Card)> GetPlayableCardsFromPlayer(PlayManager playManager)
+    public List<IndexedCard> GetPlayableCardsFromPlayer(PlayManager playManager)
     {
-        return Hand.GetTuplesWithPositionInHandAndPlayableCards(playManager, Fortitude);
+        return Hand.GetIndexedCardsWithPositionInHandAndPlayableCards(playManager);
     }
 
-    public List<(int, Card)> GetReversalTuplesFromHand(PlayManager playManager)
+    public List<IndexedCard> GetReversalIndexedCardsFromHand(PlayManager playManager)
     {
-        return Hand.GetTuplesWithPositionInHandAndReversalCards(this, playManager);
+        return Hand.GetIndexedCardsWithPositionInHandAndReversalCards(playManager);
     }
 
     public List<Card> GetReversalsFromArsenal(PlayManager playManager)
@@ -92,7 +134,7 @@ public class Player
 
     public int CalculateDamage(Card card)
     {
-        int actualDamage = Math.Max((int)(card.GetCurrentDamage() - DamageReducedByShield), 0);
+        int actualDamage = Math.Max((int)(card.GetCurrentDamage() - _damageReducedByShield), 0);
         return actualDamage;
     }
 
@@ -109,7 +151,7 @@ public class Player
 
     public bool HasZeroCardsInArsenal()
     {
-        return Arsenal.CardListSize == 0;
+        return Arsenal.Count == 0;
     }
 
     public bool CanUseHisAbility()
@@ -124,7 +166,7 @@ public class Player
 
     public int GetRingsideSize()
     {
-        return Ringside.CardListSize;
+        return Ringside.Count;
     }
 
     public string GetSuperStarAbility()
@@ -134,7 +176,7 @@ public class Player
 
     public void SetShieldOfDamage(int amountOfDamageShield)
     {
-        DamageReducedByShield = amountOfDamageShield;
+        _damageReducedByShield = amountOfDamageShield;
     }
 
     public void ExecuteInitialAbility()
@@ -144,7 +186,7 @@ public class Player
 
     public List<Card> GetAllReversalCards()
     {
-        return AllCardsList.Where(card => card.IsTypeReversal).ToList();
+        return _allCardsList.Where(card => card.IsTypeReversal).ToList();
     }
 
     public int AmountOfDamagesReceived()

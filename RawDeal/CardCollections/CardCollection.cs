@@ -1,8 +1,9 @@
+using System.Collections;
 using RawDeal.Cards;
 
 namespace RawDeal.CardCollections;
 
-public class CardCollection
+public class CardCollection : IEnumerable<Card>
 {
     public List<Card> CardList;
 
@@ -11,7 +12,7 @@ public class CardCollection
         CardList = new List<Card>();
     }
 
-    public int CardListSize => CardList.Count;
+    public int Count => CardList.Count;
 
     public Card GetPenultimateCard
     {
@@ -31,7 +32,7 @@ public class CardCollection
         }
     }
 
-    public void AddCard(Card card)
+    public void Add(Card card)
     {
         CardList.Add(card);
     }
@@ -45,7 +46,7 @@ public class CardCollection
     {
         try
         {
-            CardList.RemoveAt(CardListSize - 1);
+            CardList.RemoveAt(Count - 1);
         }
         catch (InvalidOperationException ex)
         {
@@ -56,16 +57,14 @@ public class CardCollection
     public List<string> GetFormattedCards()
     {
         List<string> formattedCards = new List<string>();
-
         foreach (Card card in CardList) formattedCards.Add(card.GetCardFormattedInfo());
-
         return formattedCards;
     }
 
-    public List<Card> GetLastCards(int? numberOfCards)
+    public CardCollection GetLastCards(int? numberOfCards)
     {
-        List<Card> lastCards = new List<Card>();
-        int index = CardListSize - 1;
+        CardCollection lastCards = new CardCollection();
+        int index = Count - 1;
         while (index >= 0 && lastCards.Count < numberOfCards)
         {
             lastCards.Add(CardList[index]);
@@ -74,10 +73,10 @@ public class CardCollection
         return lastCards;
     }
     
-    public List<Card> GetLastCardsReversed(int? numberOfCards)
+    public CardCollection GetLastCardsReversed(int? numberOfCards)
     {
-        List<Card> lastCards = GetLastCards(numberOfCards);
-        lastCards.Reverse();
+        CardCollection lastCards = GetLastCards(numberOfCards);
+        lastCards.CardList.Reverse();
         return lastCards;
     }
 
@@ -106,4 +105,16 @@ public class CardCollection
     {
         CardList.RemoveAt(index);
     }
+    
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
+    }
+
+    public IEnumerator<Card> GetEnumerator()
+    {
+        return CardList.GetEnumerator();
+    }
+
+    
 }

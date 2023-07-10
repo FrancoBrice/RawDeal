@@ -6,20 +6,21 @@ namespace RawDeal.JsonReaders;
 
 public static class SuperstarsJsonReader
 {
-    public static List<SuperStar> GenerateAllSuperStarsListFromJson()
+    public static SuperStar[] GenerateAllSuperStarsArrayFromJson()
     {
         string pathSuperStarJson = Path.Combine("data", "superstar.json");
         string allSuperStarJson = File.ReadAllText(pathSuperStarJson);
         JArray jsonArrayAllSuperStar = JArray.Parse(allSuperStarJson);
-        List<SuperStar> allSuperStarList = new List<SuperStar>();
+        SuperStar[] allSuperStarArray = new SuperStar[jsonArrayAllSuperStar.Count];
 
-        foreach (JObject jObjectSuperStar in jsonArrayAllSuperStar)
+        for (int i = 0; i < jsonArrayAllSuperStar.Count; i++)
         {
+            JObject jObjectSuperStar = (JObject)jsonArrayAllSuperStar[i];
             SuperStar superstar = CreateSuperStarUsingName(jObjectSuperStar);
-            allSuperStarList.Add(superstar);
+            allSuperStarArray[i] = superstar;
         }
 
-        return allSuperStarList;
+        return allSuperStarArray;
     }
 
     private static SuperStar CreateSuperStarUsingName(JObject jObject)
@@ -55,9 +56,9 @@ public static class SuperstarsJsonReader
 
     public static List<string> GenerateSuperStarLogosList()
     {
-        List<SuperStar> allSuperStarsList = GenerateAllSuperStarsListFromJson();
+        SuperStar[] allSuperStarsArray = GenerateAllSuperStarsArrayFromJson();
         List<string> superStarLogosList = new List<string>();
-        foreach (SuperStar superstar in allSuperStarsList) superStarLogosList.Add(superstar.Logo);
+        foreach (SuperStar superstar in allSuperStarsArray) superStarLogosList.Add(superstar.Logo);
         return superStarLogosList;
     }
 }

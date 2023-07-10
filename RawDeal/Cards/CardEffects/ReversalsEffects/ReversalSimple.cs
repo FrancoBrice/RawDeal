@@ -12,18 +12,16 @@ public class ReversalSimple : Effect
 
     protected override void ApplyCustomEffect(Play currentPlay)
     {
-        if (_reversalCard.Damage != "#") _reversalCard.SetDefaultValues();
-        if (_reversalCard.PlayedFrom == "Hand")
-        {
-            CardMobilizer.MoveSpecificCardFromHandToRingside(_currentPlayer, _attackingCardTuple);
-            _currentPlayer.HasEndsHisTurn = true;
-            _view.SayThatPlayerReversedTheCard(_notCurrentPlayer.GetSuperStarName(),
-                _reversalCard.GetCardInPlayFormat(_reversalCard.PlayedType));
-            CardMobilizer.MoveFromHandToRingArea(_notCurrentPlayer, _reversalCardTuple);
-        }
-        else if (_reversalCard.PlayedFrom == "Deck")
-        {
-            _currentPlayer.HasEndsHisTurn = true;
-        }
+        if (_reversalCard.Damage != "#" && !_reversalCard.HasPendingEffect) _reversalCard.SetDefaultValues();
+        _currentPlayer.HasEndsHisTurn = true;
+        if (_reversalCard.PlayedFrom == "Hand") HandleReversalFromHand();
+    }
+
+    private void HandleReversalFromHand()
+    {
+        CardMobilizer.MoveSpecificCardFromHandToRingside(_currentPlayer, _attackingIndexedCard);
+        _view.SayThatPlayerReversedTheCard(_notCurrentPlayer.GetSuperStarName(),
+            _reversalCard.GetCardInPlayFormat(_reversalCard.PlayedType));
+        CardMobilizer.MoveFromHandToRingArea(_notCurrentPlayer, _reversalIndexedCard);
     }
 }

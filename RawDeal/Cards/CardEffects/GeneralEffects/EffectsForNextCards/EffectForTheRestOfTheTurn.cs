@@ -15,7 +15,7 @@ public class EffectForTheRestOfTheTurn : Effect
     }
 
     protected override void ApplyCustomEffect(Play currentPlay)
-    {
+    { 
         currentPlay.RemoveAPendingEffect(this);
         if (_playIdThatAppliesBonus != currentPlay.Id) return;
         _effect.ApplyEffect(currentPlay);

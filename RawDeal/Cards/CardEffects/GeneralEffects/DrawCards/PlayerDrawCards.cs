@@ -7,7 +7,7 @@ namespace RawDeal.Cards.CardEffects.GeneralEffects.DrawCards;
 
 public class PlayerDrawCards : Effect
 {
-    private readonly int _numberOfCardsToDraw;
+    private int _numberOfCardsToDraw;
     private readonly Player _player;
 
     public PlayerDrawCards(View view, Player player, int numberOfCardsToDraw) : base(view)
@@ -18,9 +18,10 @@ public class PlayerDrawCards : Effect
 
     protected override void ApplyCustomEffect(Play currentPlay)
     {
-        if (_player.GetArsenalSize() < _numberOfCardsToDraw) return;
-        _view.SayThatPlayerDrawCards(_player.GetSuperStarName(),
-            _numberOfCardsToDraw);
+        if (_player.GetArsenalSize() < _numberOfCardsToDraw) 
+            _numberOfCardsToDraw = _player.GetArsenalSize();
+        _view.SayThatPlayerDrawCards(_player.GetSuperStarName(), _numberOfCardsToDraw);
+        if (_numberOfCardsToDraw <= 0) return;
         CardMobilizer.MoveFromArsenalToHandByAmount(_player, _numberOfCardsToDraw);
     }
 }

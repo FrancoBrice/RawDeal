@@ -8,9 +8,12 @@ public class ReversalsRequiresMoreFortitudeByTypeAndSubtype : Effect
     private readonly int? _extraFortitude;
     private readonly string _playedTypeThatAppliesEffect;
     private readonly string _subtypeThatAppliesEffect;
+    private PlayManager _playManager;
 
-    public ReversalsRequiresMoreFortitudeByTypeAndSubtype(View view, string type, string subtype, int extraFortitude) : base(view)
+    public ReversalsRequiresMoreFortitudeByTypeAndSubtype(View view, PlayManager playManager,  string type, string subtype, 
+        int extraFortitude) : base(view)
     {
+        _playManager = playManager;
         _playedTypeThatAppliesEffect = type;
         _subtypeThatAppliesEffect = subtype;
         _extraFortitude = extraFortitude;
@@ -18,18 +21,45 @@ public class ReversalsRequiresMoreFortitudeByTypeAndSubtype : Effect
     
     protected override void ApplyCustomEffect(Play currentPlay)
     {
-        currentPlay.IsAPendingEffect = true;
-        List<Card> opponentReversals = _currentPlayer.GetAllReversalCards();
-        Card lastCard = currentPlay.GetLastCard();
-        if (lastCard.PlayedType != _playedTypeThatAppliesEffect ||
-            !lastCard.Subtypes.Contains(_subtypeThatAppliesEffect))
+        if (currentPlay.PlayedCardsCount > 0)
         {
-            currentPlay.PendingEffects.Remove(this);
-            return;
+            BeginEffectApplication(currentPlay);
         }
+        currentPlay.RemoveAPendingEffect(this);
+    }
+
+    private void BeginEffectApplication(Play currentPlay)
+    {
+        List<Card> opponentReversals = _notCurrentPlayer.GetAllReversalCards();
+        Card lastCard = currentPlay.GetLastCard();
+        if (TypeIsCorrect(lastCard) && SubtypeIsCorrect(lastCard))
+        {
+            SetFortitudeInReversals(opponentReversals);
+        }
+    }
+
+    private bool TypeIsCorrect(Card lastCard)
+    {
+        return lastCard.PlayedType == _playedTypeThatAppliesEffect;
+    }
+    
+    private bool SubtypeIsCorrect(Card lastCard)
+    {
+        return lastCard.Subtypes.Contains(_subtypeThatAppliesEffect) || _subtypeThatAppliesEffect == "All";
+    }
+
+    private void SetFortitudeInReversals(List<Card> opponentReversals)
+    {
         foreach (Card opponentCard in opponentReversals)
+        {
             opponentCard.SetCurrentFortitude(Convert.ToInt32(opponentCard.Fortitude) +
                                              _extraFortitude);
-        currentPlay.PendingEffects.Remove(this);
+        }
+    }
+
+    protected override bool CheckIfIsImportable()
+    {
+        Play previousPlay = _playManager.GetPreviousPlay();
+        return previousPlay.ReversalCard != null;
     }
 }

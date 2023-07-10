@@ -1,4 +1,3 @@
-using RawDeal.CardCollections;
 using RawDeal.Cards;
 using RawDeal.GameLogic.DecksLogic;
 using RawDeal.SuperStars;
@@ -18,7 +17,7 @@ public class PlayersCreator
         _view = view;
     }
 
-    public void CreatePlayers(List<DeckValidator> selectedDecks)
+    public void CreatePlayers(DeckValidator[] selectedDecks)
     {
         foreach (DeckValidator deck in selectedDecks)
         {
@@ -29,7 +28,7 @@ public class PlayersCreator
 
     private Player CreatePlayerFromDeck(DeckValidator deckValidator)
     {
-        SuperStar superstar = deckValidator.SuperStarsList.First();
+        SuperStar superstar = deckValidator.SuperStarsArray.First();
         List<Card> cardsList = deckValidator.CardList;
         return CreatePlayer(superstar, cardsList);
     }
@@ -45,26 +44,12 @@ public class PlayersCreator
 
     private static Player CreateDefaultPlayer(SuperStar superstar, List<Card> cardList)
     {
-        return new Player
-        {
-            SuperStar = superstar,
-            Fortitude = 0,
-            Ringside = new Ringside(),
-            RingArea = new RingArea(),
-            Arsenal = new Arsenal(),
-            Hand = new Hand(),
-            AllCardsList = cardList,
-            DamagesReceived = new List<int>(),
-            TuplesWithPlayIdAndPlayedCards = new List<(int, Card)>(),
-            HasUsedHisAbilityInTheTurn = false,
-            HasEndsHisTurn = false,
-            DamageReducedByShield = 0
-        };
+        return new Player(superstar, cardList);
     }
     
     private static void InitializeArsenal(List<Card> deck, Player player)
     {
-        foreach (Card card in deck) player.Arsenal.AddCard(card);
+        foreach (Card card in deck) player.Arsenal.Add(card);
     }
     
     private static void AddViewToSuperStar(SuperStar superstar)

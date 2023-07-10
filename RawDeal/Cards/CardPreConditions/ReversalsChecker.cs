@@ -11,7 +11,7 @@ public static class ReversalsChecker
         Card attackingCard = currentPlay.AttackingCard;
         Player damagedPlayer = currentPlay.NotCurrentPlayer;
         if (!attackingCard.CanBeReversed) return false;
-        if (reversalCard.GetCurrentFortitude(reversalCard.PlayedType) > damagedPlayer.Fortitude)
+        if (reversalCard.GetCurrentFortitude(currentPlay, reversalCard.PlayedType) > damagedPlayer.Fortitude)
             return false;
         if (reversalCard.Subtypes.Contains("ReversalStrike"))
         {
@@ -108,6 +108,16 @@ public static class ReversalsChecker
                 return true;
             case "Double Arm DDT" when attackingCard.Title == "Back Body Drop":
                 return true;
+            case "Pedigree" when attackingCard.Title == "Back Body Drop":
+                return true;
+            case "Rock Bottom":
+                if (reversalCard.PlayedFrom == "Hand" && attackingCard.PlayedType == "Maneuver" && 
+                    attackingCard.Subtypes.Contains("Grapple") 
+                    && playerThatCanReverse.GetHandSize() >= 2)
+                {
+                    return true;
+                }
+                break;
         }
 
         return false;

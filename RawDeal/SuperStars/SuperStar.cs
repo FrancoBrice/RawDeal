@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using RawDeal.CardCollections;
 using RawDeal.Cards;
 using RawDeal.GameLogic.Players;
 using RawDeal.Tools;
@@ -10,6 +11,11 @@ public abstract class SuperStar
 {
     private protected View _view;
     private protected bool _hasInitialAbility;
+    public string Name { get; }
+    public string Logo { get; }
+    [JsonProperty("Hand Size")] public int HandSize { get; set; }
+    [JsonProperty("Superstar Value")] public int SuperstarValue { get; set; }
+    [JsonProperty("Superstar Ability")] public string SuperstarAbility { get; set; }
 
     protected SuperStar(string name, string logo, int handSize, int superstarValue,
         string superstarAbility)
@@ -21,12 +27,6 @@ public abstract class SuperStar
         SuperstarAbility = superstarAbility;
         _hasInitialAbility = false;
     }
-
-    public string Name { get; }
-    public string Logo { get; }
-    [JsonProperty("Hand Size")] public int HandSize { get; set; }
-    [JsonProperty("Superstar Value")] public int SuperstarValue { get; set; }
-    [JsonProperty("Superstar Ability")] public string SuperstarAbility { get; set; }
 
     public abstract void UseAbility(Player player, Player opponentPlayer);
 
@@ -58,7 +58,8 @@ public abstract class SuperStar
 
     protected Card ApplyDamageToOpponent(Player opponentPlayer, int damage)
     {
-        Card discardedCard = opponentPlayer.GetCardsFromArsenal(damage)[0];
+        CardCollection arsenalCards = opponentPlayer.GetCardsFromArsenal(damage);
+        Card discardedCard = arsenalCards.CardList[0];
         _view.SayThatSuperstarWillTakeSomeDamage(opponentPlayer.GetSuperStarName(), damage);
         CardDamageController.PlayerReceiveDamage(opponentPlayer, damage: 1);
         return discardedCard;

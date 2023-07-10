@@ -2,68 +2,66 @@ using RawDeal.CardCollections;
 using RawDeal.Cards;
 using RawDeal.Cards.CardEffects;
 using RawDeal.GameLogic.Players;
-using RawDeal.Tools;
 
 namespace RawDeal.GameLogic.Plays;
 
 public class Play
 {
-    public Card AttackingCard;
-    public (int, Card) AttackingCardTuple;
-    public Player CurrentPlayer;
     public int Id;
-    public bool IsAPendingEffect;
+    public Player CurrentPlayer;
     public Player NotCurrentPlayer;
     public readonly List<Effect> PendingEffects;
     public readonly CardCollection PlayedCards;
     public readonly List<Player> Players;
+    public Card AttackingCard;
+    public IndexedCard AttackingIndexedCard;
     public Card ReversalCard;
-    public (int, Card) ReversalCardTuple;
+    public IndexedCard ReversalIndexedCard;
     public int PlayedCardsCount => PlayedCards.CardList.Count;
+    private int PendingEffectsCount => PendingEffects.Count;
     public event EventHandler<Card> CardAddedToPlayedCards;
 
-    public Play(Dictionary<string, Player> playersDictionary)
+    public Play(PlayersPackage playersPackage)
     {
-        CurrentPlayer = playersDictionary["CurrentPlayer"];
-        NotCurrentPlayer = playersDictionary["NotCurrentPlayer"];
+        CurrentPlayer = playersPackage.CurrentPlayer;
+        NotCurrentPlayer = playersPackage.NotCurrentPlayer;
         Players = new List<Player>();
         Players?.AddRange(new[] { CurrentPlayer, NotCurrentPlayer });
         PlayedCards = new CardCollection();
-        IsAPendingEffect = false;
         PendingEffects = new List<Effect>();
     }
 
-    public void SetAttackingCardTuple((int, Card) attackingCardTuple)
+    public void SetAttackingIndexedCard(IndexedCard attackingIndexedCard)
     {
-        AttackingCardTuple = attackingCardTuple;
-        AttackingCard = TupleManager.ExtractCard(AttackingCardTuple);
+        AttackingIndexedCard = attackingIndexedCard;
+        AttackingCard = AttackingIndexedCard.Card;
         AddCardToPlayedCardsWithPendingEffectsApplied(AttackingCard);
-        CurrentPlayer.TuplesWithPlayIdAndPlayedCards.Add((Id, AttackingCard));
+        CurrentPlayer.PlayIdAndPlayedCards.Add(new IndexedCard(Id, AttackingCard));
     }
 
-    public void SetReversalCardTuple((int, Card) reversalCardTuple)
+    public void SetReversalIndexedCard(IndexedCard reversalIndexedCard)
     {
-        ReversalCardTuple = reversalCardTuple;
-        ReversalCard = TupleManager.ExtractCard(ReversalCardTuple);
+        ReversalIndexedCard = reversalIndexedCard;
+        ReversalCard = ReversalIndexedCard.Card;
         ReversalCard.PlayedType = "Reversal";
         AddCardToPlayedCardsWithPendingEffectsApplied(ReversalCard);
-        NotCurrentPlayer.TuplesWithPlayIdAndPlayedCards.Add((Id, ReversalCard));
+        NotCurrentPlayer.PlayIdAndPlayedCards.Add(new IndexedCard(Id, ReversalCard));
     }
 
     private void AddCardToPlayedCardsWithPendingEffectsApplied(Card card)
     {
-        PlayedCards.AddCard(card);
-        if (IsAPendingEffect) ApplyPendingEffects();
+        PlayedCards.Add(card);
+        if (PendingEffectsCount > 0) ApplyPendingEffects();
         CardAddedToPlayedCards?.Invoke(this, card);
     }
 
     private void ApplyPendingEffects()
     {
-        int pendingEffectsCount = PendingEffects.Count;
+        int pendingEffectsCount = PendingEffectsCount;
         for (int i = 0; i < pendingEffectsCount; i++)
         {
             Effect effect = PendingEffects[i];
-            effect.ApplyEffect(this);
+            effect.ApplyEffect(currentPlay: this);
             i--;
             pendingEffectsCount--;
         }
@@ -88,7 +86,6 @@ public class Play
     public void AddPendingEffect(Effect pendingEffect)
     {
         PendingEffects.Add(pendingEffect);
-        IsAPendingEffect = true;
     }
 
     public void RemoveAPendingEffect(Effect pendingEffectToRemove)

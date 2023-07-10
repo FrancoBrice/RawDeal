@@ -22,9 +22,9 @@ public class DrawCardsAskingNumber : Effect
         int actualNumberOfCardToDraw =
             _view.AskHowManyCardsToDrawBecauseOfACardEffect(_playerThatMustDraw.GetSuperStarName(),
                 _numberOfCardsToDraw);
-        if (_playerThatMustDraw.GetArsenalSize() < _numberOfCardsToDraw) return;
         _view.SayThatPlayerDrawCards(_playerThatMustDraw.GetSuperStarName(),
             actualNumberOfCardToDraw);
+        if (_playerThatMustDraw.GetArsenalSize() < _numberOfCardsToDraw) return;
         CardMobilizer.MoveFromArsenalToHandByAmount(_playerThatMustDraw, actualNumberOfCardToDraw);
     }
 }

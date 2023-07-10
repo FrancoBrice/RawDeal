@@ -1,3 +1,4 @@
+using RawDeal.CardCollections;
 using RawDeal.GameLogic;
 using RawDealView;
 
@@ -15,13 +16,13 @@ public class CollateralDamageController : CardDamageController
         if (damageAmount == 0) return;
         SetPlayers(_currentPlay);
         _view.SayThatSuperstarWillTakeSomeDamage(_currentPlayer.GetSuperStarName(), damageAmount);
-        List<Card> cardsToBeDamaged = _currentPlayer.GetCardsFromArsenal(damageAmount);
+        CardCollection cardsToBeDamaged = _currentPlayer.GetCardsFromArsenal(damageAmount);
         ViewManager.ShowDamagedCards(_view, cardsToBeDamaged, damageAmount);
         AddCardsToCardToBeDamaged(cardsToBeDamaged);
         ApplyCollateralDamage(damageAmount, cardsToBeDamaged);
     }
 
-    private void ApplyCollateralDamage(int damageAmount, List<Card> cardsToBeDamaged)
+    private void ApplyCollateralDamage(int damageAmount, CardCollection cardsToBeDamaged)
     {
         PlayerReceiveDamage(_currentPlayer, cardsToBeDamaged.Count - 1);
         _opponentRanOutOfCards =
@@ -31,11 +32,11 @@ public class CollateralDamageController : CardDamageController
         EndGameIfPlayerRanOutOfCardsAndNotReverse(_notCurrentPlayer);
     }
     
-    private static void AddCardsToCardToBeDamaged(List<Card> cardsToBeDamaged)
+    private static void AddCardsToCardToBeDamaged(CardCollection cardsToBeDamaged)
     {
         for (int index = cardsToBeDamaged.Count - 1; index >= 0; index--)
         {
-            Card damagedCard = cardsToBeDamaged[index];
+            Card damagedCard = cardsToBeDamaged.CardList[index];
             cardsToBeDamaged.Add(damagedCard);
         }
     }
