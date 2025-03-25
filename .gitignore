@@ -1,0 +1,99 @@
+# Archivos de entorno
+.vscode/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Archivos binarios y compilación
+bin/
+obj/
+*.exe
+*.dll
+*.pdb
+*.cache
+*.ilk
+*.log
+*.dmp
+*.mdf
+*.ldf
+*.ndx
+*.ndb
+*.db
+*.bak
+*.backup
+
+# Archivos de configuración de compilación
+*.csproj.user
+*.csproj.nuget.g.props
+*.csproj.nuget.g.targets
+*.csprojAssemblyReference.cache
+*.CoreCompileInputs.cache
+*.genruntimeconfig.cache
+*.nuget.dgspec.json
+*.nuget.g.props
+*.nuget.g.targets
+*.GeneratedMSBuildEditorConfig.editorconfig
+
+# Archivos de paquete y configuración
+project.lock.json
+project.fragment.lock.json
+project.nuget.cache
+project.assets.json
+packages/
+.nuget/
+
+# Archivos de cobertura de código
+coverage/
+coverage.cobertura.xml
+coverage.opencover.xml
+
+# Archivos generados por Coverlet
+coverage.json
+lcov-report/
+*.cov
+*.cvr
+*.gcov
+*.tlog
+TestResults/
+*.coverage
+*.coveragexml
+*.opencover
+
+# Archivos de depuración
+*.log
+*.vspscc
+*.vssscc
+
+# Archivos de cache y temp
+*.tmp
+*.temp
+*.log
+*.tlog
+*.vs
+.vscode/
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Archivos de migración y backup
+*.bak
+*.sql
+*.sqlproj.user
+*.publish.xml
+
+# Archivos específicos de IDEs
+.idea/
+.vscode/
+_ReSharper*/
+*.DotSettings.user
+
+# Archivos de entorno para Docker
+docker-compose.override.yml
+.env
+.env.*
+
+# Archivos específicos de Rider
+.idea/
+.idea_modules/
+*.sln.iml

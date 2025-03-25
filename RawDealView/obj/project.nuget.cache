@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "tAZFKYzUEBT3MM/f43i6jSHjRhiW2T8103czOfx25ZXS1hyhr8WCxoRPy4ZaaTGCvci14lyydW+TUgYy1TROKQ==",
+  "dgSpecHash": "GYtDgwdnt4apf4FQK3jJsRQn7+P4RqVNdL6z3+JVlvbCq+2rA/nw346mCFjQ1C670fMCFhX/eQ7YOfWM9JPCmA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\franc\\Documentos - Local\\RawDeal\\RawDealView\\RawDealView.csproj",
+  "projectFilePath": "C:\\Users\\franc\\RawDeal\\RawDealView\\RawDealView.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\franc\\.nuget\\packages\\json\\1.0.1\\json.1.0.1.nupkg.sha512",
     "C:\\Users\\franc\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512"
@@ -12,7 +12,7 @@
       "code": "NU1701",
       "level": "Warning",
       "warningLevel": 1,
-      "message": "Package 'JSON 1.0.1' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net6.0'. This package may not be fully compatible with your project.",
+      "message": "El paquete \"JSON 1.0.1\" se restauró con \".NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1\" en lugar de la plataforma de destino del proyecto \"net6.0\". Puede que el paquete no sea totalmente compatible con el proyecto.",
       "libraryId": "JSON",
       "targetGraphs": [
         "net6.0"
